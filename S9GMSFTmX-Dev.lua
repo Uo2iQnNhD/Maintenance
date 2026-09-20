@@ -36,7 +36,7 @@ local Theme = Window:CreateTab("Theme & Settings", "settings")
 local MainSection = Change:CreateSection("Information & Version")
 
 local Paragraph = Change:CreateParagraph({Title = "🔄️ V-39MB2ZZS", Content = "- [+] Add Main Developer Mode, Admin Mode, Basic\n- [+] Add Main Scripts\n- [+] Add Theme & Settings"})
-local Paragraph = Change:CreateParagraph({Title = "🔄️ V-LLQCH3DC", Content = "- [+] Add Script & Fixed Some Bugs\n- [+] Updated Key System UI & Key Generator"})
+local Paragraph = Change:CreateParagraph({Title = "🔄️ V-LLQCH3DC", Content = "- [+] Add Script & Fixed Some Bugs\n- [+] Updated Key System UI & Key Generator\n- [+] Add 🥚 Steal an Egg"})
 
 local MainSection = Change:CreateSection("Next Update & Version")
 local Paragraph = Change:CreateParagraph({Title = "❌ V-7H4RXYE5", Content = "Unknown, Coming Soon!"})
