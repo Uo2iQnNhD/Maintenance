@@ -55,9 +55,11 @@ local function runScript(optionName)
         Rayfield:Notify({
             Title = "Failed to execute",
             Content = "This script isn't working due to several issues, please use a different script",
-            Duration = 6,
+            Duration = 8,
             Image = "x",
         })
+        pcall(function()
+            
         end)
     
     elseif optionName == "👑 Zeutron [HUB]" then
@@ -516,6 +518,14 @@ local Button = dev:CreateButton({
  end,
 })
 
+local Button = dev:CreateButton({
+    Name = "Waypoint Manager [S.W.P]",
+    Callback = function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Uo2iQnNhD/Maintenance/refs/heads/main/xtvqz7us-Waypoint.lua"))()
+ end,
+})
+
+
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local lp = Players.LocalPlayer
@@ -840,7 +850,7 @@ end)
 -- ==========================================
 -- UI Toggle (ESP Player)
 -- ==========================================
-local Toggle = dev:CreateToggle({
+local Toggle = Theme:CreateToggle({
    Name = "ESP Player",
    CurrentValue = false,
    Flag = "ESPPlayerToggle",
@@ -870,6 +880,8 @@ local NotificationGui = Instance.new("ScreenGui")
 NotificationGui.Name = "JoinLeaveNotificationGui"
 NotificationGui.ResetOnSpawn = false
 NotificationGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+NotificationGui.IgnoreGuiInset = true
+NotificationGui.DisplayOrder = 999999 -- Paling depan dari UI lain (BIAR TIDAK KETIMPA)
 NotificationGui.Parent = PlayerGui
 
 -- Flag global untuk mengontrol status toggle
@@ -1101,7 +1113,7 @@ end)
 -- ============================================
 
 -- Pastikan variabel 'dev' (Tab/Window Rayfield) sudah didefinisikan di atas script ini
-local JoinLeaveToggle = dev:CreateToggle({
+local JoinLeaveToggle = Theme:CreateToggle({
    Name = "Player Notification",
    CurrentValue = false,
    Flag = "ToggleJoinLeaveNotif", 
