@@ -35,7 +35,7 @@ local Theme = Window:CreateTab("Theme & Settings", "settings")
 local MainSection = Change:CreateSection("Information & Version")
 
 local Paragraph = Change:CreateParagraph({Title = "🔄️ V-D74XABR4", Content = "- [+] Add Main Developer Mode, Admin Mode, Basic\n- [+] Add Main Scripts\n- [+] Add Theme & Settings"})
-local Paragraph = Change:CreateParagraph({Title = "🔄️ V-ShXTHAMC", Content = "- [+] Add Script & Fixed Some Bugs\n- [+] Updated Key System UI & Key Generator\n- [+] Add Infinite yield & Esp Player"})
+local Paragraph = Change:CreateParagraph({Title = "🔄️ V-ShXTHAMC", Content = "- [+] Add Script & Fixed Some Bugs\n- [+] Updated Key System UI & Key Generator\n- [+] Add Infinite yield & Esp Player\n- [+] Add Script 🥚 Steal an Egg"})
 
 local MainSection = Change:CreateSection("Next Update & Version")
 local Paragraph = Change:CreateParagraph({Title = "❌ V-XSSJVLZY", Content = "Unknown, Coming Soon!"})
@@ -64,11 +64,11 @@ local function runScript(optionName)
     elseif optionName == "👑 Zeutron [HUB]" then
         Rayfield:Notify({
             Title = "Executed Scripts",
-            Content = "Scripts Successfully Executed!",
+            Content = "Scripts Successfully Executed, Please wait 3 second!",
             Duration = 6,
             Image = "check",
         })
-        task.wait(0.5)
+        task.wait(3)
         pcall(function()
             loadstring(game:HttpGet("https://raw.githubusercontent.com/Zyptrue/Release/refs/heads/main/New%20Interface"))()
         end)
@@ -76,11 +76,11 @@ local function runScript(optionName)
     elseif optionName == "🛠️ TLK Prison" then
         Rayfield:Notify({
             Title = "Executed Scripts",
-            Content = "Scripts Successfully Executed!",
+            Content = "Scripts Successfully Executed, Please wait 3 second!",
             Duration = 6,
             Image = "check",
         })
-        task.wait(0.5)
+        task.wait(3)
         pcall(function()
             loadstring(game:HttpGet("https://raw.githubusercontent.com/IOERHUB/CheckingV2/refs/heads/main/Protection"))()
         end)
@@ -88,11 +88,11 @@ local function runScript(optionName)
     elseif optionName == "🎯 Area 51 Remake" then
         Rayfield:Notify({
             Title = "Executed Scripts",
-            Content = "Scripts Successfully Executed!",
+            Content = "Scripts Successfully Executed, Please wait 3 second!",
             Duration = 6,
             Image = "check",
         })
-        task.wait(0.5)
+        task.wait(3)
         pcall(function()
             loadstring(game:HttpGet("https://raw.githubusercontent.com/zeutronxsite/Area-51-Remake/refs/heads/main/Latest%20Version"))()
         end)
@@ -100,11 +100,11 @@ local function runScript(optionName)
     elseif optionName == "🚗 Jailbreak" then
         Rayfield:Notify({
             Title = "Executed Scripts",
-            Content = "Scripts Successfully Executed!",
+            Content = "Scripts Successfully Executed, Please wait 3 second!",
             Duration = 6,
             Image = "check",
         })
-        task.wait(0.5)
+        task.wait(3)
         pcall(function()
             loadstring(game:HttpGet("https://raw.githubusercontent.com/zeutronxsite/M6txEKBDBreak/refs/heads/main/Working"))()
         end)
@@ -112,11 +112,11 @@ local function runScript(optionName)
     elseif optionName == "🔪 Violence District" then
         Rayfield:Notify({
             Title = "Executed Scripts",
-            Content = "Scripts Successfully Executed!",
+            Content = "Scripts Successfully Executed, Please wait 3 second!",
             Duration = 6,
             Image = "check",
         })
-        task.wait(0.5)
+        task.wait(3)
         pcall(function()
             loadstring(game:HttpGet("https://raw.githubusercontent.com/zeutronxsite/XptC65ba-MainDestrict/refs/heads/main/5N8Eji9H"))()
         end)
@@ -124,21 +124,34 @@ local function runScript(optionName)
     elseif optionName == "🔥 Power Incremental" then
         Rayfield:Notify({
             Title = "Executed Scripts",
-            Content = "Scripts Successfully Executed!",
+            Content = "Scripts Successfully Executed, Please wait 3 second!",
             Duration = 6,
             Image = "check",
         })
-        task.wait(0.5)
+        task.wait(3)
         pcall(function()
             loadstring(game:HttpGet("https://raw.githubusercontent.com/IOERHUB/Power-Incremental/refs/heads/main/Working"))()
         end)
+
+    elseif optionName == "🥚 Steal an Egg" then
+        Rayfield:Notify({
+            Title = "Executed Scripts",
+            Content = "Scripts Successfully Executed, Please wait 3 second!",
+            Duration = 6,
+            Image = "check",
+        })
+        task.wait(3)
+        pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Uo2iQnNhD/Maintenance/refs/heads/main/sAcfzDLt-Steal%20An%20Egg.lua"))()
+        end)
+
     end
 end
 
 local Dropdown = MainTab:CreateDropdown({
     Name = "Select Scripts",
     Options = {"🎮 Automatic [Picker]", "👑 Zeutron [HUB]", "🛠️ TLK Prison", "🎯 Area 51 Remake",
-                "🚗 Jailbreak", "🔪 Violence District", "🔥 Power Incremental"},
+                "🚗 Jailbreak", "🔪 Violence District", "🔥 Power Incremental", "🥚 Steal an Egg"},
     CurrentOption = {"None"},
     MultipleOptions = false,
     Flag = "Dropdown1",
