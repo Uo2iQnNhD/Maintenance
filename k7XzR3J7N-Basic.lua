@@ -52,14 +52,11 @@ local selectedOptions = {}
 local function runScript(optionName)
     if optionName == "🎮 Automatic [Picker]" then
         Rayfield:Notify({
-            Title = "Executed Scripts",
-            Content = "Scripts Successfully Executed!",
+            Title = "Failed to execute",
+            Content = "This script isn't working due to several issues, please use a different script",
             Duration = 6,
-            Image = "check",
+            Image = "x",
         })
-        task.wait(0.5)
-        pcall(function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/zeutronxsite/Checking/refs/heads/main/reworked"))()
         end)
     
     elseif optionName == "👑 Zeutron [HUB]" then
