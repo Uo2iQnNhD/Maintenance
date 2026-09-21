@@ -55,7 +55,7 @@ local function runScript(optionName)
         })
         task.wait(0.5)
         pcall(function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/Uo2iQnNhD/Maintenance/refs/heads/main/3CXnSp3a-NIGHTHUB.lua"))()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/WhiteX1208/Scripts/refs/heads/main/StealEggOnly.luau"))()
         end)
     
     elseif optionName == "LENNON  [HUB & KEYLESS]" then
