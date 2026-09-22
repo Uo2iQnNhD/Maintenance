@@ -242,13 +242,6 @@ local Button = Theme:CreateButton({
 })
 
 local Button = Theme:CreateButton({
-    Name = "Maintenance",
-    Callback = function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Uo2iQnNhD/Database/refs/heads/main/ey6vY5D76-Key.luau"))()
-   end
-})
-
-local Button = Theme:CreateButton({
     Name = "Destroy UI/Interface",
     Callback = function()
     Rayfield:Notify({
