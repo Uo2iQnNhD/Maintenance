@@ -282,9 +282,9 @@ local ThemeDropdown = Theme:CreateDropdown({
 local MainSection = Theme:CreateSection("More Settings")
 
 local Button = Theme:CreateButton({
-    Name = "ZETHUB GUI",
+    Name = "Zeutron [HUB]",
     Callback = function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Zyptrue/Release/refs/heads/main/New%20Interface"))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Uo2iQnNhD/Database/refs/heads/main/F4DiY9yZ9-Checking.luau"))()
    end
 })
 
