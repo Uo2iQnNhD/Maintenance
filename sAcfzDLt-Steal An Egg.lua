@@ -1,10 +1,10 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
-   Name = "ZETHUB | Steal An Egg | Beta",
-   Icon = 0, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
+   Name = "ZETHUB | Steal An Egg | 8A9ESKII",
+   Icon = "egg", -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
    LoadingTitle = "Initializing......",
-   LoadingSubtitle = "By Zeutronxsite",
+   LoadingSubtitle = "By Exterminate0",
    Theme = "Default", -- Check https://docs.sirius.menu/rayfield/configuration/themes
 
    DisableRayfieldPrompts = false,
@@ -25,18 +25,20 @@ Rayfield:Notify({
 })
 
 -- Workspace
-local Change = Window:CreateTab("📰 Changelog", nil)
-local MainTab = Window:CreateTab("⚔️ Main Scipts", nil)
-local Theme = Window:CreateTab("🎨 Theme & Settings", nil)
+local Change = Window:CreateTab("Changelog", "newspaper")
+local MainTab = Window:CreateTab("Main Scipts", "sword")
+local Theme = Window:CreateTab("Theme & Settings", "palette")
 
 
 -- Main Scripts
 local MainSection = Change:CreateSection("Information & Version")
 
-local Paragraph = Change:CreateParagraph({Title = "🔁 V-RRPT8kPS", Content = "- [+] Add Scipts GUI And Auto farm\n- [+] Add Changelog\n- [+] Add Theme and Destroy"})
+local Paragraph = Change:CreateParagraph({Title = "🔁 V-A9ESKII", Content = "- [+] Added Scipts GUI And Auto farm\n- [+] Add Changelog\n- [+] Add Theme and Destroy"})
+local Paragraph = Change:CreateParagraph({Title = "🔁 V-8A9ESKII", Content = "- [+] Added Scripts Sena [HUB]\n- [+] Added Pet Spawner [Client] [Coming]\n- [+] Added More Details"})
+
 
 local MainSection = Change:CreateSection("Next Update & Version")
-local Paragraph = Change:CreateParagraph({Title = "❌ V-8A9ESKII", Content = "Unknown, Coming Soon!"})
+local Paragraph = Change:CreateParagraph({Title = "❌ V-vVaLjCVc", Content = "Unknown, Coming Soon!"})
 
 local MainSection = MainTab:CreateSection("Main Menu")
 
@@ -82,7 +84,7 @@ local function runScript(optionName)
             loadstring(game:HttpGet("https://flowauth.net/v1/ui/5f7a6b969f81332d7994e3b5eb71c686.lua"))()
         end)
 
-    elseif optionName == "Chilli [HUB]" then
+    elseif optionName == "Chilli [HUB & FREE]" then
         Rayfield:Notify({
             Title = "Executed Scripts",
             Content = "Scripts Successfully Executed!",
@@ -94,7 +96,7 @@ local function runScript(optionName)
             loadstring(game:HttpGet("https://raw.githubusercontent.com/tienkhanh1/spicy/main/Chilli.lua"))()
         end)
 
-    elseif optionName == "Avolon [HUB]" then
+    elseif optionName == "Sena [HUB & V5]" then
         Rayfield:Notify({
             Title = "Executed Scripts",
             Content = "Scripts Successfully Executed!",
@@ -103,14 +105,14 @@ local function runScript(optionName)
         })
         task.wait(0.5)
         pcall(function()
-            loadstring(game:HttpGet("https://cdn.keysystem.pro/avalon/loader"))()
+            loadstring(game:HttpGet("https://senahub.xyz/raw/loader"))()
         end)
     end
 end
 
 local Dropdown = MainTab:CreateDropdown({
     Name = "Select Scripts",
-    Options = {"NIGHT [HUB & KEYLESS]", "LENNON  [HUB & KEYLESS]", "MIRANDA [HUB & KEYLESS]", "Chilli [HUB]", "Avolon [HUB]"},
+    Options = {"NIGHT [HUB & KEYLESS]", "LENNON  [HUB & KEYLESS]", "MIRANDA [HUB & KEYLESS]", "Chilli [HUB & FREE]", "Sena [HUB & V5]"},
     CurrentOption = {"None"},
     MultipleOptions = false,
     Flag = "Dropdown1",
@@ -147,6 +149,11 @@ local Button = MainTab:CreateButton({
         end
     end
 })
+
+
+local MainSection = MainTab:CreateSection("Pet Spawner & More")
+local Paragraph = MainTab:CreateParagraph({Title = "📚 Guide Information", Content = "This feature is coming soon!"})
+
 
 local MainSection = Theme:CreateSection("Select Theme")
 local Paragraph = Theme:CreateParagraph({Title = "📚 Guide Information", Content = "Select a color to change the Scripts"})
