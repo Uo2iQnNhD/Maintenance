@@ -1,0 +1,618 @@
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Rayfield = loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
+
+local Window = Rayfield:CreateWindow({
+	Name = "ZETHUB | Untitled Upgrade | YRZbp24p",
+	Icon = "square-plus",
+	LoadingTitle = "Initializing......",
+	LoadingSubtitle = "By Exterminate0",
+	Theme = "Default",
+	DisableRayfieldPrompts = false,
+	DisableBuildWarnings = false,
+	ConfigurationSaving = {
+		Enabled = false,
+		FolderName = nil,
+		FileName = "ZethubUntitledUpgradeTree",
+	},
+})
+
+Rayfield:Notify({
+	Title = "ZETHUB Loaded",
+	Content = "Thank you for using this script.",
+	Duration = 6,
+	Image = 4483362458,
+})
+
+local Remotes = ReplicatedStorage:FindFirstChild("Remotes")
+if not Remotes then
+	Remotes = ReplicatedStorage:WaitForChild("Remotes", 5)
+end
+
+if not Remotes then
+	Rayfield:Notify({
+		Title = "Error",
+		Content = "Remotes folder not found. This script may not work in this game.",
+		Duration = 10,
+		Image = 4384402990,
+	})
+	return
+end
+
+local function FireRemote(remoteName, ...)
+	local remote = Remotes:FindFirstChild(remoteName)
+	if not remote then
+		return false
+	end
+
+	if remote:IsA("RemoteEvent") then
+		return pcall(function()
+			remote:FireServer()
+		end)
+	end
+
+	return false
+end
+
+local function InvokeRemote(remoteName, ...)
+	local remote = Remotes:FindFirstChild(remoteName)
+	if not remote then
+		return false, nil
+	end
+
+	if remote:IsA("RemoteFunction") then
+		return pcall(function()
+			return remote:InvokeServer()
+		end)
+	end
+
+	return false, nil
+end
+
+local State = {
+	AutoBuy = false,
+	AutoAscend = false,
+	AutoClicker = false,
+	AutoRoll = false,
+
+	StartUpgrade = 1,
+	EndUpgrade = 100,
+	BuyDelay = 0.10,
+
+	AscendDelay = 0.50,
+	ClickerDelay = 0.10,
+	RollDelay = 1.00,
+
+	ManualUpgrade = 1,
+	SelectedChallenge = "BigBang",
+}
+
+local Threads = {}
+local ToggleElements = {}
+local AutoKeys = { "AutoBuy", "AutoAscend", "AutoClicker", "AutoRoll" }
+
+local function CancelThread(key)
+	local thread = Threads[key]
+	if thread then
+		pcall(task.cancel, thread)
+		Threads[key] = nil
+	end
+end
+
+local function StopAuto(key)
+	State[key] = false
+	CancelThread(key)
+
+	if ToggleElements[key] then
+		pcall(function()
+			ToggleElements[key]:Set(false)
+		end)
+	end
+end
+
+local function StopAllAuto()
+	for _, key in ipairs(AutoKeys) do
+		StopAuto(key)
+	end
+
+	Rayfield:Notify({
+		Title = "Automation Stopped",
+		Content = "All auto loops have been stopped.",
+		Duration = 4,
+		Image = 4400697855,
+	})
+end
+
+local function SafeNumber(value, default)
+	local n = tonumber(value)
+	if not n then
+		return default
+	end
+	return n
+end
+
+local function StartAutoLoop(key, action, getDelay)
+	CancelThread(key)
+
+	Threads[key] = task.spawn(function()
+		while State[key] do
+			local ok, err = pcall(action)
+			if not ok then
+				warn("ZETHUB | Auto loop error (" .. key .. "): " .. tostring(err))
+			end
+
+			local delay = getDelay and getDelay() or 0.10
+			if delay < 0.03 then
+				delay = 0.03
+			end
+
+			task.wait(delay)
+		end
+
+		Threads[key] = nil
+	end)
+end
+
+local function StartAutoBuy()
+	CancelThread("AutoBuy")
+
+	Threads.AutoBuy = task.spawn(function()
+		while State.AutoBuy do
+			local startValue = math.clamp(math.floor(State.StartUpgrade), 1, 999)
+			local endValue = math.clamp(math.floor(State.EndUpgrade), 1, 999)
+
+			if startValue > endValue then
+				startValue, endValue = endValue, startValue
+			end
+
+			for i = startValue, endValue do
+				if not State.AutoBuy then
+					break
+				end
+
+				FireRemote("BuyUpg", i)
+				task.wait(math.max(State.BuyDelay, 0.03))
+			end
+
+			if State.AutoBuy then
+				task.wait(math.max(State.BuyDelay, 0.03))
+			end
+		end
+
+		Threads.AutoBuy = nil
+	end)
+end
+
+-- Tabs
+local Change = Window:CreateTab("Changelog", "newspaper")
+local AutomationTab = Window:CreateTab("Automation", "swords")
+local UpgradesTab = Window:CreateTab("Upgrades", "circle-arrow-up")
+local RebirthTab = Window:CreateTab("Rebirth", "rotate-ccw")
+local ChallengeTab = Window:CreateTab("Challenges", "webhook")
+local SettingsTab = Window:CreateTab("Theme & Settings", "palette")
+
+-- Changelog
+local MainSection = Change:CreateSection("Information & Version")
+
+local Paragraph = Change:CreateParagraph({Title = "🔁 V-YRZbp24p", Content = "- [+] Added Scipts GUI And Auto farm\n- [+] Add Changelog\n- [+] Add Theme and Destroy"})
+
+
+local MainSection = Change:CreateSection("Next Update & Version")
+local Paragraph = Change:CreateParagraph({Title = "❌ V-vVaLjCVc", Content = "Unknown, Coming Soon!"})
+
+-- Automation
+AutomationTab:CreateSection("Auto Systems")
+AutomationTab:CreateParagraph({
+	Title = "Automation Info",
+	Content = "Toggle untuk mengaktifkan loop otomatis.\nButton Stop All untuk menghentikan semua loop.",
+})
+
+ToggleElements.AutoBuy = AutomationTab:CreateToggle({
+	Name = "Auto Buy Upgrades",
+	CurrentValue = false,
+	Flag = "ZET_AutoBuy",
+	Callback = function(Value)
+		State.AutoBuy = Value
+
+		if Value then
+			StartAutoBuy()
+		else
+			CancelThread("AutoBuy")
+		end
+	end,
+})
+
+AutomationTab:CreateSlider({
+	Name = "Start Upgrade",
+	Range = { 1, 999 },
+	Increment = 1,
+	Suffix = "",
+	CurrentValue = 1,
+	Flag = "ZET_StartUpgrade",
+	Callback = function(Value)
+		State.StartUpgrade = math.clamp(math.floor(Value), 1, 999)
+	end,
+})
+
+AutomationTab:CreateSlider({
+	Name = "End Upgrade",
+	Range = { 1, 999 },
+	Increment = 1,
+	Suffix = "",
+	CurrentValue = 100,
+	Flag = "ZET_EndUpgrade",
+	Callback = function(Value)
+		State.EndUpgrade = math.clamp(math.floor(Value), 1, 999)
+	end,
+})
+
+AutomationTab:CreateSlider({
+	Name = "Buy Delay",
+	Range = { 0.03, 2 },
+	Increment = 0.01,
+	Suffix = "s",
+	CurrentValue = 0.10,
+	Flag = "ZET_BuyDelay",
+	Callback = function(Value)
+		State.BuyDelay = math.clamp(Value, 0.03, 2)
+	end,
+})
+
+ToggleElements.AutoAscend = AutomationTab:CreateToggle({
+	Name = "Auto Ascend",
+	CurrentValue = false,
+	Flag = "ZET_AutoAscend",
+	Callback = function(Value)
+		State.AutoAscend = Value
+
+		if Value then
+			StartAutoLoop("AutoAscend", function()
+				FireRemote("Ascend")
+			end, function()
+				return State.AscendDelay
+			end)
+		else
+			CancelThread("AutoAscend")
+		end
+	end,
+})
+
+AutomationTab:CreateSlider({
+	Name = "Ascend Delay",
+	Range = { 0.05, 5 },
+	Increment = 0.05,
+	Suffix = "s",
+	CurrentValue = 0.50,
+	Flag = "ZET_AscendDelay",
+	Callback = function(Value)
+		State.AscendDelay = math.clamp(Value, 0.05, 5)
+	end,
+})
+
+ToggleElements.AutoClicker = AutomationTab:CreateToggle({
+	Name = "Auto Clicker",
+	CurrentValue = false,
+	Flag = "ZET_AutoClicker",
+	Callback = function(Value)
+		State.AutoClicker = Value
+
+		if Value then
+			StartAutoLoop("AutoClicker", function()
+				FireRemote("Clicker")
+			end, function()
+				return State.ClickerDelay
+			end)
+		else
+			CancelThread("AutoClicker")
+		end
+	end,
+})
+
+AutomationTab:CreateSlider({
+	Name = "Clicker Delay",
+	Range = { 0.03, 2 },
+	Increment = 0.01,
+	Suffix = "s",
+	CurrentValue = 0.10,
+	Flag = "ZET_ClickerDelay",
+	Callback = function(Value)
+		State.ClickerDelay = math.clamp(Value, 0.03, 2)
+	end,
+})
+
+ToggleElements.AutoRoll = AutomationTab:CreateToggle({
+	Name = "Auto Roll",
+	CurrentValue = false,
+	Flag = "ZET_AutoRoll",
+	Callback = function(Value)
+		State.AutoRoll = Value
+
+		if Value then
+			StartAutoLoop("AutoRoll", function()
+				InvokeRemote("Roll", false)
+			end, function()
+				return State.RollDelay
+			end)
+		else
+			CancelThread("AutoRoll")
+		end
+	end,
+})
+
+AutomationTab:CreateSlider({
+	Name = "Roll Delay",
+	Range = { 0.10, 10 },
+	Increment = 0.10,
+	Suffix = "s",
+	CurrentValue = 1.00,
+	Flag = "ZET_RollDelay",
+	Callback = function(Value)
+		State.RollDelay = math.clamp(Value, 0.10, 10)
+	end,
+})
+
+AutomationTab:CreateButton({
+	Name = "Stop All Auto Loops",
+	Callback = function()
+		StopAllAuto()
+	end,
+})
+
+-- Upgrades
+UpgradesTab:CreateSection("Manual Buy")
+UpgradesTab:CreateParagraph({
+	Title = "Manual Upgrade",
+	Content = "Masukkan nomor upgrade lalu tekan Buy Selected Upgrade.\nBuy Range Once akan membeli sekali dari Start sampai End di tab Automation.",
+})
+
+UpgradesTab:CreateInput({
+	Name = "Upgrade ID",
+	CurrentValue = "1",
+	PlaceholderText = "1 - 999",
+	Flag = "ZET_ManualUpgradeInput",
+	RemoveTextAfterFocusLost = false,
+	Callback = function(Text)
+		State.ManualUpgrade = math.clamp(math.floor(SafeNumber(Text, 1)), 1, 999)
+	end,
+})
+
+UpgradesTab:CreateButton({
+	Name = "Buy Selected Upgrade",
+	Callback = function()
+		local ok = FireRemote("BuyUpg", State.ManualUpgrade)
+
+		if ok then
+			Rayfield:Notify({
+				Title = "Buy Upgrade",
+				Content = "Attempted to buy upgrade #" .. tostring(State.ManualUpgrade) .. ".",
+				Duration = 3,
+				Image = 3605522284,
+			})
+		else
+			Rayfield:Notify({
+				Title = "Failed",
+				Content = "BuyUpg remote not found or error.",
+				Duration = 4,
+				Image = 4384402990,
+			})
+		end
+	end,
+})
+
+UpgradesTab:CreateButton({
+	Name = "Buy Range Once",
+	Callback = function()
+		task.spawn(function()
+			local startValue = math.clamp(math.floor(State.StartUpgrade), 1, 999)
+			local endValue = math.clamp(math.floor(State.EndUpgrade), 1, 999)
+
+			if startValue > endValue then
+				startValue, endValue = endValue, startValue
+			end
+
+			for i = startValue, endValue do
+				FireRemote("BuyUpg", i)
+				task.wait(math.max(State.BuyDelay, 0.03))
+			end
+
+			Rayfield:Notify({
+				Title = "Buy Range Finished",
+				Content = "Bought upgrades from " .. tostring(startValue) .. " to " .. tostring(endValue) .. ".",
+				Duration = 4,
+				Image = 3605522284,
+			})
+		end)
+	end,
+})
+
+-- Rebirth
+RebirthTab:CreateSection("Danger Zone")
+RebirthTab:CreateParagraph({
+	Title = "Warning",
+	Content = "Tombol di bawah bersifat reset/rebirth dan dapat menghapus progress.\nGunakan dengan hati-hati.",
+})
+
+local function CreateRebirthButton(displayName, remoteName, arg)
+	RebirthTab:CreateButton({
+		Name = displayName,
+		Callback = function()
+			local ok
+
+			if arg ~= nil then
+				ok = FireRemote(remoteName, arg)
+			else
+				ok = FireRemote(remoteName)
+			end
+
+			if ok then
+				Rayfield:Notify({
+					Title = "Success",
+					Content = displayName .. " executed.",
+					Duration = 3,
+					Image = 3605522284,
+				})
+			else
+				Rayfield:Notify({
+					Title = "Failed",
+					Content = remoteName .. " remote not found or error.",
+					Duration = 4,
+					Image = 4384402990,
+				})
+			end
+		end,
+	})
+end
+
+CreateRebirthButton("Rocket Parts", "RocketParts")
+CreateRebirthButton("Prestige", "Prestige")
+CreateRebirthButton("Loop", "Loop")
+CreateRebirthButton("Dark Prestige", "DarkPrestige")
+CreateRebirthButton("Token", "Token")
+CreateRebirthButton("Dark Evil", "DarkEvil")
+CreateRebirthButton("Anti Prestige", "AntiPrestige")
+CreateRebirthButton("Anti Evil", "AntiEvil")
+CreateRebirthButton("Supernova", "Supernova")
+CreateRebirthButton("God Offer", "GodOffer")
+CreateRebirthButton("Currency 2 / Prestige 2", "Currency", "Currency2")
+CreateRebirthButton("Currency 3 / Evil Reset 2", "Currency", "Currency3")
+CreateRebirthButton("Memories", "Memories")
+CreateRebirthButton("Big Bang", "Bigbang")
+CreateRebirthButton("Cycle", "Cycle")
+CreateRebirthButton("Stars", "Stars")
+
+-- Challenges
+ChallengeTab:CreateSection("Challenge")
+ChallengeTab:CreateParagraph({
+	Title = "Challenge Control",
+	Content = "Pilih challenge lalu tekan Start atau Leave.",
+})
+
+ChallengeTab:CreateDropdown({
+	Name = "Select Challenge",
+	Options = { "BigBang", "Void", "World2" },
+	CurrentOption = { "BigBang" },
+	MultipleOptions = false,
+	Flag = "ZET_ChallengeDropdown",
+	Callback = function(Options)
+		State.SelectedChallenge = Options[1] or "BigBang"
+	end,
+})
+
+ChallengeTab:CreateButton({
+	Name = "Start Challenge",
+	Callback = function()
+		local ok = FireRemote("StartChallenge", State.SelectedChallenge)
+
+		if ok then
+			Rayfield:Notify({
+				Title = "Challenge Started",
+				Content = "Starting challenge: " .. tostring(State.SelectedChallenge),
+				Duration = 4,
+				Image = 4483362458,
+			})
+		else
+			Rayfield:Notify({
+				Title = "Failed",
+				Content = "StartChallenge remote not found or error.",
+				Duration = 4,
+				Image = 4384402990,
+			})
+		end
+	end,
+})
+
+ChallengeTab:CreateButton({
+	Name = "Leave Challenge",
+	Callback = function()
+		local ok = FireRemote("LeaveChallenge", State.SelectedChallenge)
+
+		if ok then
+			Rayfield:Notify({
+				Title = "Challenge Left",
+				Content = "Leaving challenge: " .. tostring(State.SelectedChallenge),
+				Duration = 4,
+				Image = 4483362458,
+			})
+		else
+			Rayfield:Notify({
+				Title = "Failed",
+				Content = "LeaveChallenge remote not found or error.",
+				Duration = 4,
+				Image = 4384402990,
+			})
+		end
+	end,
+})
+
+-- Theme & Settings
+SettingsTab:CreateSection("Theme")
+SettingsTab:CreateParagraph({
+	Title = "Theme Selector",
+	Content = "Pilih tema untuk mengubah tampilan Rayfield.",
+})
+
+SettingsTab:CreateDropdown({
+	Name = "Select Theme",
+	Options = {
+		"Default",
+		"AmberGlow",
+		"Amethyst",
+		"Bloom",
+		"DarkBlue",
+		"Green",
+		"Light",
+		"Ocean",
+		"Serenity",
+	},
+	CurrentOption = { "Default" },
+	MultipleOptions = false,
+	Flag = "ZET_ThemeDropdown",
+	Callback = function(Options)
+		local themeName = Options[1]
+
+		if themeName then
+			task.delay(0.10, function()
+				pcall(function()
+					Window.ModifyTheme(themeName)
+				end)
+			end)
+		end
+	end,
+})
+
+SettingsTab:CreateSection("More Settings")
+
+SettingsTab:CreateButton({
+	Name = "Zeutron [HUB]",
+	Callback = function()
+		local ok, err = pcall(function()
+			loadstring(game:HttpGet("https://raw.githubusercontent.com/Uo2iQnNhD/Database/refs/heads/main/F4DiY9yZ9-Checking.luau"))()
+		end)
+
+		if not ok then
+			Rayfield:Notify({
+				Title = "Error",
+				Content = "Failed to load Zeutron Hub: " .. tostring(err),
+				Duration = 6,
+				Image = 4384402990,
+			})
+		end
+	end,
+})
+
+SettingsTab:CreateButton({
+	Name = "Destroy UI/Interface",
+	Callback = function()
+		Rayfield:Notify({
+			Title = "Warning Detected",
+			Content = "The script will self-destruct in 7 seconds!",
+			Duration = 7,
+			Image = 4335487866,
+		})
+
+		task.delay(7, function()
+			pcall(function()
+				Rayfield:Destroy()
+			end)
+		end)
+	end,
+})
