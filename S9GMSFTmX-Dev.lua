@@ -147,13 +147,25 @@ local function runScript(optionName)
             loadstring(game:HttpGet("https://raw.githubusercontent.com/Uo2iQnNhD/Maintenance/refs/heads/main/sAcfzDLt-Steal%20An%20Egg.lua"))()
         end)
 
+    elseif optionName == "🚀 Untitled Upgrade Tree" then
+        Rayfield:Notify({
+            Title = "Executed Scripts",
+            Content = "Scripts Successfully Executed, Please wait 3 second!",
+            Duration = 6,
+            Image = "check",
+        })
+        task.wait(3)
+        pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Uo2iQnNhD/Maintenance/refs/heads/main/XoDBQiPs-Untitled%20Upg%20Tree"))()
+        end)
+		
     end
 end
 
 local Dropdown = MainTab:CreateDropdown({
     Name = "Select Scripts",
     Options = {"🎮 Automatic [Picker]", "👑 Zeutron [HUB]", "🛠️ TLK Prison", "🎯 Area 51 Remake",
-                "🚗 Jailbreak", "🔪 Violence District", "🔥 Power Incremental", "🥚 Steal an Egg"},
+                "🚗 Jailbreak", "🔪 Violence District", "🔥 Power Incremental", "🥚 Steal an Egg", "🚀 Untitled Upgrade Tree"},
     CurrentOption = {"None"},
     MultipleOptions = false,
     Flag = "Dropdown1",
