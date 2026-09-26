@@ -123,7 +123,7 @@ ScreenGui.Name = "WaypointSystemUI"
 ScreenGui.ResetOnSpawn = false
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 ScreenGui.IgnoreGuiInset = true -- PENTING: biar koordinat drag = layar penuh (batas hilang)
-ScreenGui.DisplayOrder = 9999   -- PENTING: biar tidak tertimpa script lain
+ScreenGui.DisplayOrder = 999999   -- PENTING: biar tidak tertimpa script lain
 ScreenGui.Parent = playerGui
 
 local function getSafeViewportSize()
