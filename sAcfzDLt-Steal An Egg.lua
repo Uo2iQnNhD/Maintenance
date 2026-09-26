@@ -1,7 +1,7 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
-   Name = "ZETHUB | Steal An Egg | 8A9ESKII",
+   Name = "ZETHUB | Steal An Egg | V-vVaLjCVc",
    Icon = "egg", -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
    LoadingTitle = "Initializing......",
    LoadingSubtitle = "By Exterminate0",
@@ -34,11 +34,11 @@ local Theme = Window:CreateTab("Theme & Settings", "palette")
 local MainSection = Change:CreateSection("Information & Version")
 
 local Paragraph = Change:CreateParagraph({Title = "🔁 V-A9ESKII", Content = "- [+] Added Scipts GUI And Auto farm\n- [+] Add Changelog\n- [+] Add Theme and Destroy"})
-local Paragraph = Change:CreateParagraph({Title = "🔁 V-8A9ESKII", Content = "- [+] Added Scripts Sena [HUB]\n- [+] Added Pet Spawner [Client] [Coming]\n- [+] Added More Details"})
-
+local Paragraph = Change:CreateParagraph({Title = "🔁 V-8A9ESKII", Content = "- [+] Added Scripts Sena [HUB]\n- [+] Added More Details"})
+local Paragraph = Change:CreateParagraph({Title = "🔁 V-vVaLjCVc", Content = "- [+] Added Scripts AXON [HUB]\n- [+] Added Pet Spawner [1],[2],[3]\n- [+] Fixed Some Bugs"})
 
 local MainSection = Change:CreateSection("Next Update & Version")
-local Paragraph = Change:CreateParagraph({Title = "❌ V-vVaLjCVc", Content = "Unknown, Coming Soon!"})
+local Paragraph = Change:CreateParagraph({Title = "❌ V-DdP4bugv", Content = "Unknown, Coming Soon!"})
 
 local MainSection = MainTab:CreateSection("Main Menu")
 
@@ -60,7 +60,7 @@ local function runScript(optionName)
             loadstring(game:HttpGet("https://raw.githubusercontent.com/WhiteX1208/Scripts/refs/heads/main/StealEggOnly.luau"))()
         end)
     
-    elseif optionName == "LENNON  [HUB & KEYLESS]" then
+    elseif optionName == "LENNON [HUB & KEYLESS]" then
         Rayfield:Notify({
             Title = "Executed Scripts",
             Content = "Scripts Successfully Executed!",
@@ -107,12 +107,25 @@ local function runScript(optionName)
         pcall(function()
             loadstring(game:HttpGet("https://senahub.xyz/raw/loader"))()
         end)
+
+   elseif optionName == "AXON [HUB & KEYLESS]" then
+        Rayfield:Notify({
+            Title = "Executed Scripts",
+            Content = "Scripts Successfully Executed!",
+            Duration = 6,
+            Image = "check",
+        })
+        task.wait(0.5)
+        pcall(function()
+            loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/97c3f6db55a2cf72141537a85458e5a7.lua"))()
+        end)
     end
 end
 
 local Dropdown = MainTab:CreateDropdown({
     Name = "Select Scripts",
-    Options = {"NIGHT [HUB & KEYLESS]", "LENNON  [HUB & KEYLESS]", "MIRANDA [HUB & KEYLESS]", "Chilli [HUB & FREE]", "Sena [HUB & V5]"},
+    Options = {"NIGHT [HUB & KEYLESS]", "LENNON  [HUB & KEYLESS]", "MIRANDA [HUB & KEYLESS]", 
+               "Chilli [HUB & FREE]", "Sena [HUB & V5]", "AXON [HUB & KEYLESS]"},
     CurrentOption = {"None"},
     MultipleOptions = false,
     Flag = "Dropdown1",
@@ -152,14 +165,97 @@ local Button = MainTab:CreateButton({
 
 
 local MainSection = MainTab:CreateSection("Pet Spawner & More")
-local Paragraph = MainTab:CreateParagraph({Title = "📚 Guide Information", Content = "This feature is coming soon!"})
+
+local Paragraph = MainTab:CreateParagraph({Title = "📚 Guide Information", Content = "This Scripts Is safe and has been tested\n- All these scripts are not mine\n- This script is client-side only and not the real thing, so don't get your hopes up too high"})
+
+-- Initialize with because the CurrentOption default
+local selectedOptions = {}
+
+local function runScript2(optionName)
+    if optionName == "PET SPAWNER [FREE & CLIENT]" then
+        Rayfield:Notify({
+            Title = "Executed Scripts",
+            Content = "Scripts Successfully Executed!",
+            Duration = 6,
+            Image = "check",
+        })
+        task.wait(0.5)
+        pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/zenvex4/StealAnEgg/refs/heads/main/Loader.lua"))()
+        end)
+    
+    elseif optionName == "PET SPAWNER 2 [FREE & CLIENT]" then
+        Rayfield:Notify({
+            Title = "Executed Scripts",
+            Content = "Scripts Successfully Executed!",
+            Duration = 6,
+            Image = "check",
+        })
+        task.wait(0.5)
+        pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/INF-Hub-PL/StealAEggScript/refs/heads/main/Pet_SpawnerV1"))()
+        end)
+
+    elseif optionName == "PET SPAWNER 3 [KEYLESS & CLIENT]" then
+        Rayfield:Notify({
+            Title = "Executed Scripts",
+            Content = "Scripts Successfully Executed!",
+            Duration = 6,
+            Image = "check",
+        })
+        task.wait(0.5)
+        pcall(function()
+            loadstring(game:HttpGet("https://scriptversekey.xyz/s/steal-an-egg-pet-spawner"))()
+        end)
+    end
+end
+
+local Dropdown = MainTab:CreateDropdown({
+    Name = "Select Scripts",
+    Options = {"PET SPAWNER [FREE & CLIENT]", "PET SPAWNER 2 [FREE & CLIENT]", "PET SPAWNER 3 [KEYLESS & CLIENT]"},
+    CurrentOption = {"None"},
+    MultipleOptions = false,
+    Flag = "Dropdown1",
+    Callback = function(options)
+        -- Handle both table and string returns
+        if type(options) == "table" then
+            selectedOptions = options
+        elseif type(options) == "string" then
+            selectedOptions = {options}
+        else
+            selectedOptions = {}
+        end
+    end,
+})
+
+local Button = MainTab:CreateButton({
+    Name = "Execute Selected Scripts",
+    Callback = function()
+        if #selectedOptions == 0 or selectedOptions[1] == "None" then
+            Rayfield:Notify({
+                Title = "Error",
+                Content = "Please select a script first!",
+                Duration = 5,
+                Image = "triangle-alert",
+            })
+            return
+        end
+        
+        -- Loop through every item in selectedOptions
+        for _, option in pairs(selectedOptions) do
+            if option and option ~= "None" then
+                runScript2(option)
+            end
+        end
+    end
+})
 
 
 local MainSection = Theme:CreateSection("Select Theme")
 local Paragraph = Theme:CreateParagraph({Title = "📚 Guide Information", Content = "Select a color to change the Scripts"})
 local selectedOptions = {}
 
-local function runScript2(optionName)
+local function runScript3(optionName)
     if optionName == "Default" then
         task.wait(0.5)
         pcall(function()
@@ -245,7 +341,7 @@ local Button = Theme:CreateButton({
         -- Loop through every item in selectedOptions
         for _, option in pairs(selectedOptions) do
             if option and option ~= "None" then
-                runScript2(option)
+                runScript3(option)
             end
         end
     end
