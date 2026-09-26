@@ -35,7 +35,7 @@ local MainSection = Change:CreateSection("Information & Version")
 
 local Paragraph = Change:CreateParagraph({Title = "🔁 V-A9ESKII", Content = "- [+] Added Scipts GUI And Auto farm\n- [+] Add Changelog\n- [+] Add Theme and Destroy"})
 local Paragraph = Change:CreateParagraph({Title = "🔁 V-8A9ESKII", Content = "- [+] Added Scripts Sena [HUB]\n- [+] Added More Details"})
-local Paragraph = Change:CreateParagraph({Title = "🔁 V-vVaLjCVc", Content = "- [+] Added Scripts AXON [HUB]\n- [+] Added Pet Spawner [1],[2],[3]\n- [+] Fixed Some Bugs"})
+local Paragraph = Change:CreateParagraph({Title = "🔁 V-vVaLjCVc", Content = "- [+] Added Scripts AXON [HUB]\n- [+] Added Pet Spawner [1],[2],[3]\n- [+] Fixed Some Bugs\n- [+] Added Gifter Gamepass & Pet Spawner 4"})
 
 local MainSection = Change:CreateSection("Next Update & Version")
 local Paragraph = Change:CreateParagraph({Title = "❌ V-DdP4bugv", Content = "Unknown, Coming Soon!"})
@@ -207,12 +207,37 @@ local function runScript2(optionName)
         pcall(function()
             loadstring(game:HttpGet("https://scriptversekey.xyz/s/steal-an-egg-pet-spawner"))()
         end)
+
+    elseif optionName == "PET SPAWNER 4 [KEYLESS & CLIENT]" then
+        Rayfield:Notify({
+            Title = "Executed Scripts",
+            Content = "Scripts Successfully Executed!",
+            Duration = 6,
+            Image = "check",
+        })
+        task.wait(0.5)
+        pcall(function()
+            loadstring(game:HttpGet("https://pastefy.app/t06eyyrw/raw"))()
+        end)
+
+    elseif optionName == "GIFTER GAMEPASS [KEYLESS & CLIENT]" then
+        Rayfield:Notify({
+            Title = "Executed Scripts",
+            Content = "Scripts Successfully Executed!",
+            Duration = 6,
+            Image = "check",
+        })
+        task.wait(0.5)
+        pcall(function()
+            loadstring(game:HttpGet("https://pastefy.app/CkaV7ET8/raw"))()
+        end)
     end
 end
 
 local Dropdown = MainTab:CreateDropdown({
     Name = "Select Scripts",
-    Options = {"PET SPAWNER [FREE & CLIENT]", "PET SPAWNER 2 [FREE & CLIENT]", "PET SPAWNER 3 [KEYLESS & CLIENT]"},
+    Options = {"PET SPAWNER [FREE & CLIENT]", "PET SPAWNER 2 [FREE & CLIENT]", 
+               "PET SPAWNER 3 [KEYLESS & CLIENT]", "PET SPAWNER 4 [KEYLESS & CLIENT]", "GIFTER GAMEPASS [KEYLESS & CLIENT]"},
     CurrentOption = {"None"},
     MultipleOptions = false,
     Flag = "Dropdown1",
