@@ -124,7 +124,7 @@ end
 
 local Dropdown = MainTab:CreateDropdown({
     Name = "Select Scripts",
-    Options = {"NIGHT [HUB & KEYLESS]", "LENNON  [HUB & KEYLESS]", "MIRANDA [HUB & KEYLESS]", 
+    Options = {"NIGHT [HUB & KEYLESS]", "LENNON [HUB & KEYLESS]", "MIRANDA [HUB & KEYLESS]", 
                "Chilli [HUB & FREE]", "Sena [HUB & V5]", "AXON [HUB & KEYLESS]"},
     CurrentOption = {"None"},
     MultipleOptions = false,
