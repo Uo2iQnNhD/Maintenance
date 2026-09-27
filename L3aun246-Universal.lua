@@ -1,7 +1,7 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
-   Name = "ZETHUB | UNIVERSAL | V-LLQCH3DC",
+   Name = "ZETHUB | UNIVERSAL | V-EESpz2Xk",
    Icon = "users", -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
    LoadingTitle = "Initializing......",
    LoadingSubtitle = "By Exterminate0",
@@ -38,10 +38,11 @@ local MainSection = Change:CreateSection("Information & Version")
 local Paragraph = Change:CreateParagraph({Title = "🔄️ V-39MB2ZZS", Content = "- [+] Added Main Developer Mode, Admin Mode, Basic\n- [+] Added Main Scripts\n- [+] Added Theme & Settings"})
 local Paragraph = Change:CreateParagraph({Title = "🔄️ V-LLQCH3DC", Content = "- [+] Added Script & Fixed Some Bugs\n- [+] Updated Key System UI & Key Generator\n- [+] Added 🥚 Steal an Egg"})
 local Paragraph = Change:CreateParagraph({Title = "🔄️ V-7H4RXYE5", Content = "- [!!] Deleted 🎮 Automatic [Picker]\n- [+] Buffer Wait scripts 3 sec >> 2 sec\n- [!!] Deleted Key System & Key Generator\n- [!!] Deleted Checking User/players\n- [+] Updated 🥚 Steal an Egg"})
+local Paragraph = Change:CreateParagraph({Title = "🔄️ V-EESpz2Xk", Content = "- [+] Added Select Script in Visual Player\n- [+] Added Script Headless & Korblox\n- [+] Added Script Animation Roblox\n- [+] Added More Icon & Detail\n- [!!] Fixed Bugs Laoding Screen"})
 
 
 local MainSection = Change:CreateSection("Next Update & Version")
-local Paragraph = Change:CreateParagraph({Title = "❌ V-EESpz2Xk", Content = "Unknown, Coming Soon!"})
+local Paragraph = Change:CreateParagraph({Title = "❌ V-xicochfh", Content = "Unknown, Coming Soon!"})
 
 -- local Maintab
 local MainSection = MainTab:CreateSection("Game Support")
@@ -297,7 +298,7 @@ local Button = Theme:CreateButton({
 local MainSection = Theme:CreateSection("More Settings")
 
 local Button = Theme:CreateButton({
-    Name = "Destroy Interface",
+    Name = "🗑️ Destroy Interface",
     Callback = function()
     Rayfield:Notify({
                     Title = "⚠️ Warning Detected",
@@ -307,6 +308,13 @@ local Button = Theme:CreateButton({
                 })
         wait(7)
     Rayfield:Destroy()
+   end
+})
+
+local Button = Theme:CreateButton({
+    Name = "💎 Korblox & Headless",
+    Callback = function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Uo2iQnNhD/Maintenance/refs/heads/main/SYtg4g76-Korblox%20%26%20Headless.lua"))()
    end
 })
 
@@ -320,7 +328,7 @@ local plr = Players.LocalPlayer
 _G.infinjump = false
 
 local Toggle = dev:CreateToggle({
-   Name = "Infinite Jump",
+   Name = "👟 Infinite Jump",
    CurrentValue = false,
    Flag = "Toggle1", 
    Callback = function(Value)
@@ -390,7 +398,7 @@ end
 -- ============================================
 
 local WalkSpeedSlider = dev:CreateSlider({
-   Name = "WalkSpeed",
+   Name = "🏃 WalkSpeed",
    Range = {0, 5000},
    Increment = 1,
    Suffix = " Speed",
@@ -447,7 +455,7 @@ local WalkSpeedToggle = dev:CreateToggle({
 -- ============================================
 
 local JumpPowerSlider = dev:CreateSlider({
-   Name = "JumpPower",
+   Name = "⬆️ JumpPower",
    Range = {0, 5000},
    Increment = 1,
    Suffix = " Power",
@@ -517,15 +525,6 @@ plr.CharacterAdded:Connect(function(char)
       humanoid.JumpPower = _G.jumppowerValue
    end
 end)
-
-local MainSection = dev:CreateSection("Visual Player")
-
-local Button = dev:CreateButton({
-    Name = "Infinite Yield",
-    Callback = function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
- end,
-})
 
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
@@ -852,7 +851,7 @@ end)
 -- UI Toggle (ESP Player)
 -- ==========================================
 local Toggle = Theme:CreateToggle({
-   Name = "ESP Player",
+   Name = "👁️ ESP Player",
    CurrentValue = false,
    Flag = "ESPPlayerToggle",
    Callback = function(Value)
@@ -866,28 +865,6 @@ local Toggle = Theme:CreateToggle({
 if lp.Character then
     -- Siap pakai, tinggal toggle untuk aktifkan
 end
-
-local Button = dev:CreateButton({
-    Name = "Executor Editor [BETA]",
-    Callback = function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/zeutronxsite/nf5guunQd-exec/refs/heads/main/executor.luau"))()
- end,
-})
-
-local Button = dev:CreateButton({
-    Name = "Waypoint Manager [S.W.P]",
-    Callback = function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Uo2iQnNhD/Maintenance/refs/heads/main/xtvqz7us-Waypoint.lua"))()
- end,
-})
-
-
-local Button = dev:CreateButton({
-    Name = "Anti-Fling [Protection]",
-    Callback = function()
-    loadstring(game:HttpGet("https://pastebin.com/raw/MhJDcWjR"))()
- end,
-})
 
 -- ============================================
 -- PLAYER JOIN / LEAVE NOTIFICATION SYSTEM (ULTRA FIXED & SAFE)
@@ -1137,7 +1114,7 @@ end)
 
 -- Pastikan variabel 'dev' (Tab/Window Rayfield) sudah didefinisikan di atas script ini
 local JoinLeaveToggle = Theme:CreateToggle({
-   Name = "Player Notification",
+   Name = "🌐 Player Notification",
    CurrentValue = false,
    Flag = "ToggleJoinLeaveNotif", 
    Callback = function(Value)
@@ -1162,4 +1139,116 @@ local JoinLeaveToggle = Theme:CreateToggle({
          end
       end
    end,
+})
+
+
+local MainSection = dev:CreateSection("Visual Player")
+
+local Paragraph = dev:CreateParagraph({Title = "🛡️ System Information", Content = "All these scripts work with all games"})
+
+-- Initialize with because the CurrentOption default
+local selectedOptions = {}
+
+local function runScript4(optionName)
+    if optionName == "♾️ Infinite Yield" then
+        Rayfield:Notify({
+            Title = "Executed Scripts",
+            Content = "Scripts Successfully Executed, Please wait 2 second!",
+            Duration = 4,
+            Image = "check",
+        })
+        task.wait(2)
+        pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
+        end)
+
+
+    elseif optionName == "🖥️ Executor Editor [BETA]" then
+        Rayfield:Notify({
+            Title = "Executed Scripts",
+            Content = "Scripts Successfully Executed, Please wait 2 second!",
+            Duration = 4,
+            Image = "check",
+        })
+        task.wait(2)
+        pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/zeutronxsite/nf5guunQd-exec/refs/heads/main/executor.luau"))()
+        end)
+
+    elseif optionName == "📌 Waypoint Manager [S.W.P]" then
+        Rayfield:Notify({
+            Title = "Executed Scripts",
+            Content = "Scripts Successfully Executed, Please wait 2 second!",
+            Duration = 4,
+            Image = "check",
+        })
+        task.wait(2)
+        pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Uo2iQnNhD/Maintenance/refs/heads/main/xtvqz7us-Waypoint.lua"))()
+        end)
+
+    elseif optionName == "🛡️ Anti-Fling [Protection]" then
+        Rayfield:Notify({
+            Title = "Executed Scripts",
+            Content = "Scripts Successfully Executed, Please wait 2 second!",
+            Duration = 4,
+            Image = "check",
+        })
+        task.wait(2)
+        pcall(function()
+            loadstring(game:HttpGet("https://pastebin.com/raw/MhJDcWjR"))()
+        end)
+
+    elseif optionName == "🎭 Animation Roblox [Working]" then
+        Rayfield:Notify({
+            Title = "Executed Scripts",
+            Content = "Scripts Successfully Executed, Please wait 2 second!",
+            Duration = 4,
+            Image = "check",
+        })
+        task.wait(2)
+        pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Bac0nHck/Scripts/refs/heads/main/BundleAnimations.lua"))()
+        end)		
+    end
+end
+
+local Dropdown = dev:CreateDropdown({
+    Name = "Select Scripts",
+    Options = {"♾️ Infinite Yield", "🖥️ Executor Editor [BETA]", "📌 Waypoint Manager [S.W.P]","🛡️ Anti-Fling [Protection]", "🎭 Animation Roblox [Working]"},
+    CurrentOption = {"None"},
+    MultipleOptions = false,
+    Flag = "Dropdown1",
+    Callback = function(options)
+        -- Handle both table and string returns
+        if type(options) == "table" then
+            selectedOptions = options
+        elseif type(options) == "string" then
+            selectedOptions = {options}
+        else
+            selectedOptions = {}
+        end
+    end,
+})
+
+local Button = dev:CreateButton({
+    Name = "Execute Selected Scripts",
+    Callback = function()
+        if #selectedOptions == 0 or selectedOptions[1] == "None" then
+            Rayfield:Notify({
+                Title = "Error",
+                Content = "Please select a script first!",
+                Duration = 5,
+                Image = "triangle-alert",
+            })
+            return
+        end
+        
+        -- Loop through every item in selectedOptions
+        for _, option in pairs(selectedOptions) do
+            if option and option ~= "None" then
+                runScript4(option)
+            end
+        end
+    end
 })
