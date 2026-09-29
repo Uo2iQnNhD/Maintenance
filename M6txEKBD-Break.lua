@@ -1,10 +1,10 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
-   Name = "ZETHUB | Jailbreak | v1.5",
-   Icon = 0, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
-   LoadingTitle = "Loading......",
-   LoadingSubtitle = "By Zeutronxsite",
+   Name = "ZETHUB | Jailbreak | V-jv2vZBaP",
+   Icon = "columns-4", -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
+   LoadingTitle = "Initializing......",
+   LoadingSubtitle = "By Exterminate0",
    Theme = "Default", -- Check https://docs.sirius.menu/rayfield/configuration/themes
 
    DisableRayfieldPrompts = false,
@@ -25,16 +25,19 @@ Rayfield:Notify({
 })
 
 -- Workspace
-local Change = Window:CreateTab("📰 Changelog", nil)
-local MainTab = Window:CreateTab("⚔️ Main Scipts", nil)
-local Theme = Window:CreateTab("🎨 Theme & Settings", nil)
+local Change = Window:CreateTab("Changelog", "newspaper")
+local MainTab = Window:CreateTab("Main Scipts", "swords")
+local Theme = Window:CreateTab("Theme & Settings", "palette")
 
 
 -- Main Scripts
 local MainSection = Change:CreateSection("Information & Version")
 
-local Paragraph = Change:CreateParagraph({Title = "✅ VERSION 1.5", Content = "- [+] Add Scipts GUI And Auto farm\n- [+] Add Changelog\n- [+] Add Theme and Destroy"})
+local Paragraph = Change:CreateParagraph({Title = "🔁 V-jv2vZBaP", Content = "- [+] Add Scipts GUI And Auto farm\n- [+] Add Changelog\n- [+] Add Theme and Destroy\n- [+] Add More Details & Icon\n- [+] Fixed Some Bugs"})
 
+
+local MainSection = Change:CreateSection("Next Update & Version")
+local Paragraph = Change:CreateParagraph({Title = "❌ V-rJUZBy7E", Content = "Unknown, Coming Soon!"})
 
 local MainSection = MainTab:CreateSection("Scripts UI/GUI")
 
@@ -92,7 +95,7 @@ local function runScript(optionName)
             loadstring(game:HttpGet("https://pastebin.com/raw/dUAj0Vpx"))()
         end)
 
-    elseif optionName == "Spark [FREE]" then
+    elseif optionName == "Spark [KEYLESS]" then
         Rayfield:Notify({
             Title = "Executed Scripts",
             Content = "Scripts Successfully Executed!",
@@ -108,7 +111,7 @@ end
 
 local Dropdown = MainTab:CreateDropdown({
     Name = "Select Scripts",
-    Options = {"Rendex [FREE]", "Flow [KEYLESS]", "Iliomium [FREE]", "Spark [FREE]"},
+    Options = {"Rendex [FREE]", "Flow [KEYLESS]", "Iliomium [FREE]", "Spark [KEYLESS]"},
     CurrentOption = {"None"},
     MultipleOptions = false,
     Flag = "Dropdown1",
