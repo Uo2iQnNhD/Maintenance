@@ -4,7 +4,7 @@ local Window = Rayfield:CreateWindow({
    Name = "ZETHUB | TLK PRISON | V-MAX",
    Icon = "user",
    LoadingTitle = "Loading......",
-   LoadingSubtitle = "by Zeutronxsite",
+   LoadingSubtitle = "by Externimate0",
    ShowText = "Interface", -- for mobile users to unhide Rayfield, change if you'd like
    Theme = "DarkBlue",
 
