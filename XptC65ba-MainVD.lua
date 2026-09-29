@@ -1,10 +1,10 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
-   Name = "ZETHUB | Violence District | v177",
-   Icon = 0, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
-   LoadingTitle = "Loading......",
-   LoadingSubtitle = "By Zeutronxsite",
+   Name = "ZETHUB | Violence District | V-5bxRUFRb",
+   Icon = "utensils", -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
+   LoadingTitle = "Initializing......",
+   LoadingSubtitle = "By Exterminate0",
    Theme = "Default", -- Check https://docs.sirius.menu/rayfield/configuration/themes
 
    DisableRayfieldPrompts = false,
@@ -25,20 +25,23 @@ Rayfield:Notify({
 })
 
 -- Workspace
-local Change = Window:CreateTab("📰 Changelog", nil)
-local MainTab = Window:CreateTab("⚔️ Main Scipts", nil)
-local Theme = Window:CreateTab("🎨 Theme & Settings", nil)
+local Change = Window:CreateTab("Changelog", "newspaper")
+local MainTab = Window:CreateTab("Main Scipts", "swords")
+local Theme = Window:CreateTab("Theme & Settings", "palette")
 
 
 -- Main Scripts
 local MainSection = Change:CreateSection("Information & Version")
 
-local Paragraph = Change:CreateParagraph({Title = "🔁 VERSION 174", Content = "- [+] Add Scipts GUI And Auto farm\n- [+] Add Changelog\n- [+] Add Theme and Destroy"})
-local Paragraph = Change:CreateParagraph({Title = "🔁 VERSION 175", Content = "- [+] Add More Scripts"})
-local Paragraph = Change:CreateParagraph({Title = "🔁 VERSION 177", Content = "- [+] Updated Script Bolong HUB"})
+local Paragraph = Change:CreateParagraph({Title = "🔁 V-YNRbnuCQ", Content = "- [+] Add Scipts GUI And Auto farm\n- [+] Add Changelog\n- [+] Add Theme and Destroy"})
+local Paragraph = Change:CreateParagraph({Title = "🔁 V-Ez6UbKcj", Content = "- [+] Add More Scripts\n- [+] Fixed Scripts not working\n- [+] Fixed Zeutron Bugs"})
+local Paragraph = Change:CreateParagraph({Title = "🔁 V-5bxRUFRb", Content = "- [+] Updated Script Bolong HUB\n- [+] Added More Icon & Details\n- [+] Fixed Some bugs"})
+
+local MainSection = Change:CreateSection("Next Update & Version")
+local Paragraph = Change:CreateParagraph({Title = "❌ V-u5SHHhTP", Content = "Unknown, Coming Soon!"})
 
 
-local MainSection = MainTab:CreateSection("Scripts UI/GUI")
+local MainSection = MainTab:CreateSection("Main Menu")
 
 local Paragraph = MainTab:CreateParagraph({Title = "🛡️ System Information", Content = "This Scripts Is safe and has been tested\n- All these scripts are not mine"})
 
@@ -135,6 +138,11 @@ local Button = MainTab:CreateButton({
         end
     end
 })
+
+local MainSection = MainTab:CreateSection("Auto Farm")
+local Paragraph = MainTab:CreateParagraph({Title = "🛡️ System Information", Content = "This feature is coming soon!"})
+
+
 
 local MainSection = Theme:CreateSection("Select Theme")
 local Paragraph = Theme:CreateParagraph({Title = "📚 Guide Information", Content = "Select a color to change the Scripts"})
@@ -237,7 +245,7 @@ local MainSection = Theme:CreateSection("More Settings")
 local Button = Theme:CreateButton({
     Name = "Zeutron [HUB]",
     Callback = function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Uo2iQnNhD/Database/refs/heads/main/F4DiY9yZ9-Checking.luau"))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Uo2iQnNhD/Maintenance/refs/heads/main/L3aun246-Universal.lua"))()
    end
 })
 
