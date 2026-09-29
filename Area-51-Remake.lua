@@ -1,10 +1,10 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
-   Name = "ZETHUB | Area 51 Remake | V1.75",
-   Icon = 0, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
-   LoadingTitle = "Loading......",
-   LoadingSubtitle = "By Zeutronxsite",
+   Name = "ZETHUB | Area 51 Remake | V-sVG4e7TG",
+   Icon = "map-pin", -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
+   LoadingTitle = "Initializing......",
+   LoadingSubtitle = "By Externimate0",
    Theme = "Default", -- Check https://docs.sirius.menu/rayfield/configuration/themes
 
    DisableRayfieldPrompts = false,
@@ -18,10 +18,10 @@ local Window = Rayfield:CreateWindow({
 
 -- Notification Rayfield
 Rayfield:Notify({
-   Title = "⚠️ NOTIFICATION ALERT",
+   Title = "Notification Alert",
    Content = "- Thank you for using this script\n- This script is still in beta stage so there are many bugs",
    Duration = 5,
-   Image = 4483362458,
+   Image = "bell",
    Actions = { -- Notification Buttons
       Ignore = {
          Name = "Okay!",
@@ -31,18 +31,20 @@ Rayfield:Notify({
    },
 })
 
-local Change = Window:CreateTab("📰 Changelogs", nil)
-local MainTab = Window:CreateTab("🌌 Main Scripts", nil) -- Title, Image
-local Theme = Window:CreateTab("🎨 Theme", nil)
-local Misc = Window:CreateTab("🔥 Credits", nil)
+local Change = Window:CreateTab("Changelogs", "newspaper")
+local MainTab = Window:CreateTab("Main Scripts", "swords") -- Title, Image
+local Theme = Window:CreateTab("Theme & settings", "palette")
 
 
 local MainSection = Change:CreateSection("Information")
-local Paragraph = Change:CreateParagraph({Title = "✅ VERSION 1.3", Content = "- [+] Add Teleporter\n- [+] Add Local Scripts\n- [+] Add 🎨 Theme\n- [+] Fixed Bug"})
+local Paragraph = Change:CreateParagraph({Title = "🔁 V-QZ9CPsNC", Content = "- [+] Add Teleporter\n- [+] Add Local Scripts\n- [+] Add 🎨 Theme\n- [+] Fixed Bug"})
 
-local Paragraph = Change:CreateParagraph({Title = "✅ VERSION 1.5", Content = "- [+] Add Destroy UI\n- [+] Add Details\n- [+] Add 🔥 Credits"})
+local Paragraph = Change:CreateParagraph({Title = "🔁 V-cpRoap6v", Content = "- [+] Add Destroy UI\n- [+] Add Details\n- [+] Add 🔥 Credits"})
 
-local Paragraph = Change:CreateParagraph({Title = "✅ VERSION 1.75 (Latest Update)", Content = "- [+] Add Teleporter Tool And More"})
+local Paragraph = Change:CreateParagraph({Title = "🔁 V-sVG4e7TG", Content = "- [+] Add Teleporter Tool And More\n- [+] More Details & Icon\n- [+] Fixed Some Bugs\n- [!!] Deleted 🔥 Credits"})
+
+local MainSection = Change:CreateSection("Next Update & Version")
+local Paragraph = Change:CreateParagraph({Title = "❌ V-mehQVqJr", Content = "Unknown, Coming Soon!"})
 
 local MainSection = MainTab:CreateSection("Teleporter")
 local Paragraph = MainTab:CreateParagraph({Title = "📢 INFORMATION", Content = "Teleport tools require 2,500–5,555 Money to purchase."})
@@ -716,24 +718,15 @@ local Button = Theme:CreateButton({
 })
 
 local Button = Theme:CreateButton({
-   Name = "Destroy UI",
+   Name = "Destroy Interface",
    Callback = function()
    Rayfield:Notify({
-   Title = "⚠️ WARNING",
+   Title = "Warning alert",
    Content = "This script will self-destruct in 7 seconds!",
-   Duration = 6,
+   Duration = 7,
    Image = "triangle-alert",
 })
    wait(7)
    Rayfield:Destroy()
    end,
 })
-
-local MainSection = Misc:CreateSection("Information")
-local Paragraph = Misc:CreateParagraph({Title = "⚒️ CREATOR SCRIPT", Content = "- 3streakzx: Programmer\n- 4Streakzx: Builder\n- Therepositori & kamunanya3vx: Tester Scripts"})
-
-local Paragraph = Misc:CreateParagraph({Title = "🔍 LINK SCRIPTS & SUPPORT", Content = "- Pastebin.com/u/Ty4rds\n- https://github.com/ioerhub"})
-
-local Paragraph = Misc:CreateParagraph({Title = "🛡️ INFORMATION", Content = "- Latest Version: Latest Update\n- Max Version: 3.0\n- Status: 🟡 Progress"})
-
-local Paragraph = Misc:CreateParagraph({Title = "🌐 GROUP & TEAM", Content = "- @Zeutron Community\n- @Zyptrue Dev Community\n- @IOER State Community"})
