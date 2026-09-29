@@ -52,7 +52,7 @@ local Misc = Window:CreateTab("Creadits", "flame")
 -- ==========================================
 
 local MainSection = Change:CreateSection("Recent Updates")
-local Paragraph = Change:CreateParagraph({Title = "✅ VERSION MAXIMUM", Content = "- [+] Remake System Checking For Mobile\n- [+] Fixed Some Bugs\n- [+] Add More Details\n- [+] Add Destroy UI\n- [+] Add More Information\n- [+] Add New System Checking For Computer\n- [NEW] More Details"})
+local Paragraph = Change:CreateParagraph({Title = "✅ VERSION MAXIMUM", Content = "- [+] Remake System Checking For Mobile\n- [+] Fixed Some Bugs\n- [+] Add More Details\n- [+] Add Destroy UI\n- [+] Add More Information\n- [+] Add New System Checking For Computer\n- [NEW] More Details\n- [+] Fixed Bugs On Esp [NEW]"})
 local Paragraph = Change:CreateParagraph({Title = "✅ FINAL UPDATED (Will no longer be Updated)", Content = "- [+] Add More Details\n- [+] Changes Icon And Image\n- [+] Fixed Some Bugs\n- [+] Fixed Choose Team Bugs\n- [+] Fixed Cframe Fly Bug On Mobile\n- [=] Deleted System Checking Mobile & Computer\n- [+] Fixed UI Not Show Slider, Toggle, Section And More"})
 
 local MainSection = MainTab:CreateSection("Main Script Toggle")
@@ -498,9 +498,9 @@ local Toggle = Bypass:CreateToggle({
         if Value then
             -- Saat toggle dinyalakan, langsung cek pemain yang sudah ada di server
             CheckAllPlayers()
-            info("ZENHUB: Anti-Ban System ON - Monitoring for admins...")
+            warn("ZENHUB: Anti-Ban System ON - Monitoring for admins...")
         else
-            info("ZENHUB: Anti-Ban System OFF")
+            warn("ZENHUB: Anti-Ban System OFF")
         end
     end,
 })
@@ -1243,7 +1243,7 @@ local function scanAllTools()
         end
     end
     
-    info("[ESP] Scan complete. Number of tools detected: " .. count)
+    warn("[ESP] Scan complete. Number of tools detected: " .. count)
     return count
 end
 
@@ -1552,7 +1552,7 @@ local function scanAllTools()
         end
     end
     
-    info("[ESP] Scan complete. Number of tools detected: " .. count)
+    warn("[ESP] Scan complete. Number of tools detected: " .. count)
     return count
 end
 
@@ -1864,7 +1864,7 @@ local function scanAllTools()
         end
     end
     
-    info("[ESP] Scan complete. Number of tools detected: " .. count)
+    warn("[ESP] Scan complete. Number of tools detected: " .. count)
     return count
 end
 
