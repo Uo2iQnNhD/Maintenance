@@ -3,10 +3,10 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 local Window = Rayfield:CreateWindow({
    Name = "ZETHUB | TLK PRISON | V-MAX",
    Icon = "user",
-   LoadingTitle = "Loading......",
+   LoadingTitle = "Initializing......",
    LoadingSubtitle = "by Externimate0",
    ShowText = "Interface", -- for mobile users to unhide Rayfield, change if you'd like
-   Theme = "DarkBlue",
+   Theme = "Amethyst",
 
 -- Toggle HIde UI in PC
    ToggleUIKeybind = "K", -- The keybind to toggle the UI visibility (string like "K" or Enum.KeyCode)
@@ -17,7 +17,7 @@ local Window = Rayfield:CreateWindow({
    ConfigurationSaving = {
       Enabled = false,
       FolderName = nil, -- Create a custom folder for your hub/game
-      FileName = "Zenhubxsite File"
+      FileName = "Zenhub_File"
    },
 })
 
@@ -45,15 +45,14 @@ local Team = Window:CreateTab("Team & Esp", "users")
 local Other = Window:CreateTab("Scripts & Tools", "wrench")
 local Target = Window:CreateTab("Target & Player", "crosshair")
 local Theme = Window:CreateTab("Theme & Teleport", "palette")
-local Misc = Window:CreateTab("Creadits", "flame")
+local Misc = Window:CreateTab("Settings", "settings")
 
 -- ==========================================
 -- UI TABS & SECTIONS
 -- ==========================================
 
 local MainSection = Change:CreateSection("Recent Updates")
-local Paragraph = Change:CreateParagraph({Title = "✅ VERSION MAXIMUM", Content = "- [+] Remake System Checking For Mobile\n- [+] Fixed Some Bugs\n- [+] Add More Details\n- [+] Add Destroy UI\n- [+] Add More Information\n- [+] Add New System Checking For Computer\n- [NEW] More Details\n- [+] Fixed Bugs On Esp [NEW]"})
-local Paragraph = Change:CreateParagraph({Title = "✅ FINAL UPDATED (Will no longer be Updated)", Content = "- [+] Add More Details\n- [+] Changes Icon And Image\n- [+] Fixed Some Bugs\n- [+] Fixed Choose Team Bugs\n- [+] Fixed Cframe Fly Bug On Mobile\n- [=] Deleted System Checking Mobile & Computer\n- [+] Fixed UI Not Show Slider, Toggle, Section And More"})
+local Paragraph = Change:CreateParagraph({Title = "🔁 FINAL UPDATED (New Updated)", Content = "- [+] Added Kill Aura & deleted auto attack\n- [+] Change Buffer\n- [+] Deteled Auto bypass\n- [+] Change teleport tool, food & other\n- [+] Added New UI for fly, walk & jump\n- [+] Added More Details & Icon"})
 
 local MainSection = MainTab:CreateSection("Main Script Toggle")
 local Paragraph = MainTab:CreateParagraph({Title = "📢 INFORMATION", Content = "Auto Attack & Auto Heal Working Now, Keybind One Hit (F) moved to the target tab"})
@@ -61,77 +60,242 @@ local Paragraph = MainTab:CreateParagraph({Title = "📢 INFORMATION", Content =
 -- ==========================================
 -- LOCAL SCRIPTS & SERVICE
 -- ==========================================
--- Script Auto Attack
-local Plr = game:GetService("Players").LocalPlayer
+local Players           = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService        = game:GetService("RunService")
+local LocalPlayer       = Players.LocalPlayer
 
-workspace.FallenPartsDestroyHeight = -50000
-
--- Daftar item yang diabaikan (Bukan senjata / Tool pendukung)
-local IgnoredItems = {
-    -- Makanan & Minuman
-    ["Drink"] = true, 
-    ["Doughnut"] = true, 
-    ["Hamburger"] = true, 
-    ["Food"] = true, 
-    ["Subway"] = true,
-    
-    -- Benda lain / Non-Weapon
-    ["KeyCard"] = true, 
-    ["BallNChainTool"] = true, 
-    ["Broom"] = true, 
-    ["BlindFold"] = true, 
-    ["Rope"] = true, 
-    ["Handcuffs (fugitive)"] = true, 
-    ["Flashlight"] = true, 
-    ["Board"] = true, 
-    ["Grab"] = true
+-- //==================================================================
+-- // DAFTAR SEMUA TOOL YANG DIDUKUNG
+-- //==================================================================
+local SUPPORTED_TOOLS = {
+    "Pickaxe", "Axe", "PoliceBaton", "Shovel", "Pipe", "Knife",
+    "Crowbar", "Bat", "Musket", "StopSign", "Screwdriver", 
+    "Pliers", "Handsaw", "Hammer", "Fist"
 }
 
--- ==========================================
--- AUTO ATTACK (CONTINUOUS LOOP)
--- ==========================================
-local IsAutoAttacking = false
+local TOOL_LOOKUP = {}
+for _, name in ipairs(SUPPORTED_TOOLS) do
+    TOOL_LOOKUP[name:lower()] = true
+end
 
--- Catatan: Pastikan variabel 'MainTab' sudah didefinisikan di script GUI utama kamu
-local Toggle = MainTab:CreateToggle({
-    Name = "Auto Attack (Working)",
-    CurrentValue = false,
-    Flag = "Auto Attack",
-    Callback = function(value)
-        IsAutoAttacking = value
-        
-        if value then
-            -- Memulai thread looping saat toggle ON
-            task.spawn(function()
-                while IsAutoAttacking do
-                    pcall(function()
-                        if Plr.Character and Plr.Backpack then
-                            
-                            -- 1. Equip tool dari Backpack ke Character (Kecuali yang ada di IgnoredItems)
-                            for _, tool in pairs(Plr.Backpack:GetChildren()) do
-                                if tool:IsA("Tool") and not IgnoredItems[tool.Name] then
-                                    tool.Parent = Plr.Character
-                                end
-                            end
-                            
-                            -- 2. Auto click/attack SEMUA tool yang ada di Character (Kecuali yang ada di IgnoredItems)
-                            for _, tool in pairs(Plr.Character:GetChildren()) do
-                                if tool:IsA("Tool") and not IgnoredItems[tool.Name] then
-                                    tool:Activate()
-                                end
-                            end
-                            
-                        end
-                    end)
-                    
-                    task.wait(0.1) -- Delay kecil agar tidak membuat game lag/crash
-                end
-            end)
+-- //==================================================================
+-- // [2] UNIVERSAL KILL AURA (AUTO-EQUIP MODE + RAYFIELD NOTIFY)
+-- //==================================================================
+
+local MAX_DISTANCE   = 14.4
+local BASE_CD        = 0.29
+local ATTACK_SPEED   = BASE_CD / 1.30
+local SMOOTH_OFFSET  = 0.3
+local RANDOM_DELAY   = {0.02, 0.08}
+
+local auraEnabled = false
+_G.UniversalAura = false -- Tetap di-update untuk kompatibilitas
+local currentEquippedToolName = ""
+
+local lastAttackTime = 0
+local attackCount = 0
+local killCount = 0
+
+-- Pre-fetch remote
+local CombatEvent = nil
+task.spawn(function()
+    pcall(function()
+        CombatEvent = ReplicatedStorage:WaitForChild("Combat", 10)
+    end)
+end)
+
+-- //==================================================================
+-- // RAYFIELD NOTIFICATION & EQUIP TRACKER
+-- //==================================================================
+
+-- Pastikan variabel 'Rayfield' sesuai dengan nama variabel UI library Anda
+local function sendNotify(title, content, iconId)
+    if Rayfield and Rayfield.Notify then
+        Rayfield:Notify({
+            Title = title,
+            Content = content,
+            Image = iconId,
+            Time = 3
+        })
+    end
+end
+
+local function updateToolState(char)
+    if not char then return end
+    
+    -- Cek apakah ada tool/model yang didukung sedang di-equip (berada di karakter)
+    local equippedItem = nil
+    for _, child in ipairs(char:GetChildren()) do
+        if (child:IsA("Tool") or child:IsA("Model")) and TOOL_LOOKUP[child.Name:lower()] then
+            equippedItem = child
+            break
         end
-        -- Jika value = false, loop akan otomatis berhenti karena kondisi "while IsAutoAttacking" menjadi false
+    end
+
+    if equippedItem then
+        if currentEquippedToolName ~= equippedItem.Name then
+            currentEquippedToolName = equippedItem.Name
+            if auraEnabled then
+            end
+        end
+    else
+        if currentEquippedToolName ~= "" then
+            local oldName = currentEquippedToolName
+            currentEquippedToolName = ""
+            if auraEnabled then
+            end
+        end
+    end
+end
+
+-- Monitor perubahan karakter (Respawn, Equip, Unequip)
+LocalPlayer.CharacterAdded:Connect(function(char)
+    currentEquippedToolName = ""
+    task.defer(function()
+        updateToolState(char)
+    end)
+    
+    char.ChildAdded:Connect(function()
+        task.defer(function()
+            updateToolState(char)
+        end)
+    end)
+    
+    char.ChildRemoved:Connect(function()
+        task.defer(function()
+            updateToolState(char)
+        end)
+    end)
+end)
+
+-- Cek awal jika karakter sudah ada saat script dijalankan
+if LocalPlayer.Character then
+    task.defer(function()
+        updateToolState(LocalPlayer.Character)
+    end)
+end
+
+-- //==================================================================
+-- // TOGGLE UI (MASTER SWITCH)
+-- //==================================================================
+local Toggle = MainTab:CreateToggle({
+    Name = "Kill Aura (Nearest & Beta)",
+    CurrentValue = false,
+    Flag = "UniversalKillAura",
+    Callback = function(Value)
+        auraEnabled = Value
+        _G.UniversalAura = Value
+        
+        Rayfield:Notify({
+            Title = "Information alert",
+            Content = Value and "Kill Aura: ON" or "Kill Aura: OFF",
+            Duration = 6,
+            Image = Value and "check" or "x",
+        })
     end,
 })
 
+-- //==================================================================
+-- // MAIN AURA LOOP (HANYA BERJALAN SAAT TOOL DI-EQUIP)
+-- //==================================================================
+task.spawn(function()
+    while true do
+        task.wait(ATTACK_SPEED + math.random(RANDOM_DELAY[1]*100, RANDOM_DELAY[2]*100)/100)
+        
+        local MyChar = LocalPlayer.Character
+        local MyHRP = MyChar and MyChar:FindFirstChild("HumanoidRootPart")
+        
+        -- Cari weapon yang sedang di-equip (hanya di dalam Character, BUKAN di Backpack)
+        local currentWeapon = nil
+        if MyChar then
+            for _, child in ipairs(MyChar:GetChildren()) do
+                if (child:IsA("Tool") or child:IsA("Model")) and TOOL_LOOKUP[child.Name:lower()] then
+                    currentWeapon = child
+                    break
+                end
+            end
+        end
+        
+        -- Hentikan loop jika: Toggle mati, tidak ada weapon di-equip, atau komponen penting hilang
+        if not auraEnabled or not currentWeapon or not MyChar or not MyHRP or not CombatEvent then
+            continue
+        end
+        
+        local now = tick()
+        if now - lastAttackTime < 0.25 then
+            attackCount += 1
+            if attackCount > 4 then
+                task.wait(0.5)
+                attackCount = 0
+                continue
+            end
+        else
+            attackCount = 1
+        end
+        lastAttackTime = now
+        
+        local closestTarget = nil
+        local closestScore = math.huge
+        
+        for _, player in ipairs(Players:GetPlayers()) do
+            if player ~= LocalPlayer and player.Character then
+                local TargetChar = player.Character
+                local TargetTorso = TargetChar:FindFirstChild("Torso") or TargetChar:FindFirstChild("HumanoidRootPart")
+                local TargetHumanoid = TargetChar:FindFirstChildOfClass("Humanoid")
+                
+                if TargetTorso and TargetHumanoid and TargetHumanoid.Health > 0 then
+                    local distance = (MyHRP.Position - TargetTorso.Position).Magnitude
+                    if distance <= MAX_DISTANCE then
+                        local score = distance + (TargetHumanoid.Health / TargetHumanoid.MaxHealth) * 5
+                        if score < closestScore then
+                            closestScore = score
+                            closestTarget = {
+                                char = TargetChar,
+                                torso = TargetTorso,
+                                humanoid = TargetHumanoid,
+                                distance = distance
+                            }
+                        end
+                    end
+                end
+            end
+        end
+        
+        if closestTarget then
+            local initialHealth = closestTarget.humanoid.Health
+            
+            pcall(function()
+                local TargetTorso = closestTarget.torso
+                
+                local randomOffset = Vector3.new(
+                    math.random(-10, 10) / 50,
+                    0,
+                    math.random(-10, 10) / 50
+                )
+                local attackPos = TargetTorso.Position - (TargetTorso.CFrame.LookVector * SMOOTH_OFFSET) + randomOffset
+                local originalCFrame = MyHRP.CFrame
+                
+                local targetLook = CFrame.new(attackPos, TargetTorso.Position)
+                MyHRP.CFrame = originalCFrame:Lerp(targetLook, 1)
+                
+                CombatEvent:FireServer(MyChar, TargetTorso, currentWeapon)
+                
+                MyHRP.CFrame = MyHRP.CFrame:Lerp(originalCFrame, 1)
+                
+                MyHRP.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
+                MyHRP.AssemblyAngularVelocity = Vector3.new(0, 0, 0)
+                
+                task.delay(0.1, function()
+                    if closestTarget.humanoid and closestTarget.humanoid.Health <= 0 
+                       and initialHealth > 0 then
+                        killCount += 1
+                    end
+                end)
+            end)
+        end
+    end
+end)
 
 -- ==========================================
 -- PERBAIKAN AUTO HEAL (CONTINUOUS LOOP)
@@ -303,116 +467,85 @@ spawn(function()
     end
 end)
 
--- ==========================================
--- AUTO DROP FOOD (ZENHUB)
--- ==========================================
-
--- Daftar makanan yang akan di-drop (Whitelist)
-local FoodList = {
-    ["Flashlight"] = true,
-}
-
--- Variabel untuk mengontrol status toggle
-local autoDropFoodActive = false
-
--- Keybind untuk Auto Drop Food
-local Keybind = MainTab:CreateKeybind({
-    Name = "Auto Drop (Flashlight)",
-    CurrentKeybind = "H",
-    HoldToInteract = false,
-    Flag = "AutoDropFlash",
-    Callback = function()
-        -- Toggle status ON/OFF setiap kali keybind ditekan
-        autoDropFoodActive = not autoDropFoodActive
-        
-        -- Tampilkan notifikasi sesuai status
-        if autoDropFoodActive then
-            Rayfield:Notify({
-                Title = "✅ Information",
-                Content = "Auto Drop Flashlight: ON",
-                Duration = 5,
-                Image = "check",
-            })
-        else
-            Rayfield:Notify({
-                Title = "❌ Information",
-                Content = "Auto Drop Flashlight: OFF",
-                Duration = 5,
-                Image = "x",
-            })
-        end
-    end,
-})
-
--- Script Auto Drop (berjalan di background menggunakan spawn agar GUI tidak freeze)
-spawn(function()
-    local lp = game:GetService("Players").LocalPlayer
-    
-    while wait(0.5) do -- Looping terus menerus dengan jeda 0.5 detik
-        if autoDropFoodActive then
-            
-            -- Langkah 1: Pindahkan makanan dari Backpack ke Character 
-            -- (Beberapa game mewajibkan tool berada di character dulu agar bisa di-drop)
-            if lp.Backpack then
-                for _, item in pairs(lp.Backpack:GetChildren()) do 
-                    if item:IsA("Tool") and FoodList[item.Name] then 
-                        item.Parent = lp.Character 
-                    end 
-                end
-            end
-            
-            wait(0.1) -- Delay kecil agar game sempat memproses perpindahan item
-            
-            -- Langkah 2: Jatuhkan makanan dari Character ke Workspace
-            if lp.Character then
-                for _, item in pairs(lp.Character:GetChildren()) do 
-                    if item:IsA("Tool") and FoodList[item.Name] then 
-                        item.Parent = workspace 
-                    end 
-                end
-            end
-            
-        end
-    end
-end)
-
 local MainSection = MainTab:CreateSection("Main Script Buttom")
 
 local Paragraph = MainTab:CreateParagraph({Title = "⚠️ WARNING", Content = "Don't Spam Your Tool/Use Auto Click Can Get Benned!"})
-local Dropdown = MainTab:CreateDropdown({
-   Name = "Select Script",
-   Options = {"No Cooldown Tool (Fast)", "No Cooldown Tool (Medium)", "No Cooldown Tool (Low)"},
-   CurrentOption = {"None"},
-   MultipleOptions = false,
-   Flag = "Dropdown1", -- A flag is the identifier for the configuration file; make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-   Callback = function(Options)
-    local selectedScripts = Options[1]
 
-    if selectedScripts == "No Cooldown Tool (Fast)" then
-        loadstring(game:HttpGet("https://pastebin.com/raw/uNaUfZpL"))()
-    
-    elseif selectedScripts == "No Cooldown Tool (Medium)" then
-        loadstring(game:HttpGet("https://pastebin.com/raw/Gz3Kzh7v"))()
+-- Variabel untuk menyimpan pilihan script sebelum dieksekusi
+-- Diinisialisasi dengan "None" sesuai CurrentOption default
+local selectedScriptOption = "None"
 
-    elseif selectedScripts == "No Cooldown Tool (Low)" then
-        loadstring(game:HttpGet("https://pastebin.com/raw/UURZKdcb"))()
-
-       end
-   end,
+local ScriptDropdown = MainTab:CreateDropdown({
+    Name = "Select Script",
+    Options = {
+        "No Cooldown Tool (Fast)", 
+        "No Cooldown Tool (Medium)", 
+        "No Cooldown Tool (Low)"
+    },
+    CurrentOption = {"None"},
+    MultipleOptions = false,
+    Flag = "Dropdown1", -- Pastikan flag ini unik jika ada dropdown lain
+    Callback = function(Options)
+        -- Hanya menyimpan pilihan, TIDAK langsung mengeksekusi loadstring
+        if type(Options) == "table" and Options[1] then
+            selectedScriptOption = Options[1]
+        elseif type(Options) == "string" then
+            selectedScriptOption = Options
+        end
+        
+        print("Script selected (pending execution): " .. selectedScriptOption)
+    end,
 })
 
+-- Tombol untuk mengeksekusi script berdasarkan pilihan di dropdown
+local ExecuteScriptButton = MainTab:CreateButton({
+    Name = "Execute Selected Script",
+    Callback = function()
+        -- Validasi jika pengguna belum memilih script atau masih "None"
+        if selectedScriptOption == "None" or selectedScriptOption == "" then
+            Rayfield:Notify({
+                Title = "Error",
+                Content = "Please select a script first!",
+                Duration = 5,
+                Image = "triangle-alert",
+            })
+            return
+        end
+        
+        -- Notifikasi proses eksekusi (opsional, agar UI terasa lebih responsif)
+        Rayfield:Notify({
+            Title = "Executing",
+            Content = "Loading script: " .. selectedScriptOption,
+            Duration = 3,
+            Image = "loader",
+        })
+        
+        -- Eksekusi script dengan pcall untuk mencegah error crash
+        pcall(function()
+            if selectedScriptOption == "No Cooldown Tool (Fast)" then
+                loadstring(game:HttpGet("https://pastebin.com/raw/uNaUfZpL"))()
+            elseif selectedScriptOption == "No Cooldown Tool (Medium)" then
+                loadstring(game:HttpGet("https://pastebin.com/raw/Gz3Kzh7v"))()
+            elseif selectedScriptOption == "No Cooldown Tool (Low)" then
+                loadstring(game:HttpGet("https://pastebin.com/raw/UURZKdcb"))()
+            end
+        end)
+        
+        -- Notifikasi sukses setelah eksekusi
+        Rayfield:Notify({
+            Title = "Success",
+            Content = "Script executed successfully: " .. selectedScriptOption,
+            Duration = 5,
+            Image = "check",
+        })
+        
+        print("Script executed: " .. selectedScriptOption)
+    end
+})
 
 local MainSection = Bypass:CreateSection("Anti Cheat Remover/Delete")
 
 local Paragraph = Bypass:CreateParagraph({Title = "⚠️ WARNING", Content = "Some Anti Cheats are not bypassed properly so be careful"})
-
-local Toggle = Bypass:CreateToggle({
-   Name = "Anti-Cheat Remover (Auto Bypass)",
-   CurrentValue = true,
-   Flag = "Anti-CheatV2",
-   Callback = function()
-   end,
-})
 
 local Button = Bypass:CreateButton({
     Name = "Anti-Cheat Remover (Plus)",
@@ -538,32 +671,13 @@ local Paragraph = Buff:CreateParagraph({Title = "📢 INFORMATION", Content = "F
 
 local Paragraph = Buff:CreateParagraph({Title = "🛡️ SYSTEM INFORMATION", Content = "- For the velocity method, since a different approach is used, jumppower will not work\n- To revert your character to its original state when using the velocity method, simply rejoin the server"})
 
-local MainSection = Buff:CreateSection("Walkspeed & JumpPower")
-local Dropdown = Buff:CreateDropdown({
-   Name = "Select Script",
-   Options = {"Walk & Jump & Fly (Cframe Method)", "Walk & Jump (VelocityLinier)", "Walk & Jump (HookMetaMethod", "Walk & Jump (Randomization)"},
-   CurrentOption = {"None"},
-   MultipleOptions = false,
-   Flag = "Dropdown1", -- A flag is the identifier for the configuration file; make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-   Callback = function(Options)
-    local selectedScripts = Options[1]
-
-    if selectedScripts == "Walk & Jump & Fly (Cframe Method)" then
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/zeutronxsite/s65xKCrMCframe/refs/heads/main/T7h9Q3tfmsMain"))()
-
-    elseif selectedScripts == "Walk & Jump (VelocityLinier)" then
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/zeutronxsite/CvnmysQjVXLinier/refs/heads/main/Main2.lua"))()
-
-    elseif selectedScripts == "Walk & Jump (HookMetaMethod" then
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/zeutronxsite/NpN75gc4NQHOOK/refs/heads/main/Main.lua"))()
-
-    elseif selectedScripts == "Walk & Jump (Randomization)" then
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/zeutronxsite/7HcztJM7XHRandom/refs/heads/main/PZFEFnegiHlua"))()
-
-       end
-   end,
+local MainSection = Buff:CreateSection("Walkspeed, Fly & JumpPower ")
+local Button = Buff:CreateButton({
+    Name = "All Method",
+    Callback = function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Uo2iQnNhD/Maintenance/refs/heads/main/s65xKCrM-Method.lua"))()
+   end
 })
-
 
 local MainSection = Team:CreateSection("Choose Team")
 local Paragraph = Team:CreateParagraph({Title = "🛡️ INFORMATION", Content = "Choose Team is Fixed Now!"})
@@ -1992,442 +2106,171 @@ local Toggle = Team:CreateToggle({
 local MainSection = Other:CreateSection("Script Tool")
 local Paragraph = Other:CreateParagraph({Title = "📢 INFORMATION", Content = "All these scripts support this game"})
 
-local Dropdown = Other:CreateDropdown({
-   Name = "Select Script",
-   Options = {"Infinite Yield", "Multi Tool", "Freecam (Mobile)", "Invisble", 
-              "Noclip Tool", "Tool Giver (Client)", "Instant Click E", "Super Ring V6"},
-   CurrentOption = {"None"},
-   MultipleOptions = false,
-   Flag = "Dropdown1", -- A flag is the identifier for the configuration file; make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-   Callback = function(Options)
-    local selectedScripts = Options[1]
+-- Initialize with because the CurrentOption default
+local selectedOptions = {}
 
-    if selectedScripts == "Infinite Yield" then
-        loadstring(game:HttpGet(('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'),true))()
+local function runScript(optionName)
+    if optionName == "♾️ Infinite Yield" then
+        Rayfield:Notify({
+            Title = "Executed Scripts",
+            Content = "Scripts Successfully Executed!",
+            Duration = 6,
+            Image = "check",
+        })
+        task.wait(0)
+        pcall(function()
+            loadstring(game:HttpGet(('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'),true))()
+        end)
     
-    elseif selectedScripts == "Multi Tool" then
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/zephyr10101/MultiToolsV1/main/script"))()
+    elseif optionName == "🔍 Multi Tools" then
+        Rayfield:Notify({
+            Title = "Executed Scripts",
+            Content = "Scripts Successfully Executed!",
+            Duration = 6,
+            Image = "check",
+        })
+        task.wait(0)
+        pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/zephyr10101/MultiToolsV1/main/script"))()
+        end)
 
-    elseif selectedScripts == "Freecam (Mobile)" then
-        loadstring(game:HttpGet("https://pastebin.com/raw/QsqZcTAV"))()
+    elseif optionName == "📷 Freecam (Mobile)" then
+        Rayfield:Notify({
+            Title = "Executed Scripts",
+            Content = "Scripts Successfully Executed!",
+            Duration = 6,
+            Image = "check",
+        })
+        task.wait(0)
+        pcall(function()
+            loadstring(game:HttpGet("https://pastebin.com/raw/QsqZcTAV"))()
+        end)
 
-    elseif selectedScripts == "Invisble" then
-        loadstring(game:HttpGet('https://pastebin.com/raw/3Rnd9rHf'))()
+    elseif optionName == "👤 Invisisble" then
+        Rayfield:Notify({
+            Title = "Executed Scripts",
+            Content = "Scripts Successfully Executed!",
+            Duration = 6,
+            Image = "check",
+        })
+        task.wait(0)
+        pcall(function()
+            loadstring(game:HttpGet('https://pastebin.com/raw/3Rnd9rHf'))()
+        end)
 
-    elseif selectedScripts == "Noclip Tool" then
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/IOERHUB/Noclip/refs/heads/main/Testing"))()
+    elseif optionName == "🧱 Noclip Tool" then
+        Rayfield:Notify({
+            Title = "Executed Scripts",
+            Content = "Scripts Successfully Executed!",
+            Duration = 6,
+            Image = "check",
+        })
+        task.wait(0)
+        pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/IOERHUB/Noclip/refs/heads/main/Testing"))()
+        end)
 
-    elseif selectedScripts == "Tool Giver (Client)" then
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/yofriendfromschool1/Sky-Hub-Backup/main/gametoolgiver.lua"))()
+    elseif optionName == "✂️ Tool Giver" then
+        Rayfield:Notify({
+            Title = "Executed Scripts",
+            Content = "Scripts Successfully Executed!",
+            Duration = 6,
+            Image = "check",
+        })
+        task.wait(0)
+        pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/yofriendfromschool1/Sky-Hub-Backup/main/gametoolgiver.lua"))()
+        end)
 
-    elseif selectedScripts == "Instant Click E" then
-        loadstring(game:HttpGet("https://pastebin.com/raw/5qXz6a5L"))()
+    elseif optionName == "👆 Instant Click E" then
+        Rayfield:Notify({
+            Title = "Executed Scripts",
+            Content = "Scripts Successfully Executed!",
+            Duration = 6,
+            Image = "check",
+        })
+        task.wait(0)
+        pcall(function()
+            loadstring(game:HttpGet("https://pastebin.com/raw/5qXz6a5L"))()
+        end)
 
-    elseif selectedScripts == "Super Ring V6" then
-        loadstring(game:HttpGet("https://pastebin.com/raw/hhyT3gQr"))()
+    elseif optionName == "🔄️ Super Ring V6" then
+        Rayfield:Notify({
+            Title = "Executed Scripts",
+            Content = "Scripts Successfully Executed!",
+            Duration = 6,
+            Image = "check",
+        })
+        task.wait(0)
+        pcall(function()
+            loadstring(game:HttpGet("https://pastebin.com/raw/hhyT3gQr"))()
+        end)
+		
+    end
+end
 
-       end
-   end,
+local Dropdown = Other:CreateDropdown({
+    Name = "Select Scripts",
+    Options = {"♾️ Infinite Yield", "🔍 Multi Tools", "📷 Freecam (Mobile)", "👤 Invisisble",
+                "🧱 Noclip Tool", "✂️ Tool Giver", "👆 Instant Click E", "🔄️ Super Ring V6"},
+    CurrentOption = {"None"},
+    MultipleOptions = false,
+    Flag = "Dropdown1",
+    Callback = function(options)
+        -- Handle both table and string returns
+        if type(options) == "table" then
+            selectedOptions = options
+        elseif type(options) == "string" then
+            selectedOptions = {options}
+        else
+            selectedOptions = {}
+        end
+    end,
+})
+
+local Button = Other:CreateButton({
+    Name = "Execute Selected Scripts",
+    Callback = function()
+        if #selectedOptions == 0 or selectedOptions[1] == "None" then
+            Rayfield:Notify({
+                Title = "Error",
+                Content = "Please select a script first!",
+                Duration = 5,
+                Image = "triangle-alert",
+            })
+            return
+        end
+        
+        -- Loop through every item in selectedOptions
+        for _, option in pairs(selectedOptions) do
+            if option and option ~= "None" then
+                runScript(option)
+            end
+        end
+    end
 })
 
 local MainSection = Other:CreateSection("Teleporter Tool")
 local Paragraph = Other:CreateParagraph({Title = "📢 INFORMATION", Content = "- Ensure your character is on the ground, if you are hovering, you will die due to the anti-cheat fly detection\n- The teleport duration to reach the destination is 7 seconds"})
 
--- ==========================================
--- SERVICES
--- ==========================================
-local Players = game:GetService("Players")
-local TweenService = game:GetService("TweenService")
-
-local lp = Players.LocalPlayer
-
--- ==========================================
--- DAFTAR POSISI TOOL
--- ==========================================
-local toolPositions = {
-    ["Axe"]         = Vector3.new(206, 3, -611),
-    ["PoliceBaton"] = Vector3.new(148, 3, -109),
-    ["Shovel"]      = Vector3.new(292, 3, 40),
-    ["Pipe"]        = Vector3.new(259, -27, -441),
-    ["Knife"]       = Vector3.new(216, 16, -223),
-    ["Crowbar"]     = Vector3.new(316, 4, -48),
-    ["Bat"]         = Vector3.new(411, 19, -94),
-    ["Musket"]      = Vector3.new(322, 3, -459),
-    ["StopSign"]    = Vector3.new(551, 5, -380),
-    ["AK-47"]       = Vector3.new(42, 3, -89),
-    ["SprayPaint"]  = Vector3.new(335, -27, -426),
-    ["Taser"]       = Vector3.new(42, 3, -93),
-    ["Screwdriver"] = Vector3.new(459, -6, -88),
-    ["Pliers"]      = Vector3.new(459, -6, -88),
-    ["Handsaw"]     = Vector3.new(459, -6, -88),
-    ["Hammer"]      = Vector3.new(459, -6, -88)
-}
-
--- Mengambil nama-nama tool untuk Dropdown
-local toolNames = {}
-for name, _ in pairs(toolPositions) do
-    table.insert(toolNames, name)
-end
-table.sort(toolNames)
-
--- ==========================================
--- VARIABEL KONTROL TELEPORT
--- ==========================================
-local currentTween = nil
-local currentLoopActive = false
-
--- ==========================================
--- FUNGSI TELEPORT (TweenService + Spam 7 Detik)
--- ==========================================
-local function teleportToTool(toolName)
-    -- Batalkan proses teleport sebelumnya jika masih berjalan
-    if currentTween then
-        pcall(function() currentTween:Cancel() end)
-        currentTween = nil
-    end
-    
-    -- Hentikan loop sebelumnya
-    if currentLoopActive then
-        currentLoopActive = false
-        task.wait(0.1) -- Beri jeda agar loop lama benar-benar berhenti
-    end
-
-    local char = lp.Character
-    if not char then return end
-    
-    local hrp = char:FindFirstChild("HumanoidRootPart")
-    local hum = char:FindFirstChild("Humanoid")
-    if not hrp or not hum then return end
-
-    local pos = toolPositions[toolName]
-    if not pos then return end
-
-    local targetCFrame = CFrame.new(pos)
-    
-    -- Set flag loop aktif
-    currentLoopActive = true
-    local startTime = tick()
-    local totalDuration = 7       -- Total waktu spam: 7 detik
-    local tweenDuration = 2.5     -- Durasi per tween: 1.5 detik (jangan cepat-cepat)
-
-    task.spawn(function()
-        while currentLoopActive and (tick() - startTime < totalDuration) do
-            -- Cek apakah karakter masih valid
-            if not hrp.Parent or not hum.Parent then 
-                currentLoopActive = false
-                break 
-            end
-            
-            -- Buat tween baru dengan durasi 1.5 detik (pergerakan lambat/halus)
-            local tweenInfo = TweenInfo.new(tweenDuration, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-            currentTween = TweenService:Create(hrp, tweenInfo, {CFrame = targetCFrame})
-            currentTween:Play()
-            
-            -- Tunggu hingga tween selesai atau waktu total 7 detik habis
-            local tweenDone = false
-            local conn
-            conn = currentTween.Completed:Connect(function()
-                tweenDone = true
-                if conn then conn:Disconnect() end
-            end)
-            
-            -- Loop menunggu dengan interval kecil
-            local waitStart = tick()
-            while not tweenDone and currentLoopActive and (tick() - startTime < totalDuration) do
-                task.wait(0.1)
-                -- Jika waktu tunggu melebihi durasi tween, paksa keluar untuk membuat tween baru
-                if tick() - waitStart >= tweenDuration then
-                    break
-                end
-            end
-            
-            if conn then conn:Disconnect() end
-        end
-        
-        -- Reset setelah 7 detik selesai
-        currentLoopActive = false
-        currentTween = nil
-    end)
-end
-
--- ==========================================
--- UI SETUP (Dropdown)
--- ==========================================
--- CATATAN: Pastikan variabel 'Tab' sudah didefinisikan oleh UI Library kamu.
-local Dropdown = Other:CreateDropdown({
-   Name = "Teleport to Tool",
-   Options = toolNames,
-   CurrentOption = {"None"},
-   MultipleOptions = false,
-   Flag = "ToolTeleportDropdown",
-   Callback = function(Options)
-       local selectedTool = Options[1]
-       if selectedTool then
-           teleportToTool(selectedTool)
-       end
-   end,
+local Button = Other:CreateButton({
+    Name = "Teleport Items",
+    Callback = function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Uo2iQnNhD/Maintenance/refs/heads/main/F7V7b5vB-Teleporter%20Items.lua"))()
+   end
 })
-
--- ==========================================
--- SERVICES
--- ==========================================
-local Players = game:GetService("Players")
-local TweenService = game:GetService("TweenService")
-
-local lp = Players.LocalPlayer
-
--- ==========================================
--- DAFTAR POSISI TOOL
--- ==========================================
-local toolPositions = {
-    ["Hamburger"]         = Vector3.new(257, 3, -601),
-    ["Doughnut"] = Vector3.new(589, 3, -326),
-    ["Subway"]      = Vector3.new(394, -26, -301),
-    ["Drink"]        = Vector3.new(459, 5, 32),
-    ["Food"]       = Vector3.new(105, 3, -48),
-}
-
--- Mengambil nama-nama tool untuk Dropdown
-local toolNames = {}
-for name, _ in pairs(toolPositions) do
-    table.insert(toolNames, name)
-end
-table.sort(toolNames)
-
--- ==========================================
--- VARIABEL KONTROL TELEPORT
--- ==========================================
-local currentTween = nil
-local currentLoopActive = false
-
--- ==========================================
--- FUNGSI TELEPORT (TweenService + Spam 7 Detik)
--- ==========================================
-local function teleportToTool(toolName)
-    -- Batalkan proses teleport sebelumnya jika masih berjalan
-    if currentTween then
-        pcall(function() currentTween:Cancel() end)
-        currentTween = nil
-    end
-    
-    -- Hentikan loop sebelumnya
-    if currentLoopActive then
-        currentLoopActive = false
-        task.wait(0.1) -- Beri jeda agar loop lama benar-benar berhenti
-    end
-
-    local char = lp.Character
-    if not char then return end
-    
-    local hrp = char:FindFirstChild("HumanoidRootPart")
-    local hum = char:FindFirstChild("Humanoid")
-    if not hrp or not hum then return end
-
-    local pos = toolPositions[toolName]
-    if not pos then return end
-
-    local targetCFrame = CFrame.new(pos)
-    
-    -- Set flag loop aktif
-    currentLoopActive = true
-    local startTime = tick()
-    local totalDuration = 7       -- Total waktu spam: 7 detik
-    local tweenDuration = 2.5     -- Durasi per tween: 1.5 detik (jangan cepat-cepat)
-
-    task.spawn(function()
-        while currentLoopActive and (tick() - startTime < totalDuration) do
-            -- Cek apakah karakter masih valid
-            if not hrp.Parent or not hum.Parent then 
-                currentLoopActive = false
-                break 
-            end
-            
-            -- Buat tween baru dengan durasi 1.5 detik (pergerakan lambat/halus)
-            local tweenInfo = TweenInfo.new(tweenDuration, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-            currentTween = TweenService:Create(hrp, tweenInfo, {CFrame = targetCFrame})
-            currentTween:Play()
-            
-            -- Tunggu hingga tween selesai atau waktu total 7 detik habis
-            local tweenDone = false
-            local conn
-            conn = currentTween.Completed:Connect(function()
-                tweenDone = true
-                if conn then conn:Disconnect() end
-            end)
-            
-            -- Loop menunggu dengan interval kecil
-            local waitStart = tick()
-            while not tweenDone and currentLoopActive and (tick() - startTime < totalDuration) do
-                task.wait(0.1)
-                -- Jika waktu tunggu melebihi durasi tween, paksa keluar untuk membuat tween baru
-                if tick() - waitStart >= tweenDuration then
-                    break
-                end
-            end
-            
-            if conn then conn:Disconnect() end
-        end
-        
-        -- Reset setelah 7 detik selesai
-        currentLoopActive = false
-        currentTween = nil
-    end)
-end
-
--- ==========================================
--- UI SETUP (Dropdown)
--- ==========================================
--- CATATAN: Pastikan variabel 'Tab' sudah didefinisikan oleh UI Library kamu.
-local Dropdown = Other:CreateDropdown({
-   Name = "Teleport to Food",
-   Options = toolNames,
-   CurrentOption = {"None"},
-   MultipleOptions = false,
-   Flag = "ToolTeleportDropdown",
-   Callback = function(Options)
-       local selectedTool = Options[1]
-       if selectedTool then
-           teleportToTool(selectedTool)
-       end
-   end,
-})
-
--- ==========================================
--- SERVICES
--- ==========================================
-local Players = game:GetService("Players")
-local TweenService = game:GetService("TweenService")
-
-local lp = Players.LocalPlayer
-
--- ==========================================
--- DAFTAR POSISI TOOL
--- ==========================================
-local toolPositions = {
-    ["KeyCard"]             = Vector3.new(217, 31, -222),
-    ["BallNChainTool"]      = Vector3.new(135, 1, -27),
-    ["Broom"]               = Vector3.new(63, 3, 15),
-    ["BlindFold"]           = Vector3.new(51, 3, -113),
-    ["Rope"]                = Vector3.new(54, 3, -141),
-    ["Handcuffs (fugitive)"]= Vector3.new(415, 19, -96),
-    ["Flashlight"]          = Vector3.new(432, 19, -99),
-    ["Board"]               = Vector3.new(274, 3, -104)
-}
-
--- Mengambil nama-nama tool untuk Dropdown
-local toolNames = {}
-for name, _ in pairs(toolPositions) do
-    table.insert(toolNames, name)
-end
-table.sort(toolNames)
-
--- ==========================================
--- VARIABEL KONTROL TELEPORT
--- ==========================================
-local currentTween = nil
-local currentLoopActive = false
-
--- ==========================================
--- FUNGSI TELEPORT (TweenService + Spam 7 Detik)
--- ==========================================
-local function teleportToTool(toolName)
-    -- Batalkan proses teleport sebelumnya jika masih berjalan
-    if currentTween then
-        pcall(function() currentTween:Cancel() end)
-        currentTween = nil
-    end
-    
-    -- Hentikan loop sebelumnya
-    if currentLoopActive then
-        currentLoopActive = false
-        task.wait(0.1) -- Beri jeda agar loop lama benar-benar berhenti
-    end
-
-    local char = lp.Character
-    if not char then return end
-    
-    local hrp = char:FindFirstChild("HumanoidRootPart")
-    local hum = char:FindFirstChild("Humanoid")
-    if not hrp or not hum then return end
-
-    local pos = toolPositions[toolName]
-    if not pos then return end
-
-    local targetCFrame = CFrame.new(pos)
-    
-    -- Set flag loop aktif
-    currentLoopActive = true
-    local startTime = tick()
-    local totalDuration = 7       -- Total waktu spam: 7 detik
-    local tweenDuration = 2.5     -- Durasi per tween: 1.5 detik (jangan cepat-cepat)
-
-    task.spawn(function()
-        while currentLoopActive and (tick() - startTime < totalDuration) do
-            -- Cek apakah karakter masih valid
-            if not hrp.Parent or not hum.Parent then 
-                currentLoopActive = false
-                break 
-            end
-            
-            -- Buat tween baru dengan durasi 1.5 detik (pergerakan lambat/halus)
-            local tweenInfo = TweenInfo.new(tweenDuration, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-            currentTween = TweenService:Create(hrp, tweenInfo, {CFrame = targetCFrame})
-            currentTween:Play()
-            
-            -- Tunggu hingga tween selesai atau waktu total 7 detik habis
-            local tweenDone = false
-            local conn
-            conn = currentTween.Completed:Connect(function()
-                tweenDone = true
-                if conn then conn:Disconnect() end
-            end)
-            
-            -- Loop menunggu dengan interval kecil
-            local waitStart = tick()
-            while not tweenDone and currentLoopActive and (tick() - startTime < totalDuration) do
-                task.wait(0.1)
-                -- Jika waktu tunggu melebihi durasi tween, paksa keluar untuk membuat tween baru
-                if tick() - waitStart >= tweenDuration then
-                    break
-                end
-            end
-            
-            if conn then conn:Disconnect() end
-        end
-        
-        -- Reset setelah 7 detik selesai
-        currentLoopActive = false
-        currentTween = nil
-    end)
-end
-
--- ==========================================
--- UI SETUP (Dropdown)
--- ==========================================
--- CATATAN: Pastikan variabel 'Tab' sudah didefinisikan oleh UI Library kamu.
-local Dropdown = Other:CreateDropdown({
-   Name = "Teleport to Other",
-   Options = toolNames,
-   CurrentOption = {"None"},
-   MultipleOptions = false,
-   Flag = "ToolTeleportDropdown",
-   Callback = function(Options)
-       local selectedTool = Options[1]
-       if selectedTool then
-           teleportToTool(selectedTool)
-       end
-   end,
-})
-
 
 local MainSection = Misc:CreateSection("Information")
-local Paragraph = Misc:CreateParagraph({Title = "⚒️ CREATOR SCRIPT", Content = "- Owner: Zeutronxsite\n- Developer: Zyruuux\n- Programmer: 4Streakzx & 3Streakzx\n- Builder Script: Therepositori\n- Tester Script: Exterminate0"})
+local Paragraph = Misc:CreateParagraph({Title = "❓ INFORMATION", Content = "Actually, work on this script hasn't stopped completely, zeutronxsite has stopped working on it, so the project has been handed over to Externimate0 and his team\n \nNote: This script will be updated silently."})
 
-local Paragraph = Misc:CreateParagraph({Title = "🛡️ INFORMATION", Content = "- Created Team: ZeutronX\n- Max Version: Final Update\n- Status: ⚪ Discountinue"})
 
 local MainSection = Theme:CreateSection("Choose Theme")
 local Paragraph = Theme:CreateParagraph({Title = "📢 INFORMATION", Content = "All these themes are built-in from Rayfield"})
--- Dropdown Theme Selector
+
+-- Variabel untuk menyimpan pilihan tema sebelum dieksekusi
+-- Diinisialisasi dengan "Default" karena CurrentOption default adalah "Default"
+local selectedThemeOption = "Default"
+
 local ThemeDropdown = Theme:CreateDropdown({
     Name = "Select Theme",
     Options = {
@@ -2444,30 +2287,46 @@ local ThemeDropdown = Theme:CreateDropdown({
     MultipleOptions = false,     -- Hanya bisa pilih satu tema
     Flag = "ThemeSelector",      -- Identifier unik untuk config
     Callback = function(Options)
-        -- Options adalah tabel, karena MultipleOptions = false, kita ambil index pertama [1]
-        local selectedTheme = Options[1]
-        
-        -- Mencocokkan string pilihan dengan fungsi ModifyTheme
-        if selectedTheme == "Default" then
-            Window.ModifyTheme('Default')
-        elseif selectedTheme == "AmberGlow" then
-            Window.ModifyTheme('AmberGlow')
-        elseif selectedTheme == "Bloom" then
-            Window.ModifyTheme('Bloom')
-        elseif selectedTheme == "Amethyst" then
-            Window.ModifyTheme('Amethyst')
-        elseif selectedTheme == "DarkBlue" then
-            Window.ModifyTheme('DarkBlue')
-        elseif selectedTheme == "Green" then
-            Window.ModifyTheme('Green')
-        elseif selectedTheme == "Light" then
-            Window.ModifyTheme('Light')
-        elseif selectedTheme == "Ocean" then
-            Window.ModifyTheme('Ocean')
+        -- Hanya menyimpan pilihan, TIDAK langsung mengeksekusi
+        if type(Options) == "table" and Options[1] then
+            selectedThemeOption = Options[1]
+        elseif type(Options) == "string" then
+            selectedThemeOption = Options
         end
         
-        print("Theme changed to: " .. selectedTheme)
+        print("Theme selected (pending execution): " .. selectedThemeOption)
     end,
+})
+
+-- Tombol untuk mengeksekusi perubahan tema berdasarkan pilihan di dropdown
+local ApplyThemeButton = Theme:CreateButton({
+    Name = "Apply Selected Theme",
+    Callback = function()
+        -- Validasi jika tidak ada pilihan yang valid
+        if not selectedThemeOption or selectedThemeOption == "" then
+            Rayfield:Notify({
+                Title = "Error",
+                Content = "Please select a theme first!",
+                Duration = 5,
+                Image = "triangle-alert",
+            })
+            return
+        end
+        
+        -- Eksekusi perubahan tema di sini
+        -- Karena nama string pilihan sama persis dengan argumen ModifyTheme, kita bisa langsung melempar variabelnya
+        Window.ModifyTheme(selectedThemeOption)
+        
+        -- Notifikasi sukses
+        Rayfield:Notify({
+            Title = "Theme Applied",
+            Content = "Theme successfully changed to: " .. selectedThemeOption,
+            Duration = 5,
+            Image = "check",
+        })
+        
+        print("Theme executed and changed to: " .. selectedThemeOption)
+    end
 })
 
 local MainSection = Target:CreateSection("Choose Target")
