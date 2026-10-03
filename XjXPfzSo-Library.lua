@@ -1,12 +1,12 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
-   Name = "ZETHUB | TLK PRISON | V-MAX",
+   Name = "ZETHUB | TLK PRISON | V-RBXV45",
    Icon = "user",
    LoadingTitle = "Initializing......",
    LoadingSubtitle = "by Externimate0",
    ShowText = "Interface", -- for mobile users to unhide Rayfield, change if you'd like
-   Theme = "Amethyst",
+   Theme = "Ocean",
 
 -- Toggle HIde UI in PC
    ToggleUIKeybind = "K", -- The keybind to toggle the UI visibility (string like "K" or Enum.KeyCode)
@@ -23,11 +23,25 @@ local Window = Rayfield:CreateWindow({
 
 -- Notification Rayfield
 Rayfield:Notify({
-   Title = "📢 Notification Alert",
-   Content = "- Thank you for using this script\n- This script is still in beta stage so there are many bugs",
+   Title = "Notification Alert",
+   Content = "Thank you for using this script",
+   Duration = 5,
+   Image = "bell",
+   Actions = {
+      Ignore = {
+         Name = "Okay",
+         Callback = function()
+      end
+   },
+},
+})
+
+Rayfield:Notify({
+   Title = "Notification Alert",
+   Content = "This script is still in beta stage so there are many bugs",
    Duration = 5,
    Image = "megaphone",
-   Actions = { -- Notification Buttons
+   Actions = {
       Ignore = {
          Name = "Okay",
          Callback = function()
@@ -52,10 +66,15 @@ local Misc = Window:CreateTab("Settings", "settings")
 -- ==========================================
 
 local MainSection = Change:CreateSection("Recent Updates")
-local Paragraph = Change:CreateParagraph({Title = "🔁 FINAL UPDATED (New Updated)", Content = "- [+] Added Kill Aura & deleted auto attack\n- [+] Change Buffer\n- [+] Deteled Auto bypass\n- [+] Change teleport tool, food & other\n- [+] Added New UI for fly, walk & jump\n- [+] Added More Details & Icon"})
+local Paragraph = Change:CreateParagraph({Title = "🔁 V-RERBX", Content = "- [+] Added Kill Aura & deleted auto attack\n- [+] Change Buffer\n- [+] Deteled Auto bypass\n- [+] Change teleport tool, food & other\n- [+] Added New UI for fly, walk & jump\n- [+] Added More Details & Icon"})
+
+local Paragraph = Change:CreateParagraph({Title = "🔁 V-RBXV45", Content = "- [+] Fixed One hit Not Works\n- [+] Deleted Velocity Method\n- [+] Fixed Details & Information"})
+
+local MainSection = Change:CreateSection("Next Updates")
+local Paragraph = Change:CreateParagraph({Title = "❌ V-????", Content = "Unknown, Coming Soon!"})
 
 local MainSection = MainTab:CreateSection("Main Script Toggle")
-local Paragraph = MainTab:CreateParagraph({Title = "📢 INFORMATION", Content = "Auto Attack & Auto Heal Working Now, Keybind One Hit (F) moved to the target tab"})
+local Paragraph = MainTab:CreateParagraph({Title = "📢 INFORMATION", Content = "Kill Aura & Auto Heal Working Now, Keybind One Hit (F) moved to the target tab"})
 
 -- ==========================================
 -- LOCAL SCRIPTS & SERVICE
@@ -667,9 +686,7 @@ local Button = Bypass:CreateButton({
 })
 
 local MainSection = Buff:CreateSection("Information/Guide")
-local Paragraph = Buff:CreateParagraph({Title = "📢 INFORMATION", Content = "For Walkspeed and Jumppower there are several types of Anti Cheat Bypass (Just Choose One)\n- Cframe & Randomization Method = Recommended!\n- VelocityLinier & HookMetaMethod = Working, But Not Recommended!\n- [Guide] Use Alt Button On Your Keyboard For Hide/Open UI"})
-
-local Paragraph = Buff:CreateParagraph({Title = "🛡️ SYSTEM INFORMATION", Content = "- For the velocity method, since a different approach is used, jumppower will not work\n- To revert your character to its original state when using the velocity method, simply rejoin the server"})
+local Paragraph = Buff:CreateParagraph({Title = "📢 INFORMATION", Content = "For Walkspeed and Jumppower there are several types of Anti Cheat Bypass (Just Choose One)\n- Cframe & Randomization Method = Recommended!\n- Hookmethod = Not Recommended!"})
 
 local MainSection = Buff:CreateSection("Walkspeed, Fly & JumpPower ")
 local Button = Buff:CreateButton({
@@ -680,7 +697,7 @@ local Button = Buff:CreateButton({
 })
 
 local MainSection = Team:CreateSection("Choose Team")
-local Paragraph = Team:CreateParagraph({Title = "🛡️ INFORMATION", Content = "Choose Team is Fixed Now!"})
+local Paragraph = Team:CreateParagraph({Title = "🛡️ INFORMATION", Content = "Some teams are not working effectively due to differing methods"})
 
 -- Pastikan 'MainTab' sudah didefinisikan sebelumnya di script Rayfield Anda
 -- Contoh: local MainTab = Rayfield:CreateTab({ Name = "TLK Prison", Icon = "shield" })
