@@ -1,3 +1,4 @@
+-- Script Esp Moster
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
@@ -665,10 +666,9 @@ local function createESPForMonster(monster)
         highlight = nil,
         billboard = nil,
         ancestryConn = nil,
-        healthConn = nil,
     }
     
-    -- HIGHLIGHT
+    -- HIGHLIGHT (Full ESP dari kepala sampai kaki)
     pcall(function()
         local highlight = Instance.new("Highlight")
         highlight.FillColor = COLOR_ESP_FILL
@@ -681,7 +681,7 @@ local function createESPForMonster(monster)
         espData.highlight = highlight
     end)
     
-    -- BILLBOARD GUI
+    -- BILLBOARD GUI (Nama & Jarak)
     local attachPart = nil
     if monster:IsA("BasePart") then
         attachPart = monster
@@ -705,7 +705,7 @@ local function createESPForMonster(monster)
         local height = getMonsterHeight(monster)
         
         local billboard = Instance.new("BillboardGui")
-        billboard.Size = UDim2.new(0, 180, 0, 52)
+        billboard.Size = UDim2.new(0, 180, 0, 40) -- Ukuran disesuaikan karena health bar dihapus
         billboard.StudsOffset = Vector3.new(0, height / 2 + 1.5, 0)
         billboard.AlwaysOnTop = true
         billboard.LightInfluence = 0
@@ -714,6 +714,7 @@ local function createESPForMonster(monster)
         billboard.Parent = monster
         espData.billboard = billboard
         
+        -- Label Nama
         local nameLabel = Instance.new("TextLabel")
         nameLabel.Size = UDim2.new(1, 0, 0, 22)
         nameLabel.BackgroundTransparency = 1
@@ -726,6 +727,7 @@ local function createESPForMonster(monster)
         nameLabel.Parent = billboard
         espData.nameLabel = nameLabel
         
+        -- Label Jarak
         local distanceLabel = Instance.new("TextLabel")
         distanceLabel.Size = UDim2.new(1, 0, 0, 16)
         distanceLabel.Position = UDim2.new(0, 0, 0, 22)
@@ -738,49 +740,6 @@ local function createESPForMonster(monster)
         distanceLabel.Font = Enum.Font.GothamMedium
         distanceLabel.Parent = billboard
         espData.distanceLabel = distanceLabel
-        
-        -- HEALTH BAR
-        local humanoid = monster:IsA("Model") and monster:FindFirstChildOfClass("Humanoid")
-        if humanoid then
-            local healthBar = Instance.new("Frame")
-            healthBar.Size = UDim2.new(0.7, 0, 0, 5)
-            healthBar.Position = UDim2.new(0.15, 0, 0, 40)
-            healthBar.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
-            healthBar.BorderSizePixel = 0
-            healthBar.Parent = billboard
-            
-            local hbCorner = Instance.new("UICorner")
-            hbCorner.CornerRadius = UDim.new(0, 3)
-            hbCorner.Parent = healthBar
-            
-            local healthFill = Instance.new("Frame")
-            healthFill.Size = UDim2.new(math.clamp(humanoid.Health / humanoid.MaxHealth, 0, 1), 0, 1, 0)
-            healthFill.BackgroundColor3 = COLOR_GREEN
-            healthFill.BorderSizePixel = 0
-            healthFill.Parent = healthBar
-            
-            local hfCorner = Instance.new("UICorner")
-            hfCorner.CornerRadius = UDim.new(0, 3)
-            hfCorner.Parent = healthFill
-            
-            espData.healthBar = healthBar
-            espData.healthFill = healthFill
-            
-            espData.healthConn = humanoid.HealthChanged:Connect(function(newHealth)
-                if espData.healthFill and humanoid.MaxHealth > 0 then
-                    local ratio = math.clamp(newHealth / humanoid.MaxHealth, 0, 1)
-                    espData.healthFill.Size = UDim2.new(ratio, 0, 1, 0)
-                    
-                    if ratio > 0.6 then
-                        espData.healthFill.BackgroundColor3 = COLOR_GREEN
-                    elseif ratio > 0.3 then
-                        espData.healthFill.BackgroundColor3 = COLOR_ORANGE
-                    else
-                        espData.healthFill.BackgroundColor3 = COLOR_RED
-                    end
-                end
-            end)
-        end
     end
     
     -- Track removal
@@ -799,7 +758,6 @@ function destroyESPForMonster(espData)
     if not espData then return end
     if espData.highlight then pcall(function() espData.highlight:Destroy() end) end
     if espData.billboard then pcall(function() espData.billboard:Destroy() end) end
-    if espData.healthConn then pcall(function() espData.healthConn:Disconnect() end) end
     if espData.ancestryConn then pcall(function() espData.ancestryConn:Disconnect() end) end
 end
 
@@ -1050,10 +1008,6 @@ CloseBtn.MouseButton1Click:Connect(function()
     setOpen(false)
 end)
 
--- ⚠️ FIX: HAPUS MiniToggle.MouseButton1Click karena bentrok dengan drag system
--- Drag system (InputBegan + InputEnded) sudah handle click-to-toggle via miniMoved check
--- Jadi hapus baris ini agar tidak dipanggil dua kali dalam satu klik!
-
 ToggleBtn.MouseButton1Click:Connect(toggleESP)
 RefreshBtn.MouseButton1Click:Connect(refreshESP)
 
@@ -1156,7 +1110,6 @@ end)
 UserInputService.InputEnded:Connect(function(input)
     if not isPress(input) then return end
     
-    -- ✅ FIX: Hanya trigger setOpen jika ini KLIK (bukan drag) pada mini toggle
     if draggingTarget == "mini" and not miniMoved then
         setOpen(not isOpen)
     end
