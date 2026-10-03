@@ -2672,47 +2672,13 @@ local RefreshButton = Target:CreateButton({
    end,
 })
 
--- Keybind
-local Keybind = Target:CreateKeybind({
-    Name = "One Hit (Target)",
-    CurrentKeybind = "F",
-    HoldToInteract = false,
-    Flag = "Keybind1",
-    Callback = function(Keybind)
-        pcall(function()
-                if Plr.Character and Plr.Backpack then
-                    
-                    -- 1. Equip SEMUA tool dari Backpack ke Character (Kecuali yang ada di IgnoredItems)
-                    for _, tool in pairs(Plr.Backpack:GetChildren()) do
-                        if tool:IsA("Tool") and not IgnoredItems[tool.Name] then
-                            tool.Parent = Plr.Character
-                        end
-                    end
-                    
-                    -- 2. Auto attack SEMUA tool yang ada di Character 1x saja (Kecuali yang ada di IgnoredItems)
-                    for _, tool in pairs(Plr.Character:GetChildren()) do
-                        if tool:IsA("Tool") and not IgnoredItems[tool.Name] then
-                            tool:Activate()
-                        end
-                    end
-                Rayfield:Notify({
-                    Title = "⚔️ Information Alert",
-                    Content = "One Hit has been triggered!",
-                    Duration = 3,
-                    Image = "swords",
-                })
-            end
-        end)
-    end
-})
-
 -- Script Auto Attack
 local Plr = game:GetService("Players").LocalPlayer
 
 workspace.FallenPartsDestroyHeight = -50000
 
 -- Daftar item yang diabaikan (Bukan senjata / Tool pendukung)
-local IgnoredItems = {
+local IgnoredItems2 = {
     -- Makanan & Minuman
     ["Drink"] = true, 
     ["Doughnut"] = true, 
@@ -2731,6 +2697,40 @@ local IgnoredItems = {
     ["Board"] = true, 
     ["Grab"] = true
 }
+
+-- Keybind
+local Keybind = Target:CreateKeybind({
+    Name = "One Hit (Target)",
+    CurrentKeybind = "F",
+    HoldToInteract = false,
+    Flag = "Keybind1",
+    Callback = function(Keybind)
+        pcall(function()
+                if Plr.Character and Plr.Backpack then
+                    
+                    -- 1. Equip SEMUA tool dari Backpack ke Character (Kecuali yang ada di IgnoredItems)
+                    for _, tool in pairs(Plr.Backpack:GetChildren()) do
+                        if tool:IsA("Tool") and not IgnoredItems2[tool.Name] then
+                            tool.Parent = Plr.Character
+                        end
+                    end
+                    
+                    -- 2. Auto attack SEMUA tool yang ada di Character 1x saja (Kecuali yang ada di IgnoredItems)
+                    for _, tool in pairs(Plr.Character:GetChildren()) do
+                        if tool:IsA("Tool") and not IgnoredItems2[tool.Name] then
+                            tool:Activate()
+                        end
+                    end
+                Rayfield:Notify({
+                    Title = "⚔️ Information Alert",
+                    Content = "One Hit has been triggered!",
+                    Duration = 3,
+                    Image = "swords",
+                })
+            end
+        end)
+    end
+})
 
 local MainSection = Target:CreateSection("Teleport Player")
 local Paragraph = Target:CreateParagraph({Title = "📢 INFORMATION", Content = "Teleporting to the player takes 10 seconds, and if the player changes location, the teleport will follow them"})
