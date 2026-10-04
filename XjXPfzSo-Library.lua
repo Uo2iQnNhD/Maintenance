@@ -1,7 +1,7 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
-   Name = "ZETHUB | TLK PRISON | V-RBXV55",
+   Name = "ZETHUB | TLK PRISON | V-RBXV75",
    Icon = "user",
    LoadingTitle = "Initializing......",
    LoadingSubtitle = "by Externimate0",
@@ -56,10 +56,9 @@ local MainTab = Window:CreateTab("Attack", "swords")
 local Buff = Window:CreateTab("Buffer", "gauge")
 local Bypass = Window:CreateTab("Anti Cheat Bypass", "shield-alert")
 local Team = Window:CreateTab("Team & Esp", "users")
-local Other = Window:CreateTab("Scripts & Tools", "wrench")
+local Other = Window:CreateTab("Scripts & Teleport", "wrench")
 local Target = Window:CreateTab("Target & Player", "crosshair")
-local Theme = Window:CreateTab("Theme & Teleport", "palette")
-local Misc = Window:CreateTab("Settings", "settings")
+local Misc = Window:CreateTab("Theme & Settings", "settings")
 
 -- ==========================================
 -- UI TABS & SECTIONS
@@ -68,10 +67,10 @@ local Misc = Window:CreateTab("Settings", "settings")
 local MainSection = Change:CreateSection("Recent Updates")
 local Paragraph = Change:CreateParagraph({Title = "🔁 V-RERBX", Content = "- [+] Added Kill Aura & deleted auto attack\n- [+] Change Buffer\n- [+] Deteled Auto bypass\n- [+] Change teleport tool, food & other\n- [+] Added New UI for fly, walk & jump\n- [+] Added More Details & Icon"})
 
-local Paragraph = Change:CreateParagraph({Title = "🔁 V-RBXV55", Content = "- [+] Fixed One hit Not Works\n- [+] Deleted Velocity Method\n- [+] Fixed Details & Information\n- [+] Fixed Teleporter [Beta, Expect Bugs]"})
+local Paragraph = Change:CreateParagraph({Title = "🔁 V-RBXV75", Content = "- [+] Fixed One hit Not Works\n- [+] Deleted Velocity Method\n- [+] Fixed Details & Information\n- [+] Fixed Teleporter [Beta, Expect Bugs]\n- [+] Fixed Details & Icon\n- [+] Fixed Some Bugs\n- [+] Replace Tab & Script"})
 
 local MainSection = Change:CreateSection("Next Updates")
-local Paragraph = Change:CreateParagraph({Title = "❌ V-????", Content = "Unknown, Coming Soon!"})
+local Paragraph = Change:CreateParagraph({Title = "❓ INFORMATION", Content = "Actually, work on this script hasn't stopped completely, zeutronxsite has stopped working on it, so the project has been handed over to Externimate0 and his team\n \nNote: This script will be updated silently."})
 
 local MainSection = MainTab:CreateSection("Main Script Toggle")
 local Paragraph = MainTab:CreateParagraph({Title = "📢 INFORMATION", Content = "Kill Aura & Auto Heal Working Now, Keybind One Hit (F) moved to the target tab"})
@@ -2277,18 +2276,14 @@ local Button = Other:CreateButton({
    end
 })
 
-local MainSection = Misc:CreateSection("Information")
-local Paragraph = Misc:CreateParagraph({Title = "❓ INFORMATION", Content = "Actually, work on this script hasn't stopped completely, zeutronxsite has stopped working on it, so the project has been handed over to Externimate0 and his team\n \nNote: This script will be updated silently."})
-
-
-local MainSection = Theme:CreateSection("Choose Theme")
-local Paragraph = Theme:CreateParagraph({Title = "📢 INFORMATION", Content = "All these themes are built-in from Rayfield"})
+local MainSection = Misc:CreateSection("Choose Theme")
+local Paragraph = Misc:CreateParagraph({Title = "📢 INFORMATION", Content = "All these themes are built-in from Rayfield"})
 
 -- Variabel untuk menyimpan pilihan tema sebelum dieksekusi
 -- Diinisialisasi dengan "Default" karena CurrentOption default adalah "Default"
 local selectedThemeOption = "Default"
 
-local ThemeDropdown = Theme:CreateDropdown({
+local ThemeDropdown = Misc:CreateDropdown({
     Name = "Select Theme",
     Options = {
         "Default", 
@@ -2316,7 +2311,7 @@ local ThemeDropdown = Theme:CreateDropdown({
 })
 
 -- Tombol untuk mengeksekusi perubahan tema berdasarkan pilihan di dropdown
-local ApplyThemeButton = Theme:CreateButton({
+local ApplyThemeButton = Misc:CreateButton({
     Name = "Apply Selected Theme",
     Callback = function()
         -- Validasi jika tidak ada pilihan yang valid
@@ -2755,17 +2750,20 @@ local Paragraph = Target:CreateParagraph({Title = "📢 INFORMATION", Content = 
 local Button = Target:CreateButton({
     Name = "Teleporter Player",
     Callback = function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Zyptrue/Teleporter-Player/refs/heads/main/Working"))()
-   end
-})
+    Rayfield:Notify({
+          Title = "Notification Alert",
+          Content = "The player teleporter is currently unavailable for use!",
+          Duration = 6,
+          Image = "bell",
+        })
 
-local MainSection = Theme:CreateSection("Teleport")
-local Paragraph = Theme:CreateParagraph({Title = "📢 INFORMATION", Content = "- Ensure your character is on the ground, if you are hovering, you will die due to the anti-cheat fly detection\n- The teleport duration to reach the destination is 7 seconds"})
+     Rayfield:Notify({
+          Title = "Notification Alert",
+          Content = "Zyptrue is currently down for maintenance :(",
+          Duration = 6,
+          Image = "server",
+        })
 
-local Button = Theme:CreateButton({
-    Name = "Teleporter",
-    Callback = function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Zyptrue/Teleporter/refs/heads/main/Next"))()
    end
 })
 
