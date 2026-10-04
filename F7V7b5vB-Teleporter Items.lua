@@ -5,8 +5,32 @@ local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local TeleportService = game:GetService("TeleportService")
 local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local lp = Players.LocalPlayer
+
+-- ==========================================
+-- FIX: DRAIN ANTRIAN REMOTE "MoveBodyPart"
+-- Server game menembakkan event ini ke client terus-menerus saat
+-- karakter di bawah tanah / ragdoll. Karena client tidak punya
+-- handler, antrian penuh (128/256/512 events dropped).
+-- Solusi: pasang handler kosong agar antrian selalu diproses.
+-- ==========================================
+task.spawn(function()
+	local remote = ReplicatedStorage:FindFirstChild("MoveBodyPart")
+	if not remote then
+		local t0 = tick()
+		while not remote and (tick() - t0) < 15 do
+			task.wait(0.5)
+			remote = ReplicatedStorage:FindFirstChild("MoveBodyPart")
+		end
+	end
+	if remote and remote:IsA("RemoteEvent") then
+		-- Handler kosong = antrian event diproses & tidak menumpuk
+		remote.OnClientEvent:Connect(function() end)
+	end
+end)
 
 -- ==========================================
 -- DAFTAR LOKASI TELEPORT (3 Kategori)
@@ -68,6 +92,7 @@ local OPTIONS = {
 -- ==========================================
 local currentTween = nil
 local currentLoopActive = false
+local noclipConnection = nil
 local selections = {
 	Tools = nil,
 	Food  = nil,
@@ -75,7 +100,59 @@ local selections = {
 }
 
 -- ==========================================
--- FUNGSI TELEPORT (TweenService + Spam 7 Detik)
+-- FUNGSI NOCLIP
+-- ==========================================
+local function turnOnNoclip(char)
+	if noclipConnection then 
+		noclipConnection:Disconnect() 
+	end
+	noclipConnection = RunService.Stepped:Connect(function()
+		if not char or not char.Parent then return end
+		for _, part in ipairs(char:GetDescendants()) do
+			if part:IsA("BasePart") then
+				part.CanCollide = false
+			end
+		end
+	end)
+end
+
+local function turnOffNoclip(char)
+	if noclipConnection then
+		noclipConnection:Disconnect()
+		noclipConnection = nil
+	end
+	if char and char.Parent then
+		for _, part in ipairs(char:GetDescendants()) do
+			if part:IsA("BasePart") then
+				part.CanCollide = true
+			end
+		end
+	end
+end
+
+-- ==========================================
+-- STATE GUARD (Anti-Ragdoll / Anti spam MoveBodyPart)
+-- ==========================================
+local function lockStates(hum)
+	if hum and hum.Parent then
+		pcall(function()
+			hum:SetStateEnabled(Enum.HumanoidStateType.Ragdoll, false)
+			hum:SetStateEnabled(Enum.HumanoidStateType.Physics, false)
+		end)
+	end
+end
+
+local function restoreStates(hum)
+	if hum and hum.Parent then
+		pcall(function()
+			hum:SetStateEnabled(Enum.HumanoidStateType.Ragdoll, true)
+			hum:SetStateEnabled(Enum.HumanoidStateType.Physics, true)
+		end)
+	end
+end
+
+-- ==========================================
+-- FUNGSI TELEPORT (Metode Turun -> Geser Bawah -> Naik)
 -- ==========================================
 local function cancelTeleport()
 	if currentTween then
@@ -84,6 +161,12 @@ local function cancelTeleport()
 	end
 	if currentLoopActive then
 		currentLoopActive = false
+	end
+	-- Cleanup: matikan noclip & kembalikan state humanoid
+	local char = lp.Character
+	if char then
+		turnOffNoclip(char)
+		restoreStates(char:FindFirstChildOfClass("Humanoid"))
 	end
 end
 
@@ -101,27 +184,60 @@ local function teleportTo(category, name)
 	local hum = char:FindFirstChildOfClass("Humanoid")
 	if not hrp or not hum then return end
 
+	-- 1. NYALAKAN NOCLIP + KUNCI STATE (anti ragdoll)
+	turnOnNoclip(char)
+	lockStates(hum)
+
 	local pos = LOCATIONS[category][name]
-	local targetCFrame = CFrame.new(pos)
+	local startPos = hrp.Position
+
+	-- Strategi Anti-Ragdoll & Anti-Tembok:
+	local offsetBawah = 70
+	local safeY = startPos.Y - offsetBawah
+	
+	local step1 = Vector3.new(startPos.X, safeY, startPos.Z) -- Turun di tempat
+	local step2 = Vector3.new(pos.X, safeY, pos.Z)           -- Geser di bawah tanah
+	local step3 = pos                                        -- Naik ke tujuan
+
+	-- Kecepatan tween diperlambat (20 stud/detik) agar aman dari deteksi speedhack
+	local TWEEN_SPEED = 150
 
 	currentLoopActive = true
 	local startTime = tick()
-	local totalDuration = 7    -- Total spam: 7 detik
-	local tweenDuration = 2.5  -- Durasi per tween
+	local totalDuration = 15 -- Total waktu maksimal proses
 
 	task.spawn(function()
-		while currentLoopActive and (tick() - startTime < totalDuration) do
-			-- Validasi karakter masih ada
+		-- Cleanup terpusat untuk semua jalur keluar
+		local function cleanup()
+			turnOffNoclip(char)
+			restoreStates(hum)
+			currentLoopActive = false
+			currentTween = nil
+		end
+
+		-- Helper untuk tween per langkah
+		local function doTween(targetPos, minDuration)
+			if not currentLoopActive then return false end
 			if not hrp.Parent or not hum.Parent then
 				currentLoopActive = false
-				break
+				return false
 			end
-
-			local tweenInfo = TweenInfo.new(tweenDuration, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-			currentTween = TweenService:Create(hrp, tweenInfo, {CFrame = targetCFrame})
+			-- Death guard: berhenti jika karakter mati (void dll)
+			-- agar server tidak terus mengirim koreksi MoveBodyPart
+			if hum.Health <= 0 or hum:GetState() == Enum.HumanoidStateType.Dead then
+				currentLoopActive = false
+				return false
+			end
+			
+			-- Durasi dinamis berdasarkan jarak agar kecepatan konstan & tidak menyentak
+			local distance = (hrp.Position - targetPos).Magnitude
+			local duration = math.max(minDuration, distance / TWEEN_SPEED)
+			
+			-- Sine InOut memberikan efek percepatan dan perlambatan yang natural
+			local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut)
+			currentTween = TweenService:Create(hrp, tweenInfo, {CFrame = CFrame.new(targetPos)})
 			currentTween:Play()
 
-			-- Tunggu sampai tween selesai atau timeout
 			local tweenDone = false
 			local conn
 			conn = currentTween.Completed:Connect(function()
@@ -130,16 +246,38 @@ local function teleportTo(category, name)
 			end)
 
 			local waitStart = tick()
-			while not tweenDone and currentLoopActive and (tick() - startTime < totalDuration) do
+			while not tweenDone and currentLoopActive do
 				task.wait(0.1)
-				if tick() - waitStart >= tweenDuration then break end
+				if tick() - waitStart >= duration + 1 then break end
 			end
-
 			if conn then conn:Disconnect() end
+			
+			return currentLoopActive
 		end
 
-		currentLoopActive = false
-		currentTween = nil
+		-- 1. Turun ke bawah di tempat (min 2.0 detik)
+		local ok1 = doTween(step1, 2.0)
+		if not ok1 then cleanup() return end
+
+		-- 2. Geser horizontal ke X, Z tujuan (min 1.0 detik)
+		local ok2 = doTween(step2, 1.0)
+		if not ok2 then cleanup() return end
+
+		-- 3. Naik ke posisi tujuan sebenarnya (min 2.0 detik)
+		local ok3 = doTween(step3, 2.0)
+		if not ok3 then cleanup() return end
+
+		-- MATIKAN NOCLIP + KEMBALIKAN STATE KARENA SUDAH SAMPAI TUJUAN
+		turnOffNoclip(char)
+		restoreStates(hum)
+
+		-- 4. Spam di posisi akhir untuk memastikan sinkronisasi server
+		while currentLoopActive and (tick() - startTime < totalDuration) do
+			local okSpam = doTween(step3, 0.5)
+			if not okSpam then break end
+		end
+
+		cleanup()
 	end)
 end
 
@@ -147,6 +285,12 @@ end
 -- UI SETUP (LIBRARY V3.2)
 -- ==========================================
 local Lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/Uo2iQnNhD/Database/refs/heads/main/XsHuV3JH-ZET%20UIv4.luau"))()
+
+-- Wrapper aman: error internal library (spt GetChildren nil) tidak lagi
+-- muncul sebagai error merah di console
+local function notify(msg, dur, kind)
+	pcall(function() Lib:Notify(msg, dur, kind) end)
+end
 
 local Win = Lib:CreateWindow({
 	Title = "ZETHUB | TELEPORTER",
@@ -178,15 +322,15 @@ local function buildTeleportTab(categoryName, description)
 		Callback = function()
 			local selected = selections[categoryName]
 			if not selected or selected == "None" then
-				Lib:Notify("Please select a location first!", 3, "Warning")
+				notify("Please select a location first!", 3, "Warning")
 				return
 			end
 			local char = lp.Character
 			if not char then
-				Lib:Notify("Character not found!", 3, "Error")
+				notify("Character not found!", 3, "Error")
 				return
 			end
-			Lib:Notify("Teleporting to " .. selected .. "...", 3, "Teleport")
+			notify("Teleporting to " .. selected .. "...", 3, "Teleport")
 			teleportTo(categoryName, selected)
 		end
 	})
@@ -197,25 +341,25 @@ local function buildTeleportTab(categoryName, description)
 		Callback = function()
 			if currentLoopActive then
 				cancelTeleport()
-				Lib:Notify("Teleport cancelled", 2, "Info")
+				notify("Teleport cancelled", 2, "Info")
 			else
-				Lib:Notify("No active teleport", 2, "Info")
+				notify("No active teleport", 2, "Info")
 			end
 		end
 	})
 
-	-- Info tambahan
+
+-- Info tambahan
 	tab:CreateSection("Info")
-	tab:CreateLabel("• Tween duration: 2.5s per loop")
-	tab:CreateLabel("• Total spam time: 7 seconds")
-	tab:CreateLabel("• Auto-cancel on respawn")
+	tab:CreateLabel("Teleporter Duration is 15 Second!")
+    tab:CreateLabel("If you cannot move, wait 15 seconds!")
 
 	-- Server utility
 	tab:CreateSection("Server")
 	tab:CreateButton({
 		Title = "Rejoin Server",
 		Callback = function()
-			Lib:Notify("Rejoining server...", 2, "Server")
+			notify("Rejoining server...", 2, "Server")
 			cancelTeleport()
 			task.wait(0.3)
 			pcall(function()
@@ -265,5 +409,5 @@ end)
 -- ==========================================
 -- WELCOME
 -- ==========================================
-Lib:Notify("Interface loaded! Select location & click Teleport", 5, "Welcome")
-Lib:Notify("Press K to Show/hide UI", 4, "Info")
+notify("Interface loaded! Select location & click Teleport", 5, "Welcome")
+notify("Press K to Show/hide UI", 4, "Info")
