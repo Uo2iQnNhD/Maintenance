@@ -1,7 +1,7 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
-   Name = "ZETHUB | TLK PRISON | V-RBXV45",
+   Name = "ZETHUB | TLK PRISON | V-RBXV55",
    Icon = "user",
    LoadingTitle = "Initializing......",
    LoadingSubtitle = "by Externimate0",
@@ -68,7 +68,7 @@ local Misc = Window:CreateTab("Settings", "settings")
 local MainSection = Change:CreateSection("Recent Updates")
 local Paragraph = Change:CreateParagraph({Title = "🔁 V-RERBX", Content = "- [+] Added Kill Aura & deleted auto attack\n- [+] Change Buffer\n- [+] Deteled Auto bypass\n- [+] Change teleport tool, food & other\n- [+] Added New UI for fly, walk & jump\n- [+] Added More Details & Icon"})
 
-local Paragraph = Change:CreateParagraph({Title = "🔁 V-RBXV45", Content = "- [+] Fixed One hit Not Works\n- [+] Deleted Velocity Method\n- [+] Fixed Details & Information"})
+local Paragraph = Change:CreateParagraph({Title = "🔁 V-RBXV55", Content = "- [+] Fixed One hit Not Works\n- [+] Deleted Velocity Method\n- [+] Fixed Details & Information\n- Fixed Teleporter [Beta, Expect Bugs]"})
 
 local MainSection = Change:CreateSection("Next Updates")
 local Paragraph = Change:CreateParagraph({Title = "❌ V-????", Content = "Unknown, Coming Soon!"})
@@ -2271,7 +2271,7 @@ local MainSection = Other:CreateSection("Teleporter Tool")
 local Paragraph = Other:CreateParagraph({Title = "📢 INFORMATION", Content = "- Ensure your character is on the ground, if you are hovering, you will die due to the anti-cheat fly detection\n- The teleport duration to reach the destination is 7 seconds"})
 
 local Button = Other:CreateButton({
-    Name = "Teleport Items",
+    Name = "Teleport Items [Beta]",
     Callback = function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Uo2iQnNhD/Maintenance/refs/heads/main/F7V7b5vB-Teleporter%20Items.lua"))()
    end
