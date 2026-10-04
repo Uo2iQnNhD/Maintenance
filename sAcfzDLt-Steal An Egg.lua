@@ -119,13 +119,26 @@ local function runScript(optionName)
         pcall(function()
             loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/97c3f6db55a2cf72141537a85458e5a7.lua"))()
         end)
+
+  elseif optionName == "LIMBO [FREE]" then
+        Rayfield:Notify({
+            Title = "Executed Scripts",
+            Content = "Scripts Successfully Executed!",
+            Duration = 6,
+            Image = "check",
+        })
+        task.wait(0.5)
+        pcall(function()
+            loadstring(game:HttpGet("https://limbohub.my.id/loader.lua"))()
+        end)
+
     end
 end
 
 local Dropdown = MainTab:CreateDropdown({
     Name = "Select Scripts",
     Options = {"NIGHT [HUB & KEYLESS]", "LENNON [HUB & KEYLESS]", "MIRANDA [HUB & KEYLESS]", 
-               "Chilli [HUB & FREE]", "Sena [HUB & V5]", "AXON [HUB & KEYLESS]"},
+               "Chilli [HUB & FREE]", "Sena [HUB & V5]", "AXON [HUB & KEYLESS]", "LIMBO [FREE]"},
     CurrentOption = {"None"},
     MultipleOptions = false,
     Flag = "Dropdown1",
