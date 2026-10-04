@@ -6,7 +6,7 @@ local Window = Rayfield:CreateWindow({
    LoadingTitle = "Initializing......",
    LoadingSubtitle = "by Externimate0",
    ShowText = "Interface", -- for mobile users to unhide Rayfield, change if you'd like
-   Theme = "Ocean",
+   Theme = "AmberGlow",
 
 -- Toggle HIde UI in PC
    ToggleUIKeybind = "K", -- The keybind to toggle the UI visibility (string like "K" or Enum.KeyCode)
@@ -68,7 +68,7 @@ local Misc = Window:CreateTab("Settings", "settings")
 local MainSection = Change:CreateSection("Recent Updates")
 local Paragraph = Change:CreateParagraph({Title = "🔁 V-RERBX", Content = "- [+] Added Kill Aura & deleted auto attack\n- [+] Change Buffer\n- [+] Deteled Auto bypass\n- [+] Change teleport tool, food & other\n- [+] Added New UI for fly, walk & jump\n- [+] Added More Details & Icon"})
 
-local Paragraph = Change:CreateParagraph({Title = "🔁 V-RBXV55", Content = "- [+] Fixed One hit Not Works\n- [+] Deleted Velocity Method\n- [+] Fixed Details & Information\n- Fixed Teleporter [Beta, Expect Bugs]"})
+local Paragraph = Change:CreateParagraph({Title = "🔁 V-RBXV55", Content = "- [+] Fixed One hit Not Works\n- [+] Deleted Velocity Method\n- [+] Fixed Details & Information\n- [+] Fixed Teleporter [Beta, Expect Bugs]"})
 
 local MainSection = Change:CreateSection("Next Updates")
 local Paragraph = Change:CreateParagraph({Title = "❌ V-????", Content = "Unknown, Coming Soon!"})
