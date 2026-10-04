@@ -1209,13 +1209,26 @@ local function runScript4(optionName)
         task.wait(2)
         pcall(function()
             loadstring(game:HttpGet("https://raw.githubusercontent.com/Bac0nHck/Scripts/refs/heads/main/BundleAnimations.lua"))()
-        end)		
+        end)	
+
+    elseif optionName == "👁️ Esp Monster [Beta]" then
+        Rayfield:Notify({
+            Title = "Executed Scripts",
+            Content = "Scripts Successfully Executed, Please wait 2 second!",
+            Duration = 4,
+            Image = "check",
+        })
+        task.wait(2)
+        pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Uo2iQnNhD/Maintenance/refs/heads/main/aXXcS4rE-Esp%20Monster.lua"))()
+        end)        
+
     end
 end
 
 local Dropdown = dev:CreateDropdown({
     Name = "Select Scripts",
-    Options = {"♾️ Infinite Yield", "🖥️ Executor Editor [BETA]", "📌 Waypoint Manager [S.W.P]","🛡️ Anti-Fling [Protection]", "🎭 Animation Roblox [Working]"},
+    Options = {"♾️ Infinite Yield", "🖥️ Executor Editor [BETA]", "📌 Waypoint Manager [S.W.P]","🛡️ Anti-Fling [Protection]", "🎭 Animation Roblox [Working]", "👁️ Esp Monster [Beta]"},
     CurrentOption = {"None"},
     MultipleOptions = false,
     Flag = "Dropdown1",
