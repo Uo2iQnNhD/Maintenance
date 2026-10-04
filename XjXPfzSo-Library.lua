@@ -2767,7 +2767,7 @@ local Button = Target:CreateButton({
    end
 })
 
-local MainSection = Misc:CreateSection("More Settings")
+local MainSection = Misc:CreateSection("Settings")
 local Button = Misc:CreateButton({
     Name = "Destroy UI/Interface",
     Callback = function()
