@@ -24,7 +24,7 @@ local Window = Rayfield:CreateWindow({
 -- Notification Rayfield
 Rayfield:Notify({
    Title = "Maintenance Information",
-   Content = "Download Assets, Please Wait....",
+   Content = "Download Assets, Please Wait......",
    Duration = 10,
    Image = "download",
 })
@@ -338,9 +338,9 @@ local Toggle = MainTab:CreateToggle({
 			
 		Rayfield:Notify({
             Title = "Information alert",
-            Content = Value and "Auto Heal: ON" or "Auto Heal: OFF",
+            Content = value and "Auto Heal: ON" or "Auto Heal: OFF",
             Duration = 5,
-            Image = Value and "activity" or "x",
+            Image = value and "activity" or "x",
         }) 
 			
         if value then
@@ -2878,6 +2878,7 @@ local Button = Misc:CreateButton({
     end
 })
 
+wait(5)
 Rayfield:Notify({
    Title = "Notification Alert",
    Content = "Thank you for using this script",
