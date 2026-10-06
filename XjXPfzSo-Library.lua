@@ -349,6 +349,12 @@ local Toggle = MainTab:CreateToggle({
         IsAutoHealing = value
         
         if value then
+        Rayfield:Notify({
+            Title = "Information Alert",
+            Content = "Auto Heal: ON",
+            Duration = 5,
+            Image = "heart-plus",
+         })
             task.spawn(function()
                 while IsAutoHealing do
                     pcall(function()
@@ -379,13 +385,6 @@ local Toggle = MainTab:CreateToggle({
                                         equippedFood:Activate()
                                         task.wait(0.1) -- Klik cepat setiap 0.1 detik
                                     end
-									wait(0.1)
-                                    Rayfield:Notify({
-                                       Title = "Information Alert",
-                                       Content = "Auto Heal: ON",
-                                       Duration = 5,
-                                       Image = "heart-plus",
-                                    })
                                 else
                                     -- 3. Tidak ada makanan di character, cari di backpack dan equip 1 saja
                                     for _, tool in pairs(Plr.Backpack:GetChildren()) do
@@ -411,7 +410,6 @@ local Toggle = MainTab:CreateToggle({
                     task.wait(0.1) -- Delay kecil untuk responsif
                 end
             end)
-			wait(0.1)
 			Rayfield:Notify({
                Title = "Information Alert",
                Content = "Auto Heal: OFF",
@@ -1526,18 +1524,40 @@ end
 -- UI Toggle (ESP Tools)
 -- ==========================================
 local Toggle = Team:CreateToggle({
-   Name = "ESP Tools",
-   CurrentValue = false,
-   Flag = "ESPToolsToggle",
-   Callback = function(Value)
-       toggleToolESP(Value)
-    Rayfield:Notify({
-        Title = "Scanning Tools",
-        Content = "Tools detected: " .. count,
-        Duration = 5,
-        Image = "pickaxe",
-     })			
-   end,
+    Name = "ESP Tools",
+    CurrentValue = false,
+    Flag = "ESPToolsToggle",
+    Callback = function(Value)
+        -- Panggil fungsi ESP dengan pcall agar jika error, script tidak berhenti total
+        local success, err = pcall(function()
+            toggleToolESP(Value)
+        end)
+
+        if not success then
+            warn("Error pada toggleToolESP:", err)
+        end
+
+        -- Pastikan variabel count ada dan bernilai angka (default 0 jika nil)
+        local toolCount = tonumber(count) or 0
+
+        -- Hanya tampilkan notifikasi saat Toggle DINYALAKAN (true)
+        if Value == true then
+            Rayfield:Notify({
+                Title = "Scanning Tools",
+                Content = "Tools detected: " .. tostring(toolCount),
+                Duration = 5,
+                Image = "pickaxe",
+            })
+        else
+            -- Opsional: Notifikasi saat dimatikan (bisa dihapus jika tidak perlu)
+            Rayfield:Notify({
+                Title = "Notification Alert",
+                Content = "ESP Tools has been disabled.",
+                Duration = 3,
+                Image = "x",
+            })
+        end
+    end,
 })
 
 -- ==========================================
@@ -1717,14 +1737,14 @@ local function scanAllTools()
     local toolsFolder = Workspace:FindFirstChild("Tools")
     if not toolsFolder then return 0 end
     
-    local count = 0
+    local count2 = 0
     for _, item in ipairs(toolsFolder:GetChildren()) do
         if isRegisteredTool(item) then
             createToolESP(item)
             if toolESP[item] then count = count + 1 end
         end
     end
-    return count
+    return count2
 end
 
 -- ==========================================
@@ -1838,19 +1858,41 @@ end
 -- ==========================================
 -- UI Toggle (ESP Tools)
 -- ==========================================
-local Toggle = Team:CreateToggle({
-   Name = "ESP Food",
-   CurrentValue = false,
-   Flag = "ESPToolsToggle",
-   Callback = function(Value)
-       toggleToolESP(Value)
-    Rayfield:Notify({
-        Title = "Scanning Tools",
-        Content = "Food detected: " .. count,
-        Duration = 5,
-        Image = "pizza",
-     })
-   end,
+local FoodToggle = Team:CreateToggle({
+    Name = "ESP Food",
+    CurrentValue = false,
+    Flag = "ESPFoodToggle",
+    Callback = function(Value)
+        -- Jalankan fungsi ESP Food dengan aman
+        local success, err = pcall(function()
+            toggleFoodESP(Value)
+        end)
+
+        if not success then
+            warn("Error pada toggleFoodESP:", err)
+        end
+
+        -- Pastikan jumlah food tidak nil
+        local foodCount = tonumber(count2) or 0
+
+        -- Notifikasi hanya saat ESP Food dinyalakan
+        if Value == true then
+            Rayfield:Notify({
+                Title = "Scanning Food",
+                Content = "Food detected: " .. tostring(count2),
+                Duration = 5,
+                Image = "pizza",
+            })
+        else
+            -- Opsional: notifikasi saat dimatikan
+            Rayfield:Notify({
+                Title = "Notification Alert",
+                Content = "Esp Food has been disabled!",
+                Duration = 3,
+                Image = "x",
+            })
+        end
+    end,
 })
 
 -- ==========================================
@@ -2033,7 +2075,7 @@ local function scanAllTools()
     local toolsFolder = Workspace:FindFirstChild("Tools")
     if not toolsFolder then return 0 end
     
-    local count = 0
+    local count3 = 0
     for _, item in ipairs(toolsFolder:GetChildren()) do
         if isRegisteredTool(item) then
             createToolESP(item)
