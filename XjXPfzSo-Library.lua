@@ -204,12 +204,12 @@ local Toggle = MainTab:CreateToggle({
     Callback = function(Value)
         auraEnabled = Value
         _G.UniversalAura = Value
-        
+
         Rayfield:Notify({
             Title = "Information alert",
             Content = Value and "Kill Aura: ON" or "Kill Aura: OFF",
             Duration = 6,
-            Image = Value and "check" or "x",
+            Image = Value and "radio" or "x",
         })
     end,
 })
@@ -353,7 +353,7 @@ local Toggle = MainTab:CreateToggle({
             Title = "Information Alert",
             Content = "Auto Heal: ON",
             Duration = 5,
-            Image = "heart-plus",
+            Image = "activity",
          })
             task.spawn(function()
                 while IsAutoHealing do
