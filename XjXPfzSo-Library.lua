@@ -67,7 +67,7 @@ local Misc = Window:CreateTab("Theme & Settings", "settings")
 local MainSection = Change:CreateSection("Recent Updates")
 local Paragraph = Change:CreateParagraph({Title = "🔁 V-RERBX", Content = "- [+] Added Kill Aura & deleted auto attack\n- [+] Change Buffer\n- [+] Deteled Auto bypass\n- [+] Change teleport tool, food & other\n- [+] Added New UI for fly, walk & jump\n- [+] Added More Details & Icon"})
 
-local Paragraph = Change:CreateParagraph({Title = "🔁 V-RBXV85", Content = "- [+] Fixed One hit Not Works\n- [+] Deleted Velocity Method\n- [+] Fixed Details & Information\n- [+] Fixed Teleporter [Beta, Expect Bugs]\n- [+] Fixed Details & Icon\n- [+] Fixed Some Bugs\n- [+] Replace Tab & Script\n- Fixed Some Notification & More Notification"})
+local Paragraph = Change:CreateParagraph({Title = "🔁 V-RBXV85", Content = "- [+] Fixed One hit Not Works\n- [+] Deleted Velocity Method\n- [+] Fixed Details & Information\n- [+] Fixed Teleporter [Beta, Expect Bugs]\n- [+] Fixed Details & Icon\n- [+] Fixed Some Bugs\n- [+] Replace Tab & Script\n- [+] Fixed Some Notification & More Notification"})
 
 local MainSection = Change:CreateSection("Next Updates")
 local Paragraph = Change:CreateParagraph({Title = "❓ INFORMATION", Content = "Actually, work on this script hasn't stopped completely, zeutronxsite has stopped working on it, so the project has been handed over to Externimate0 and his team\n \nNote: This script will be updated silently."})
@@ -653,7 +653,7 @@ local Toggle = Bypass:CreateToggle({
                 Title = "Anti-Ban System",
                 Content = "Monitoring for admins... ",
                 Duration = 5,
-                Image = "eyes",
+                Image = "eye",
             })
         else
             Rayfield:Notify({
