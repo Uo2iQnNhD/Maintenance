@@ -1528,23 +1528,12 @@ local Toggle = Team:CreateToggle({
     CurrentValue = false,
     Flag = "ESPToolsToggle",
     Callback = function(Value)
-        -- Panggil fungsi ESP dengan pcall agar jika error, script tidak berhenti total
-        local success, err = pcall(function()
-            toggleToolESP(Value)
-        end)
+    toggleToolESP = Value
 
-        if not success then
-            warn("Error pada toggleToolESP:", err)
-        end
-
-        -- Pastikan variabel count ada dan bernilai angka (default 0 jika nil)
-        local toolCount = tonumber(count) or 0
-
-        -- Hanya tampilkan notifikasi saat Toggle DINYALAKAN (true)
-        if Value == true then
+	if toggleToolESP then
             Rayfield:Notify({
-                Title = "Scanning Tools",
-                Content = "Tools detected: " .. tostring(toolCount),
+                Title = "Notification Alert",
+                Content = "Esp Tools: ON",
                 Duration = 5,
                 Image = "pickaxe",
             })
@@ -1552,11 +1541,11 @@ local Toggle = Team:CreateToggle({
             -- Opsional: Notifikasi saat dimatikan (bisa dihapus jika tidak perlu)
             Rayfield:Notify({
                 Title = "Notification Alert",
-                Content = "ESP Tools has been disabled.",
+                Content = "Esp Tools: OFF",
                 Duration = 3,
                 Image = "x",
             })
-        end
+		end
     end,
 })
 
@@ -1863,23 +1852,12 @@ local FoodToggle = Team:CreateToggle({
     CurrentValue = false,
     Flag = "ESPFoodToggle",
     Callback = function(Value)
-        -- Jalankan fungsi ESP Food dengan aman
-        local success, err = pcall(function()
-            toggleFoodESP(Value)
-        end)
+    toggleFoodESP = Value
 
-        if not success then
-            warn("Error pada toggleFoodESP:", err)
-        end
-
-        -- Pastikan jumlah food tidak nil
-        local foodCount = tonumber(count2) or 0
-
-        -- Notifikasi hanya saat ESP Food dinyalakan
-        if Value == true then
+    if toggleFoodESP then
             Rayfield:Notify({
-                Title = "Scanning Food",
-                Content = "Food detected: " .. tostring(count2),
+                Title = "Notification Alert",
+                Content = "Esp Food: ON",
                 Duration = 5,
                 Image = "pizza",
             })
@@ -1887,7 +1865,7 @@ local FoodToggle = Team:CreateToggle({
             -- Opsional: notifikasi saat dimatikan
             Rayfield:Notify({
                 Title = "Notification Alert",
-                Content = "Esp Food has been disabled!",
+                Content = "Esp Food: OFF",
                 Duration = 3,
                 Image = "x",
             })
@@ -2170,7 +2148,7 @@ end
 -- ==========================================
 -- Toggle ESP ON/OFF
 -- ==========================================
-local function toggleToolESP(state)
+local function toggleToolESP2(state)
     espEnabled = state
     
     if state then
@@ -2201,13 +2179,24 @@ local Toggle = Team:CreateToggle({
    CurrentValue = false,
    Flag = "ESPToolsToggle",
    Callback = function(Value)
-       toggleToolESP(Value)
-    Rayfield:Notify({
-        Title = "Scanning Tools",
-        Content = "Other tools detected: " .. count,
-        Duration = 5,
-        Image = "hammer",
-     })
+   toggleToolESP2 = Value
+			
+	if toggleToolESP2 then
+            Rayfield:Notify({
+                Title = "Notification Alert",
+                Content = "Esp Other Tools: ON",
+                Duration = 5,
+                Image = "hammer",
+            })
+        else
+            -- Opsional: Notifikasi saat dimatikan (bisa dihapus jika tidak perlu)
+            Rayfield:Notify({
+                Title = "Notification Alert",
+                Content = "Esp Other Tools: OFF",
+                Duration = 3,
+                Image = "x",
+            })
+			end
    end,
 })
 
