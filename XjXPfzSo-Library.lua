@@ -1186,9 +1186,9 @@ local Toggle = Team:CreateToggle({
    CurrentValue = false,
    Flag = "ESPPlayerToggle",
    Callback = function(Value)
-    toggleESP = Value
+    toggleESP(Value)
 
-	if toggleESP then
+	if Value then
     Rayfield:Notify({
         Title = "Notification Alert",
         Content = "Esp Player: ON",
@@ -1528,9 +1528,9 @@ local Toggle = Team:CreateToggle({
     CurrentValue = false,
     Flag = "ESPToolsToggle",
     Callback = function(Value)
-    toggleToolESP = Value
+    toggleToolESP(Value)
 
-	if toggleToolESP then
+	if Value then
             Rayfield:Notify({
                 Title = "Notification Alert",
                 Content = "Esp Tools: ON",
@@ -1726,14 +1726,14 @@ local function scanAllTools()
     local toolsFolder = Workspace:FindFirstChild("Tools")
     if not toolsFolder then return 0 end
     
-    local count2 = 0
+    local count = 0
     for _, item in ipairs(toolsFolder:GetChildren()) do
         if isRegisteredTool(item) then
             createToolESP(item)
             if toolESP[item] then count = count + 1 end
         end
     end
-    return count2
+    return count
 end
 
 -- ==========================================
@@ -1852,9 +1852,9 @@ local FoodToggle = Team:CreateToggle({
     CurrentValue = false,
     Flag = "ESPFoodToggle",
     Callback = function(Value)
-    toggleFoodESP = Value
+    toggleFoodESP(Value)
 
-    if toggleFoodESP then
+    if Value then
             Rayfield:Notify({
                 Title = "Notification Alert",
                 Content = "Esp Food: ON",
@@ -2179,9 +2179,9 @@ local Toggle = Team:CreateToggle({
    CurrentValue = false,
    Flag = "ESPToolsToggle",
    Callback = function(Value)
-   toggleToolESP2 = Value
+   toggleToolESP2(Value)
 			
-	if toggleToolESP2 then
+	if Value then
             Rayfield:Notify({
                 Title = "Notification Alert",
                 Content = "Esp Other Tools: ON",
