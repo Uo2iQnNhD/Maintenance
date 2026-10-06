@@ -379,6 +379,13 @@ local Toggle = MainTab:CreateToggle({
                                         equippedFood:Activate()
                                         task.wait(0.1) -- Klik cepat setiap 0.1 detik
                                     end
+									wait(0.1)
+                                    Rayfield:Notify({
+                                       Title = "Information Alert",
+                                       Content = "Auto Heal: ON",
+                                       Duration = 5,
+                                       Image = "heart-plus",
+                                    })
                                 else
                                     -- 3. Tidak ada makanan di character, cari di backpack dan equip 1 saja
                                     for _, tool in pairs(Plr.Backpack:GetChildren()) do
@@ -404,6 +411,13 @@ local Toggle = MainTab:CreateToggle({
                     task.wait(0.1) -- Delay kecil untuk responsif
                 end
             end)
+			wait(0.1)
+			Rayfield:Notify({
+               Title = "Information Alert",
+               Content = "Auto Heal: OFF",
+               Duration = 5,
+               Image = "x",
+           })
         end
     end,
 })
@@ -1174,7 +1188,23 @@ local Toggle = Team:CreateToggle({
    CurrentValue = false,
    Flag = "ESPPlayerToggle",
    Callback = function(Value)
-       toggleESP(Value)
+    toggleESP = Value
+
+	if toggleESP then
+    Rayfield:Notify({
+        Title = "Notification Alert",
+        Content = "Esp Player: ON",
+        Duration = 5,
+        Image = "scan",
+     })
+	else
+    Rayfield:Notify({
+        Title = "Notification Alert",
+        Content = "Esp Player: OFF",
+        Duration = 5,
+        Image = "x",
+     })
+	   end
    end,
 })
 
@@ -1381,13 +1411,6 @@ local function scanAllTools()
             if toolESP[item] then count = count + 1 end
         end
     end
-
-    Rayfield:Notify({
-        Title = "Scanning Tools",
-        Content = "Tools detected: " .. count,
-        Duration = 5,
-        Image = "pickaxe",
-     })
     return count
 end
 
@@ -1508,6 +1531,12 @@ local Toggle = Team:CreateToggle({
    Flag = "ESPToolsToggle",
    Callback = function(Value)
        toggleToolESP(Value)
+    Rayfield:Notify({
+        Title = "Scanning Tools",
+        Content = "Tools detected: " .. count,
+        Duration = 5,
+        Image = "pickaxe",
+     })			
    end,
 })
 
@@ -1695,13 +1724,6 @@ local function scanAllTools()
             if toolESP[item] then count = count + 1 end
         end
     end
-
-    Rayfield:Notify({
-        Title = "Scanning Tools",
-        Content = "Food detected: " .. count,
-        Duration = 5,
-        Image = "pizza",
-     })
     return count
 end
 
@@ -1822,6 +1844,12 @@ local Toggle = Team:CreateToggle({
    Flag = "ESPToolsToggle",
    Callback = function(Value)
        toggleToolESP(Value)
+    Rayfield:Notify({
+        Title = "Scanning Tools",
+        Content = "Food detected: " .. count,
+        Duration = 5,
+        Image = "pizza",
+     })
    end,
 })
 
@@ -2012,13 +2040,6 @@ local function scanAllTools()
             if toolESP[item] then count = count + 1 end
         end
     end
-    
-    Rayfield:Notify({
-        Title = "Scanning Tools",
-        Content = "Other tools detected: " .. count,
-        Duration = 5,
-        Image = "hammer",
-     })
     return count
 end
 
@@ -2139,6 +2160,12 @@ local Toggle = Team:CreateToggle({
    Flag = "ESPToolsToggle",
    Callback = function(Value)
        toggleToolESP(Value)
+    Rayfield:Notify({
+        Title = "Scanning Tools",
+        Content = "Other tools detected: " .. count,
+        Duration = 5,
+        Image = "hammer",
+     })
    end,
 })
 
