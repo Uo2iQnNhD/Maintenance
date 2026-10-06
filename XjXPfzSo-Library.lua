@@ -67,7 +67,7 @@ local Misc = Window:CreateTab("Theme & Settings", "settings")
 local MainSection = Change:CreateSection("Recent Updates")
 local Paragraph = Change:CreateParagraph({Title = "🔁 V-RERBX", Content = "- [+] Added Kill Aura & deleted auto attack\n- [+] Change Buffer\n- [+] Deteled Auto bypass\n- [+] Change teleport tool, food & other\n- [+] Added New UI for fly, walk & jump\n- [+] Added More Details & Icon"})
 
-local Paragraph = Change:CreateParagraph({Title = "🔁 V-RBXV85", Content = "- [+] Fixed One hit Not Works\n- [+] Deleted Velocity Method\n- [+] Fixed Details & Information\n- [+] Fixed Teleporter [Beta, Expect Bugs]\n- [+] Fixed Details & Icon\n- [+] Fixed Some Bugs\n- [+] Replace Tab & Script\n- [+] Fixed Some Notification & More Notification"})
+local Paragraph = Change:CreateParagraph({Title = "🔁 V-RBXV85", Content = "- [+] Fixed Some Notification\n- [+] Added More Notification\n- [+] Fixed Esp Not Working"})
 
 local MainSection = Change:CreateSection("Next Updates")
 local Paragraph = Change:CreateParagraph({Title = "❓ INFORMATION", Content = "Actually, work on this script hasn't stopped completely, zeutronxsite has stopped working on it, so the project has been handed over to Externimate0 and his team\n \nNote: This script will be updated silently."})
@@ -1852,7 +1852,7 @@ local FoodToggle = Team:CreateToggle({
     CurrentValue = false,
     Flag = "ESPFoodToggle",
     Callback = function(Value)
-    toggleFoodESP(Value)
+    toggleToolESP(Value)
 
     if Value then
             Rayfield:Notify({
@@ -2053,7 +2053,7 @@ local function scanAllTools()
     local toolsFolder = Workspace:FindFirstChild("Tools")
     if not toolsFolder then return 0 end
     
-    local count3 = 0
+    local count = 0
     for _, item in ipairs(toolsFolder:GetChildren()) do
         if isRegisteredTool(item) then
             createToolESP(item)
@@ -2148,7 +2148,7 @@ end
 -- ==========================================
 -- Toggle ESP ON/OFF
 -- ==========================================
-local function toggleToolESP2(state)
+local function toggleToolESP(state)
     espEnabled = state
     
     if state then
@@ -2179,7 +2179,7 @@ local Toggle = Team:CreateToggle({
    CurrentValue = false,
    Flag = "ESPToolsToggle",
    Callback = function(Value)
-   toggleToolESP2(Value)
+   toggleToolESP(Value)
 			
 	if Value then
             Rayfield:Notify({
