@@ -23,34 +23,6 @@ local Window = Rayfield:CreateWindow({
 
 -- Notification Rayfield
 Rayfield:Notify({
-   Title = "Notification Alert",
-   Content = "Thank you for using this script",
-   Duration = 5,
-   Image = "bell",
-   Actions = {
-      Ignore = {
-         Name = "Okay",
-         Callback = function()
-      end
-   },
-},
-})
-wait(0.1)
-Rayfield:Notify({
-   Title = "Notification Alert",
-   Content = "This script is still in beta stage so there are many bugs",
-   Duration = 5,
-   Image = "megaphone",
-   Actions = {
-      Ignore = {
-         Name = "Okay",
-         Callback = function()
-      end
-   },
-},
-})
-wait(0.1)
-Rayfield:Notify({
    Title = "Maintenance Information",
    Content = "Download Assets, Please Wait....",
    Duration = 10,
@@ -363,14 +335,15 @@ local Toggle = MainTab:CreateToggle({
     Flag = "Auto Heal",
     Callback = function(value)
         IsAutoHealing = value
-        
-        if value then
-        Rayfield:Notify({
-            Title = "Information Alert",
-            Content = "Auto Heal: ON",
+			
+		Rayfield:Notify({
+            Title = "Information alert",
+            Content = Value and "Auto Heal: ON" or "Auto Heal: OFF",
             Duration = 5,
-            Image = "activity",
-         })
+            Image = Value and "activity" or "x",
+        }) 
+			
+        if value then
             task.spawn(function()
                 while IsAutoHealing do
                     pcall(function()
@@ -426,12 +399,6 @@ local Toggle = MainTab:CreateToggle({
                     task.wait(0.1) -- Delay kecil untuk responsif
                 end
             end)
-			Rayfield:Notify({
-               Title = "Information Alert",
-               Content = "Auto Heal: OFF",
-               Duration = 5,
-               Image = "x",
-           })
         end
     end,
 })
@@ -2909,4 +2876,32 @@ local Button = Misc:CreateButton({
             end
         end)
     end
+})
+
+Rayfield:Notify({
+   Title = "Notification Alert",
+   Content = "Thank you for using this script",
+   Duration = 5,
+   Image = "bell",
+   Actions = {
+      Ignore = {
+         Name = "Okay",
+         Callback = function()
+      end
+   },
+},
+})
+wait(0.1)
+Rayfield:Notify({
+   Title = "Notification Alert",
+   Content = "This script is still in beta stage so there are many bugs",
+   Duration = 5,
+   Image = "megaphone",
+   Actions = {
+      Ignore = {
+         Name = "Okay",
+         Callback = function()
+      end
+   },
+},
 })
