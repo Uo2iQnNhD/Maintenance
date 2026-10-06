@@ -35,7 +35,7 @@ Rayfield:Notify({
    },
 },
 })
-wait(1)
+wait(0.1)
 Rayfield:Notify({
    Title = "Notification Alert",
    Content = "This script is still in beta stage so there are many bugs",
@@ -49,6 +49,22 @@ Rayfield:Notify({
    },
 },
 })
+wait(0.1)
+Rayfield:Notify({
+   Title = "Maintenance Information",
+   Content = "Download Assets, Please Wait....",
+   Duration = 10,
+   Image = "download",
+})
+
+wait(10)
+Rayfield:Notify({
+   Title = "Maintenance Information",
+   Content = "Download Assets Successfully!",
+   Duration = 5,
+   Image = "check",
+})
+wait(1)
 
 -- Name Scripts/Local Script
 local Change = Window:CreateTab("Changelog", "newspaper")
