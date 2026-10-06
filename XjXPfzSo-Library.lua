@@ -1,8 +1,8 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
-   Name = "ZETHUB | TLK PRISON | V-RBXV75",
-   Icon = "user",
+   Name = "ZETHUB | TLK PRISON | V-RBXV85",
+   Icon = "layers",
    LoadingTitle = "Initializing......",
    LoadingSubtitle = "by Externimate0",
    ShowText = "Interface", -- for mobile users to unhide Rayfield, change if you'd like
@@ -35,7 +35,7 @@ Rayfield:Notify({
    },
 },
 })
-
+wait(1)
 Rayfield:Notify({
    Title = "Notification Alert",
    Content = "This script is still in beta stage so there are many bugs",
@@ -67,7 +67,7 @@ local Misc = Window:CreateTab("Theme & Settings", "settings")
 local MainSection = Change:CreateSection("Recent Updates")
 local Paragraph = Change:CreateParagraph({Title = "🔁 V-RERBX", Content = "- [+] Added Kill Aura & deleted auto attack\n- [+] Change Buffer\n- [+] Deteled Auto bypass\n- [+] Change teleport tool, food & other\n- [+] Added New UI for fly, walk & jump\n- [+] Added More Details & Icon"})
 
-local Paragraph = Change:CreateParagraph({Title = "🔁 V-RBXV75", Content = "- [+] Fixed One hit Not Works\n- [+] Deleted Velocity Method\n- [+] Fixed Details & Information\n- [+] Fixed Teleporter [Beta, Expect Bugs]\n- [+] Fixed Details & Icon\n- [+] Fixed Some Bugs\n- [+] Replace Tab & Script"})
+local Paragraph = Change:CreateParagraph({Title = "🔁 V-RBXV85", Content = "- [+] Fixed One hit Not Works\n- [+] Deleted Velocity Method\n- [+] Fixed Details & Information\n- [+] Fixed Teleporter [Beta, Expect Bugs]\n- [+] Fixed Details & Icon\n- [+] Fixed Some Bugs\n- [+] Replace Tab & Script\n- Fixed Some Notification & More Notification"})
 
 local MainSection = Change:CreateSection("Next Updates")
 local Paragraph = Change:CreateParagraph({Title = "❓ INFORMATION", Content = "Actually, work on this script hasn't stopped completely, zeutronxsite has stopped working on it, so the project has been handed over to Externimate0 and his team\n \nNote: This script will be updated silently."})
@@ -437,14 +437,14 @@ local Keybind = MainTab:CreateKeybind({
         -- Tampilkan notifikasi sesuai status
         if autoDropFoodActive then
             Rayfield:Notify({
-                Title = "✅ Information",
+                Title = "Information Alert",
                 Content = "Auto Drop Food: ON",
                 Duration = 5,
                 Image = "check",
             })
         else
             Rayfield:Notify({
-                Title = "❌ Information",
+                Title = "Information Alert",
                 Content = "Auto Drop Food: OFF",
                 Duration = 5,
                 Image = "x",
@@ -613,7 +613,7 @@ end
 -- Fungsi untuk melakukan kick diri sendiri
 local function KickSelf(adminName)
     Rayfield:Notify({
-    Title = "⚠️ Admin Detected!",
+    Title = "Notification Alert",
     Content = "Admin '" .. adminName .. "' terdeteksi! Kicking to avoid ban...",
     Duration = 6,
     Image = "triangle-alert",
@@ -649,9 +649,19 @@ local Toggle = Bypass:CreateToggle({
         if Value then
             -- Saat toggle dinyalakan, langsung cek pemain yang sudah ada di server
             CheckAllPlayers()
-            warn("ZENHUB: Anti-Ban System ON - Monitoring for admins...")
+            Rayfield:Notify({
+                Title = "Anti-Ban System",
+                Content = "Monitoring for admins... ",
+                Duration = 5,
+                Image = "eyes",
+            })
         else
-            warn("ZENHUB: Anti-Ban System OFF")
+            Rayfield:Notify({
+                Title = "Anti-Ban System",
+                Content = "Monitoring For admins: OFF",
+                Duration = 5,
+                Image = "x",
+            })
         end
     end,
 })
@@ -689,7 +699,7 @@ local Paragraph = Buff:CreateParagraph({Title = "📢 INFORMATION", Content = "F
 
 local MainSection = Buff:CreateSection("Walkspeed, Fly & JumpPower ")
 local Button = Buff:CreateButton({
-    Name = "All Method",
+    Name = "All Method [Working]",
     Callback = function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Uo2iQnNhD/Maintenance/refs/heads/main/s65xKCrM-Method.lua"))()
    end
@@ -828,9 +838,8 @@ local ExecuteTeamButton = Team:CreateButton({
                 Title = "Team Change Failed",
                 Content = message,
                 Duration = 6,
-                Image = "triangle-alert",
+                Image = "x",
             })
-            warn("[TLK Prison] " .. message)
         end
     end
 })
@@ -1372,8 +1381,13 @@ local function scanAllTools()
             if toolESP[item] then count = count + 1 end
         end
     end
-    
-    warn("[ESP] Scan complete. Number of tools detected: " .. count)
+
+    Rayfield:Notify({
+        Title = "Scanning Tools",
+        Content = "Tools detected: " .. count,
+        Duration = 5,
+        Image = "pickaxe",
+     })
     return count
 end
 
@@ -1681,8 +1695,13 @@ local function scanAllTools()
             if toolESP[item] then count = count + 1 end
         end
     end
-    
-    warn("[ESP] Scan complete. Number of tools detected: " .. count)
+
+    Rayfield:Notify({
+        Title = "Scanning Tools",
+        Content = "Food detected: " .. count,
+        Duration = 5,
+        Image = "pizza",
+     })
     return count
 end
 
@@ -1994,7 +2013,12 @@ local function scanAllTools()
         end
     end
     
-    warn("[ESP] Scan complete. Number of tools detected: " .. count)
+    Rayfield:Notify({
+        Title = "Scanning Tools",
+        Content = "Other tools detected: " .. count,
+        Duration = 5,
+        Image = "hammer",
+     })
     return count
 end
 
@@ -2306,7 +2330,7 @@ local ThemeDropdown = Misc:CreateDropdown({
             selectedThemeOption = Options
         end
         
-        print("Theme selected (pending execution): " .. selectedThemeOption)
+        print("Theme selected: " .. selectedThemeOption)
     end,
 })
 
@@ -2334,7 +2358,7 @@ local ApplyThemeButton = Misc:CreateButton({
             Title = "Theme Applied",
             Content = "Theme successfully changed to: " .. selectedThemeOption,
             Duration = 5,
-            Image = "check",
+            Image = "paint-roller",
         })
         
         print("Theme executed and changed to: " .. selectedThemeOption)
@@ -2681,6 +2705,12 @@ local RefreshButton = Target:CreateButton({
    Callback = function()
        local newNames = getPlayerNames()
        TargetDropdown:Refresh(newNames, false)
+    Rayfield:Notify({
+        Title = "Notification Alert",
+        Content = "Refresh player name",
+        Duration = 5,
+        Image = "refresh-cw",
+     })
    end,
 })
 
@@ -2712,7 +2742,7 @@ local IgnoredItems2 = {
 
 -- Keybind
 local Keybind = Target:CreateKeybind({
-    Name = "One Hit (Target)",
+    Name = "One Hit (Target/Player)",
     CurrentKeybind = "F",
     HoldToInteract = false,
     Flag = "Keybind1",
@@ -2734,7 +2764,7 @@ local Keybind = Target:CreateKeybind({
                         end
                     end
                 Rayfield:Notify({
-                    Title = "⚔️ Information Alert",
+                    Title = "Information Alert",
                     Content = "One Hit has been triggered!",
                     Duration = 3,
                     Image = "swords",
@@ -2772,10 +2802,10 @@ local Button = Misc:CreateButton({
     Name = "Destroy UI/Interface",
     Callback = function()
     Rayfield:Notify({
-                    Title = "⚠️ Warning Detected!",
+                    Title = "Warning Detected",
                     Content = "The script will self-destruct in 7 seconds!",
                     Duration = 7,
-                    Image = "shield-alert",
+                    Image = "trash",
                 })
         wait(7)
     Rayfield:Destroy()
@@ -2786,10 +2816,10 @@ local Button = Misc:CreateButton({
     Name = "Reset Character",
     Callback = function()
         Rayfield:Notify({
-            Title = "⚠️ Warning Detected!",
+            Title = "Notification Alert",
             Content = "You will die in 3 seconds",
             Duration = 3,
-            Image = "shield-alert",
+            Image = "power",
         })
         
         -- Gunakan task.delay agar tidak memblokir thread utama/UI
