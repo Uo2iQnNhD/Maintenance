@@ -2827,10 +2827,10 @@ local Button = Target:CreateButton({
           Duration = 6,
           Image = "bell",
         })
-
+wait(0.5)
      Rayfield:Notify({
           Title = "Notification Alert",
-          Content = "Zyptrue is currently down for maintenance :(",
+          Content = "Maintenence is down, please wait for the update :(",
           Duration = 6,
           Image = "server",
         })
