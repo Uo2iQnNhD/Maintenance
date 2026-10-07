@@ -115,4 +115,4 @@ end
 -- Jalankan setiap respawn
 LocalPlayer.CharacterAdded:Connect(cleanCharacter)
 
-print("✅ [Success] Safe Anti-Restriction aktif - Tanpa error rendering!")
+warn("Working??")
