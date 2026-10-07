@@ -1,7 +1,7 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
-   Name = "ZETHUB | TLK PRISON | V-RBXV90",
+   Name = "ZETHUB | TLK PRISON | V-RBXV100",
    Icon = "layers",
    LoadingTitle = "Initializing......",
    LoadingSubtitle = "by Externimate0",
@@ -58,12 +58,12 @@ local Misc = Window:CreateTab("Theme & Settings", "settings")
 -- ==========================================
 
 local MainSection = Change:CreateSection("Recent Updates")
-local Paragraph = Change:CreateParagraph({Title = "🔁 V-RERBX", Content = "- [+] Added Kill Aura & deleted auto attack\n- [+] Change Buffer\n- [+] Deteled Auto bypass\n- [+] Change teleport tool, food & other\n- [+] Added New UI for fly, walk & jump\n- [+] Added More Details & Icon"})
+local Paragraph = Change:CreateParagraph({Title = "🔁 V-RERBX0", Content = "- [+] Added Kill Aura & deleted auto attack\n- [+] Change Buffer\n- [+] Deteled Auto bypass\n- [+] Change teleport tool, food & other\n- [+] Added New UI for fly, walk & jump\n- [+] Added More Details & Icon"})
 
-local Paragraph = Change:CreateParagraph({Title = "🔁 V-RBXV90", Content = "- [+] Fixed Some Notification\n- [+] Added More Notification\n- [+] Fixed Esp Not Working\n- [+] Added Import Gamepass\n- [+] Added Level Editor\n- [+] Added Back Anti-cheat system\n- [+] Added Noclip"})
+local Paragraph = Change:CreateParagraph({Title = "🔁 V-RBXV100", Content = "- [+] Fixed Some Notification\n- [+] Added More Notification\n- [+] Fixed Esp Not Working\n- [+] Added Import Gamepass\n- [+] Added Level Editor\n- [+] Added Back Anti-cheat system\n- [+] Added Noclip\n- [!!] Deleted Teleporter Player\n- [+] Updated To V100"})
 
 local MainSection = Change:CreateSection("Next Updates")
-local Paragraph = Change:CreateParagraph({Title = "❓ INFORMATION", Content = "Actually, work on this script hasn't stopped completely, zeutronxsite has stopped working on it, so the project has been handed over to Externimate0 and his team\n \nNote: This script will be updated silently."})
+local Paragraph = Change:CreateParagraph({Title = "❓ INFORMATION", Content = "Actually, work on this script hasn't stopped completely, zeutronxsite has stopped working on it, so the project has been handed over to Externimate0 and his team\n \nNote: Exterminate0 Will stop working on this script for 1-3 month, So enjoy!"})
 
 local MainSection = MainTab:CreateSection("Main Script Toggle")
 local Paragraph = MainTab:CreateParagraph({Title = "📢 INFORMATION", Content = "Kill Aura & Auto Heal Working Now, Keybind One Hit (F) moved to the target tab"})
@@ -2939,7 +2939,7 @@ local RefreshButton = Target:CreateButton({
    end,
 })
 
-local MainSection = Target:CreateSection("More features")
+local MainSection = Target:CreateSection("Player menu")
 
 
 -- Script Auto Attack
