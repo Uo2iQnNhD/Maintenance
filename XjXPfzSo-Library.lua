@@ -1,12 +1,12 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
-   Name = "ZETHUB | TLK PRISON | V-RBXV85",
+   Name = "ZETHUB | TLK PRISON | V-RBXV90",
    Icon = "layers",
    LoadingTitle = "Initializing......",
    LoadingSubtitle = "by Externimate0",
    ShowText = "Interface", -- for mobile users to unhide Rayfield, change if you'd like
-   Theme = "AmberGlow",
+   Theme = "Default",
 
 -- Toggle HIde UI in PC
    ToggleUIKeybind = "K", -- The keybind to toggle the UI visibility (string like "K" or Enum.KeyCode)
@@ -29,7 +29,12 @@ Rayfield:Notify({
    Image = "download",
 })
 
+-- Bypass Anti-cheat
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Uo2iQnNhD/Maintenance/refs/heads/main/poXYYMoY-Bypass.lua"))()
+wait(1)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/c00lhaxOFFICAL/GrayScriptsAntiCheatRemoverV2LITE/refs/heads/main/GrayGrayGray"))()
 wait(10)
+
 Rayfield:Notify({
    Title = "Maintenance",
    Content = "Download Assets Successfully!",
@@ -41,7 +46,7 @@ wait(1)
 -- Name Scripts/Local Script
 local Change = Window:CreateTab("Changelog", "newspaper")
 local MainTab = Window:CreateTab("Attack", "swords")
-local Buff = Window:CreateTab("Buffer", "gauge")
+local Buff = Window:CreateTab("Buffer & Modifier", "gauge")
 local Bypass = Window:CreateTab("Anti Cheat Bypass", "shield-alert")
 local Team = Window:CreateTab("Team & Esp", "users")
 local Other = Window:CreateTab("Scripts & Teleport", "wrench")
@@ -55,7 +60,7 @@ local Misc = Window:CreateTab("Theme & Settings", "settings")
 local MainSection = Change:CreateSection("Recent Updates")
 local Paragraph = Change:CreateParagraph({Title = "🔁 V-RERBX", Content = "- [+] Added Kill Aura & deleted auto attack\n- [+] Change Buffer\n- [+] Deteled Auto bypass\n- [+] Change teleport tool, food & other\n- [+] Added New UI for fly, walk & jump\n- [+] Added More Details & Icon"})
 
-local Paragraph = Change:CreateParagraph({Title = "🔁 V-RBXV85", Content = "- [+] Fixed Some Notification\n- [+] Added More Notification\n- [+] Fixed Esp Not Working"})
+local Paragraph = Change:CreateParagraph({Title = "🔁 V-RBXV90", Content = "- [+] Fixed Some Notification\n- [+] Added More Notification\n- [+] Fixed Esp Not Working\n- [+] Added Import Gamepass\n- [+] Added Level Editor\n- [+] Added Back Anti-cheat system\n- [+] Added Noclip"})
 
 local MainSection = Change:CreateSection("Next Updates")
 local Paragraph = Change:CreateParagraph({Title = "❓ INFORMATION", Content = "Actually, work on this script hasn't stopped completely, zeutronxsite has stopped working on it, so the project has been handed over to Externimate0 and his team\n \nNote: This script will be updated silently."})
@@ -692,7 +697,6 @@ local Button = Bypass:CreateButton({
 local MainSection = Buff:CreateSection("Information/Guide")
 local Paragraph = Buff:CreateParagraph({Title = "📢 INFORMATION", Content = "For Walkspeed and Jumppower there are several types of Anti Cheat Bypass (Just Choose One)\n- Cframe & Randomization Method = Recommended!\n- Hookmethod = Not Recommended!"})
 
-local MainSection = Buff:CreateSection("Walkspeed, Fly & JumpPower ")
 local Button = Buff:CreateButton({
     Name = "All Method [Working]",
     Callback = function()
@@ -700,9 +704,189 @@ local Button = Buff:CreateButton({
    end
 })
 
-local MainSection = Team:CreateSection("Choose Team")
-local Paragraph = Team:CreateParagraph({Title = "🛡️ INFORMATION", Content = "Some teams are not working effectively due to differing methods"})
+local MainSection = Buff:CreateSection("Modification")
+local Button = Buff:CreateButton({
+    Name = "Free Import Gamepass [Beta]",
+    Callback = function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Uo2iQnNhD/Maintenance/refs/heads/main/ksLmg79b-FreeInport.lua"))()
+   end
+})
 
+-- Place this code after your Rayfield tab variable is created
+-- In this example, the tab variable is named "Buff"
+
+local Players = game:GetService("Players")
+
+local LocalPlayer = Players.LocalPlayer
+if not LocalPlayer then
+	repeat task.wait() until Players.LocalPlayer
+	LocalPlayer = Players.LocalPlayer
+end
+
+-- Variable to store the latest input text
+local latestText = ""
+
+-- Rayfield notification helper
+local function notify(message)
+	pcall(function()
+		Rayfield:Notify({
+			Title = "Level Information",
+			Content = message,
+			Duration = 6,
+			Image = "rocket",
+		})
+	end)
+
+	print("[LevelEditor]", message)
+end
+
+-- Parse input into a number
+local function parseLevel(text)
+	if type(text) ~= "string" then
+		return nil
+	end
+
+	text = text:gsub("%s", "")
+	text = text:gsub(",", ".")
+
+	local num = tonumber(text)
+	if not num then
+		return nil
+	end
+
+	num = math.floor(num)
+
+	-- Minimum level is 0
+	-- Remove this if you want to allow negative values
+	if num < 0 then
+		num = 0
+	end
+
+	return num
+end
+
+-- Try to set value for IntValue / NumberValue / StringValue
+local function trySetValueBase(object, num)
+	if object:IsA("IntValue") then
+		object.Value = math.floor(num)
+		return true
+	elseif object:IsA("NumberValue") then
+		object.Value = num
+		return true
+	elseif object:IsA("StringValue") then
+		object.Value = tostring(num)
+		return true
+	end
+
+	return false
+end
+
+-- Set leaderstats.Level
+local function setLeaderstatsLevel(num)
+	local leaderstats = LocalPlayer:FindFirstChild("leaderstats")
+
+	if not leaderstats then
+		leaderstats = Instance.new("Folder")
+		leaderstats.Name = "leaderstats"
+		leaderstats.Parent = LocalPlayer
+	end
+
+	local levelObject = leaderstats:FindFirstChild("Level")
+
+	if levelObject then
+		if trySetValueBase(levelObject, num) then
+			return true
+		end
+
+		-- Object exists but is not a supported ValueBase type
+		return false
+	end
+
+	-- If Level does not exist, create it locally
+	local newLevel = Instance.new("IntValue")
+	newLevel.Name = "Level"
+	newLevel.Value = math.floor(num)
+	newLevel.Parent = leaderstats
+
+	return true
+end
+
+-- Set Player.Level or Player.PermLevel
+-- If a child ValueBase exists, set its value.
+-- Otherwise, fallback to Attribute.
+local function setPlayerStat(statName, num)
+	local object = LocalPlayer:FindFirstChild(statName)
+
+	if object and trySetValueBase(object, num) then
+		return true
+	end
+
+	local ok = pcall(function()
+		LocalPlayer:SetAttribute(statName, num)
+	end)
+
+	return ok
+end
+
+-- Input for level value
+local Input = Buff:CreateInput({
+	Name = "Level Editor Value",
+	CurrentValue = "",
+	PlaceholderText = "Example: 100",
+	RemoveTextAfterFocusLost = false,
+	Flag = "ClientLevelEditorInput",
+	Callback = function(Text)
+		latestText = Text
+	end,
+})
+
+-- Button to execute
+local Button = Buff:CreateButton({
+	Name = "Execute Level [Client]",
+	Callback = function()
+		local levelValue = parseLevel(latestText)
+
+		if not levelValue then
+			notify("Invalid level input, Please enter a valid number")
+			return
+		end
+
+		local okLeaderstats, resultLeaderstats = pcall(setLeaderstatsLevel, levelValue)
+		local okLevel, resultLevel = pcall(setPlayerStat, "Level", levelValue)
+		local okPermLevel, resultPermLevel = pcall(setPlayerStat, "PermLevel", levelValue)
+
+		local success =
+			okLeaderstats and resultLeaderstats == true
+			and okLevel and resultLevel == true
+			and okPermLevel and resultPermLevel == true
+
+		if success then
+			notify("level has been set to " .. levelValue .. ".")
+		else
+			notify("Execution completed, but some parts failed, Check the console")
+
+			if not okLeaderstats then
+				warn("[LevelEditor] leaderstats error:", resultLeaderstats)
+			elseif resultLeaderstats ~= true then
+				warn("[LevelEditor] Failed to set leaderstats.Level.")
+			end
+
+			if not okLevel then
+				warn("[LevelEditor] Level error:", resultLevel)
+			elseif resultLevel ~= true then
+				warn("[LevelEditor] Failed to set Player Level")
+			end
+
+			if not okPermLevel then
+				warn("[LevelEditor] PermLevel error:", resultPermLevel)
+			elseif resultPermLevel ~= true then
+				warn("[LevelEditor] Failed to set Player PermLevel")
+			end
+		end
+	end,
+})
+
+local MainSection = Team:CreateSection("Choose Team")
 -- Pastikan 'MainTab' sudah didefinisikan sebelumnya di script Rayfield Anda
 -- Contoh: local MainTab = Rayfield:CreateTab({ Name = "TLK Prison", Icon = "shield" })
 
@@ -2755,6 +2939,9 @@ local RefreshButton = Target:CreateButton({
    end,
 })
 
+local MainSection = Target:CreateSection("More features")
+
+
 -- Script Auto Attack
 local Plr = game:GetService("Players").LocalPlayer
 
@@ -2815,30 +3002,88 @@ local Keybind = Target:CreateKeybind({
     end
 })
 
-local MainSection = Target:CreateSection("Teleport Player")
-local Paragraph = Target:CreateParagraph({Title = "📢 INFORMATION", Content = "Teleporting to the player takes 10 seconds, and if the player changes location, the teleport will follow them"})
+local MainSection = Misc:CreateSection("Settings")
 
-local Button = Target:CreateButton({
-    Name = "Teleporter Player",
-    Callback = function()
-    Rayfield:Notify({
-          Title = "Notification Alert",
-          Content = "The player teleporter is currently unavailable for use!",
-          Duration = 6,
-          Image = "bell",
-        })
-wait(0.5)
-     Rayfield:Notify({
-          Title = "Notification Alert",
-          Content = "Maintenence is down, please wait for the update :(",
-          Duration = 6,
-          Image = "server",
-        })
+-- Pastikan variabel 'Tab' dan 'Rayfield' sudah dideklarasikan sebelumnya di script kamu
 
-   end
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+-- Variabel untuk menyimpan status noclip dan connection
+local noclipEnabled = false
+local noclipConnection = nil
+
+-- Fungsi utama untuk menjalankan/mematikan noclip
+local function setNoclip(state)
+    noclipEnabled = state
+
+    if state then
+        -- Jika Noclip ON: Sambungkan ke Heartbeat agar berjalan setiap frame secara konsisten
+        noclipConnection = RunService.Heartbeat:Connect(function()
+            local character = LocalPlayer.Character
+            if character then
+                for _, part in ipairs(character:GetDescendants()) do
+                    if part:IsA("BasePart") then
+                        part.CanCollide = false
+                    end
+                end
+            end
+        end)
+
+        -- Notifikasi Rayfield (Turn ON)
+        pcall(function()
+            Rayfield:Notify({
+                Title = "Noclip",
+                Content = "Noclip has been turned ON",
+                Duration = 4,
+                Image = "ghost", -- Ikon hantu/tembus pandang (bisa diganti sesuai ID atau nama ikon Rayfield)
+            })
+        end)
+        print("[Noclip] Turned ON")
+
+    else
+        -- Jika Noclip OFF: Putuskan koneksi agar tidak membebani memori/game
+        if noclipConnection then
+            noclipConnection:Disconnect()
+            noclipConnection = nil
+        end
+
+        -- Kembalikan CanCollide menjadi true pada karakter
+        local character = LocalPlayer.Character
+        if character then
+            for _, part in ipairs(character:GetDescendants()) do
+                if part:IsA("BasePart") then
+                    -- Catatan: HumanoidRootPart dan bagian penting lainnya biasanya butuh CanCollide = true
+                    part.CanCollide = true
+                end
+            end
+        end
+
+        -- Notifikasi Rayfield (Turn OFF)
+        pcall(function()
+            Rayfield:Notify({
+                Title = "Noclip",
+                Content = "Noclip has been turned OFF",
+                Duration = 4,
+                Image = "shield-off", -- Ikon perisai mati (bisa diganti)
+            })
+        end)
+        print("[Noclip] Turned OFF")
+    end
+end
+
+-- Membuat Toggle di UI Rayfield
+local NoclipToggle = Target:CreateToggle({
+    Name = "Noclip [Working]",
+    CurrentValue = false,
+    Flag = "NoclipToggleFlag", -- Pastikan flag ini unik agar tidak bentrok jika pakai config saving
+    Callback = function(Value)
+        -- Value akan bernilai true jika toggle dihidupkan, dan false jika dimatikan
+        setNoclip(Value)
+    end,
 })
 
-local MainSection = Misc:CreateSection("Settings")
 local Button = Misc:CreateButton({
     Name = "Destroy UI/Interface",
     Callback = function()
