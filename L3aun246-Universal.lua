@@ -19,11 +19,21 @@ local Window = Rayfield:CreateWindow({
 
 -- Notification Rayfield
 Rayfield:Notify({
-   Title = "Information",
-   Content = "Thank you for using this script, more stuff is coming",
-   Duration = 6,
-   Image = "bell",
+   Title = "Maintenance",
+   Content = "Download Assets, Please Wait......",
+   Duration = 8,
+   Image = "download",
 })
+
+wait(8)
+Rayfield:Notify({
+   Title = "Maintenance",
+   Content = "Download Assets Successfully!",
+   Duration = 5,
+   Image = "check",
+})
+wait(1)
+
 
 -- Local Tab
 local Change = Window:CreateTab("Changelog", "mails")
