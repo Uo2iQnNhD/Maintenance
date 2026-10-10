@@ -21,11 +21,11 @@ local Window = Rayfield:CreateWindow({
 Rayfield:Notify({
    Title = "Maintenance",
    Content = "Download Assets, Please Wait......",
-   Duration = 8,
+   Duration = 5,
    Image = "download",
 })
 
-wait(8)
+wait(5)
 Rayfield:Notify({
    Title = "Maintenance",
    Content = "Download Assets Successfully!",
