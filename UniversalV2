@@ -315,24 +315,14 @@ ToolsTab:CreateToggle({
 	Default = false,
 	Flag = "InfiniteJumpToggle",
 	Icon = "activity",
-	Tooltip = "Aktifkan infinite jump",
+	Tooltip = "Turn ON/OFF Inf Jump",
 	Callback = function(value)
 		_G.infinjump = value
 
 		if value then
-			Library:Notify(
-				"System Information",
-				"Infinite jump has been successfully enabled.",
-				6,
-				"check-circle"
-			)
+			Library:Notify("Infinite Jump Has Been Activated", 5, "System Information", "info")
 		else
-			Library:Notify(
-				"System Information",
-				"Infinite jump has been disabled.",
-				6,
-				"x-circle"
-			)
+			Library:Notify("Infinite Jump Has Been Disabled", 5, "System Information", "info")
 		end
 	end,
 })
@@ -395,8 +385,8 @@ ToolsTab:CreateToggle({
 			end
 
 			Library:Notify(
-				"WalkSpeed ON",
-				"WalkSpeed on with value " .. tostring(_G.walkspeedValue),
+				"WalkSpeed Value".. tostring(_G.walkspeedValue), 
+				"WalkSpeed ON", 
 				5,
 				"check-circle"
 			)
