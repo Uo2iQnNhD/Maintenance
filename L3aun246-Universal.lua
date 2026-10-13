@@ -1,636 +1,818 @@
-local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
-
-local Window = Rayfield:CreateWindow({
-   Name = "ZETHUB | UNIVERSAL | V-EESpz2Xk",
-   Icon = "users", -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
-   LoadingTitle = "Initializing......",
-   LoadingSubtitle = "By Exterminate0",
-   Theme = "Default", -- Check https://docs.sirius.menu/rayfield/configuration/themes
-
-   DisableRayfieldPrompts = false,
-   DisableBuildWarnings = false, -- Prevents Rayfield from warning when the script has a version mismatch with the interface
-
-   ConfigurationSaving = {
-      Enabled = false,
-      FolderName = nil, -- Create a custom folder for your hub/game
-      FileName = "Zethubx.file"
-   },
-})
-
--- Notification Rayfield
-Rayfield:Notify({
-   Title = "Maintenance",
-   Content = "Download Assets, Please Wait......",
-   Duration = 5,
-   Image = "download",
-})
-
-wait(5)
-Rayfield:Notify({
-   Title = "Maintenance",
-   Content = "Download Assets Successfully!",
-   Duration = 5,
-   Image = "check",
-})
-wait(1)
-
-
--- Local Tab
-local Change = Window:CreateTab("Changelog", "mails")
-local MainTab = Window:CreateTab("Main Menu", "sword")
-local dev = Window:CreateTab("Tools", "wrench")
-local Theme = Window:CreateTab("Theme & Settings", "settings")
-
-
--- Local Changelog Tab
-local MainSection = Change:CreateSection("Information & Version")
-
-local Paragraph = Change:CreateParagraph({Title = "🔄️ V-39MB2ZZS", Content = "- [+] Added Main Developer Mode, Admin Mode, Basic\n- [+] Added Main Scripts\n- [+] Added Theme & Settings"})
-local Paragraph = Change:CreateParagraph({Title = "🔄️ V-LLQCH3DC", Content = "- [+] Added Script & Fixed Some Bugs\n- [+] Updated Key System UI & Key Generator\n- [+] Added 🥚 Steal an Egg"})
-local Paragraph = Change:CreateParagraph({Title = "🔄️ V-7H4RXYE5", Content = "- [!!] Deleted 🎮 Automatic [Picker]\n- [+] Buffer Wait scripts 3 sec >> 2 sec\n- [!!] Deleted Key System & Key Generator\n- [!!] Deleted Checking User/players\n- [+] Updated 🥚 Steal an Egg"})
-local Paragraph = Change:CreateParagraph({Title = "🔄️ V-EESpz2Xk", Content = "- [+] Added Select Script in Visual Player\n- [+] Added Script Headless & Korblox\n- [+] Added Script Animation Roblox\n- [+] Added More Icon & Detail\n- [!!] Fixed Bugs Laoding Screen"})
-
-
-local MainSection = Change:CreateSection("Next Update & Version")
-local Paragraph = Change:CreateParagraph({Title = "❌ V-xicochfh", Content = "Unknown, Coming Soon!"})
-
--- local Maintab
-local MainSection = MainTab:CreateSection("Game Support")
-
-local Paragraph = MainTab:CreateParagraph({Title = "🛡️ System Information", Content = "- Choose Your Script and execute that script\n- This scripts Not my Own"})
-local Paragraph = MainTab:CreateParagraph({Title = "📚 Guide Information", Content = "When executed, the automatic picker selects and runs the appropriate script based on the game being played. if the game is supported, it uses a different script than it would for an unsupported game"})
-
--- Initialize with because the CurrentOption default
-local selectedOptions = {}
-
-local function runScript(optionName)
-    if optionName == "👑 Zeutron [HUB]" then
-        Rayfield:Notify({
-            Title = "Executed Scripts",
-            Content = "Scripts Successfully Executed, Please wait 2 second!",
-            Duration = 4,
-            Image = "check",
-        })
-        task.wait(2)
-        pcall(function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/Zyptrue/Release/refs/heads/main/New%20Interface"))()
-        end)
-
-
-    elseif optionName == "🛠️ TLK Prison" then
-        Rayfield:Notify({
-            Title = "Executed Scripts",
-            Content = "Scripts Successfully Executed, Please wait 2 second!",
-            Duration = 4,
-            Image = "check",
-        })
-        task.wait(2)
-        pcall(function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/IOERHUB/CheckingV2/refs/heads/main/Protection"))()
-        end)
-
-    elseif optionName == "🎯 Area 51 Remake" then
-        Rayfield:Notify({
-            Title = "Executed Scripts",
-            Content = "Scripts Successfully Executed, Please wait 2 second!",
-            Duration = 4,
-            Image = "check",
-        })
-        task.wait(2)
-        pcall(function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/zeutronxsite/Area-51-Remake/refs/heads/main/Latest%20Version"))()
-        end)
-
-    elseif optionName == "🚗 Jailbreak" then
-        Rayfield:Notify({
-            Title = "Executed Scripts",
-            Content = "Scripts Successfully Executed, Please wait 2 second!",
-            Duration = 4,
-            Image = "check",
-        })
-        task.wait(2)
-        pcall(function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/zeutronxsite/M6txEKBDBreak/refs/heads/main/Working"))()
-        end)
-
-    elseif optionName == "🔪 Violence District" then
-        Rayfield:Notify({
-            Title = "Executed Scripts",
-            Content = "Scripts Successfully Executed, Please wait 2 second!",
-            Duration = 4,
-            Image = "check",
-        })
-        task.wait(2)
-        pcall(function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/Uo2iQnNhD/Maintenance/refs/heads/main/XptC65ba-MainVD.lua"))()
-        end)
-
-    elseif optionName == "🔥 Power Incremental" then
-        Rayfield:Notify({
-            Title = "Executed Scripts",
-            Content = "Scripts Successfully Executed, Please wait 2 second!",
-            Duration = 4,
-            Image = "check",
-        })
-        task.wait(2)
-        pcall(function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/IOERHUB/Power-Incremental/refs/heads/main/Working"))()
-        end)
-
-    elseif optionName == "🥚 Steal an Egg" then
-        Rayfield:Notify({
-            Title = "Executed Scripts",
-            Content = "Scripts Successfully Executed, Please wait 2 second!",
-            Duration = 4,
-            Image = "check",
-        })
-        task.wait(2)
-        pcall(function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/Uo2iQnNhD/Maintenance/refs/heads/main/sAcfzDLt-Steal%20An%20Egg.lua"))()
-        end)
-
-    elseif optionName == "🚀 Untitled Upgrade Tree" then
-        Rayfield:Notify({
-            Title = "Executed Scripts",
-            Content = "Scripts Successfully Executed, Please wait 2 second!",
-            Duration = 4,
-            Image = "check",
-        })
-        task.wait(2)
-        pcall(function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/Uo2iQnNhD/Maintenance/refs/heads/main/XoDBQiPs-Untitled%20Upg%20Tree"))()
-        end)
-		
-    end
-end
-
-local Dropdown = MainTab:CreateDropdown({
-    Name = "Select Scripts",
-    Options = {"👑 Zeutron [HUB]", "🛠️ TLK Prison", "🎯 Area 51 Remake","🚗 Jailbreak", "🔪 Violence District", 
-               "🔥 Power Incremental", "🥚 Steal an Egg", "🚀 Untitled Upgrade Tree"},
-    CurrentOption = {"None"},
-    MultipleOptions = false,
-    Flag = "Dropdown1",
-    Callback = function(options)
-        -- Handle both table and string returns
-        if type(options) == "table" then
-            selectedOptions = options
-        elseif type(options) == "string" then
-            selectedOptions = {options}
-        else
-            selectedOptions = {}
-        end
-    end,
-})
-
-local Button = MainTab:CreateButton({
-    Name = "Execute Selected Scripts",
-    Callback = function()
-        if #selectedOptions == 0 or selectedOptions[1] == "None" then
-            Rayfield:Notify({
-                Title = "Error",
-                Content = "Please select a script first!",
-                Duration = 5,
-                Image = "triangle-alert",
-            })
-            return
-        end
-        
-        -- Loop through every item in selectedOptions
-        for _, option in pairs(selectedOptions) do
-            if option and option ~= "None" then
-                runScript(option)
-            end
-        end
-    end
-})
-
-local MainSection = MainTab:CreateSection("???-Locked")
-local Paragraph = MainTab:CreateParagraph({Title = "📢 Information", Content = "More Stuff Is coming Soon"})
-
-
-local MainSection = Theme:CreateSection("Select Theme")
-local Paragraph = Theme:CreateParagraph({Title = "📚 Guide Information", Content = "Select a color to change the Scripts"})
-local selectedOptions = {}
-
-local function runScript2(optionName)
-    if optionName == "Default" then
-        task.wait(0.5)
-        pcall(function()
-            Window.ModifyTheme('Default')
-        end)
-    
-    elseif optionName == "AmberGlow" then
-        task.wait(0.5)
-        pcall(function()
-            Window.ModifyTheme('AmberGlow')
-        end)
-
-    elseif optionName == "Bloom" then
-        task.wait(0.5)
-        pcall(function()
-            Window.ModifyTheme('Bloom')
-        end)
-
-    elseif optionName == "Amethyst" then
-        task.wait(0.5)
-        pcall(function()
-            Window.ModifyTheme('Amethyst')
-        end)
-
-    elseif optionName == "DarkBlue" then
-        task.wait(0.5)
-        pcall(function()
-            Window.ModifyTheme('DarkBlue')
-        end)
-
-    elseif optionName == "Green" then
-        task.wait(0.5)
-        pcall(function()
-           Window.ModifyTheme('Green')
-        end)
-
-    elseif optionName == "Light" then
-        task.wait(0.5)
-        pcall(function()
-            Window.ModifyTheme('Light')
-        end)
-
-    elseif optionName == "Ocean" then
-        task.wait(0.5)
-        pcall(function()
-            Window.ModifyTheme('Ocean')
-        end)
-    end
-end
-
-local Dropdown = Theme:CreateDropdown({
-    Name = "Select Scripts",
-    Options = {"Default", "AmberGlow", "Bloom", "Amethyst",
-                "DarkBlue", "Green", "Light", "Ocean"},
-    CurrentOption = {"None"},
-    MultipleOptions = false,
-    Flag = "Dropdown1",
-    Callback = function(options)
-        -- Handle both table and string returns
-        if type(options) == "table" then
-            selectedOptions = options
-        elseif type(options) == "string" then
-            selectedOptions = {options}
-        else
-            selectedOptions = {}
-        end
-    end,
-})
-
-local Button = Theme:CreateButton({
-    Name = "Execute Selected Theme",
-    Callback = function()
-        if #selectedOptions == 0 or selectedOptions[1] == "None" then
-            Rayfield:Notify({
-                Title = "Error",
-                Content = "Please select a Theme first!",
-                Duration = 5,
-                Image = "triangle-alert",
-            })
-            return
-        end
-        
-        -- Loop through every item in selectedOptions
-        for _, option in pairs(selectedOptions) do
-            if option and option ~= "None" then
-                runScript2(option)
-            end
-        end
-    end
-})
-
-local MainSection = Theme:CreateSection("More Settings")
-
-local Button = Theme:CreateButton({
-    Name = "🗑️ Destroy Interface",
-    Callback = function()
-    Rayfield:Notify({
-                    Title = "⚠️ Warning Detected",
-                    Content = "The script will self-destruct in 7 seconds!",
-                    Duration = 7,
-                    Image = "shield-alert",
-                })
-        wait(7)
-    Rayfield:Destroy()
-   end
-})
-
-local Button = Theme:CreateButton({
-    Name = "💎 Korblox & Headless",
-    Callback = function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Uo2iQnNhD/Maintenance/refs/heads/main/SYtg4g76-Korblox%20%26%20Headless.lua"))()
-   end
-})
-
-local MainSection = dev:CreateSection("Modification Player")
-
+-- =========================================================
+-- SERVICES
+-- =========================================================
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
-local plr = Players.LocalPlayer
+local RunService = game:GetService("RunService")
+local TweenService = game:GetService("TweenService")
 
--- Inisialisasi variable global
-_G.infinjump = false
+local LocalPlayer = Players.LocalPlayer
+local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 
-local Toggle = dev:CreateToggle({
-   Name = "👟 Infinite Jump",
-   CurrentValue = false,
-   Flag = "Toggle1", 
-   Callback = function(Value)
-      _G.infinjump = Value
+-- =========================================================
+-- LOAD LIBRARY
+-- =========================================================
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Uo2iQnNhD/Database/refs/heads/main/HX5cd2ms4-Release.luau"))()
 
-      -- Notifikasi saat dinyalakan
-      if Value then
-         Rayfield:Notify({
-            Title = "System Information",
-            Content = "Infinite jump has been successfully enabled.",
-            Duration = 6,
-            Image = "person-standing",
-         })
-      else
-         -- Notifikasi saat dimatikan
-         Rayfield:Notify({
-            Title = "System Information",
-            Content = "Infinite jump has been disabled.",
-            Duration = 6,
-            Image = "person-standing",
-         })
-      end
-   end,
-})
-
--- Gunakan UserInputService.JumpRequest (Mendukung Spasi PC, Tombol Lompat Mobile, & Controller)
--- Diletakkan di luar callback agar tidak membuat koneksi ganda (mencegah lag/memory leak)
-UserInputService.JumpRequest:Connect(function()
-   if _G.infinjump then
-      local char = plr.Character
-      if char then
-         local humanoid = char:FindFirstChildOfClass("Humanoid")
-         if humanoid then
-            -- Metode modern dan stabil untuk infinite jump
-            humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
-            
-            -- CATATAN: Jika game tertentu memblokir cara di atas dan kamu 
-            -- membutuhkan trik "Seated" seperti script asli kamu, hapus tanda komentar (--), 
-            -- dan gunakan task.wait() (karena wait() sudah deprecated).
-            -- task.wait()
-            -- humanoid:ChangeState(Enum.HumanoidStateType.Seated)
-         end
-      end
-   end
-end)
-
-local Players = game:GetService("Players")
-local plr = Players.LocalPlayer
-
--- Inisialisasi variable global
-_G.walkspeedValue = 16
-_G.jumppowerValue = 50
-_G.walkspeedActive = false
-_G.jumppowerActive = false
-
--- Fungsi helper untuk mendapatkan humanoid
-local function getHumanoid()
-   local char = plr.Character
-   if char then
-      return char:FindFirstChildOfClass("Humanoid")
-   end
-   return nil
+if type(Library) ~= "table" then
+    warn("Library ZethHub Failed Loaded!", 0)
 end
 
--- ============================================
--- WALKSPEED SECTION
--- ============================================
+-- =========================================================
+-- NOTIFICATION LAYOUT SETTINGS
+-- =========================================================
+-- Ini dipakai kalau library kamu sudah memakai patch notification Rayfield-style.
+-- Kalau belum, tidak masalah, hanya tidak berpengaruh.
+Library.NotificationWidth = Library.NotificationWidth or 320
+Library.NotificationTopOffset = Library.NotificationTopOffset or 56
+Library.NotificationRightOffset = Library.NotificationRightOffset or 16
+Library.MiniSafeMargin = Library.MiniSafeMargin or 12
 
-local WalkSpeedSlider = dev:CreateSlider({
-   Name = "🏃 WalkSpeed",
-   Range = {0, 5000},
-   Increment = 1,
-   Suffix = " Speed",
-   CurrentValue = 16,
-   Flag = "WalkSpeedSlider",
-   Callback = function(Value)
-      _G.walkspeedValue = Value
-      -- Update langsung jika toggle sedang aktif
-      if _G.walkspeedActive then
-         local humanoid = getHumanoid()
-         if humanoid then
-            humanoid.WalkSpeed = Value
-         end
-      end
-   end,
+-- =========================================================
+-- NOTIFICATION HELPER
+-- =========================================================
+local function notificationText(value)
+    if type(value) == "table" then
+        return table.concat(value, "\n")
+    end
+
+    return tostring(value or "")
+end
+
+-- Gaya baru:
+-- notify("Title", "Content", 5, "icon")
+--
+-- Opsional color:
+-- notify("Title", "Content", 5, "icon", Color3.fromRGB(255, 80, 80))
+local function notify(title, content, duration, icon, color)
+    if type(Library) ~= "table" or type(Library.Notify) ~= "function" then
+        return
+    end
+
+    title = notificationText(title)
+    content = notificationText(content)
+    duration = tonumber(duration) or 5
+
+    if duration < 0.1 then
+        duration = 0.1
+    end
+
+    local cfg = {
+        Title = title,
+        Content = content,
+        Duration = duration,
+        Image = icon,
+    }
+
+    if color and typeof(color) == "Color3" then
+        cfg.Color = color
+    end
+
+    -- Coba pakai gaya Rayfield/table dulu.
+    local ok = pcall(function()
+        Library:Notify(cfg)
+    end)
+
+    -- Fallback ke gaya lama kalau library belum support table notification.
+    -- Gaya lama: Library:Notify(content, duration, title, icon)
+    if not ok then
+        task.spawn(function()
+            pcall(function()
+                Library:Notify(content, duration, title, icon)
+            end)
+        end)
+    end
+end
+
+-- =========================================================
+-- REMOTE SCRIPT EXECUTOR
+-- =========================================================
+local function executeRemoteScript(url, sourceName)
+    if not url or url == "" then
+        notify(
+            "Error",
+            "Script URL not found for: " .. tostring(sourceName),
+            5,
+            "x-circle"
+        )
+        return
+    end
+
+    notify(
+        "Executed Scripts",
+        "Scripts Successfully Executed, Please wait 2 second!",
+        4,
+        "check-circle"
+    )
+
+    task.wait(2)
+
+    local ok, err = pcall(function()
+        loadstring(game:HttpGet(url))()
+    end)
+
+    if not ok then
+        notify(
+            "Execution Error",
+            "Failed to run " .. tostring(sourceName) .. "\n" .. tostring(err),
+            6,
+            "x-circle"
+        )
+    end
+end
+
+-- =========================================================
+-- WINDOW SETUP
+-- =========================================================
+local InitialAccent = Color3.fromRGB(50, 138, 220)
+
+if type(Library.SetAccent) == "function" then
+    Library:SetAccent(InitialAccent)
+end
+
+if type(Library.SetRainbow) == "function" then
+    Library:SetRainbow(false)
+end
+
+Library.ToggleKey = Enum.KeyCode.RightShift
+
+local Window = Library:CreateWindow({
+    Title = "Hyperzero Hub",
+    Subtitle = "By Exterminate0 & Zeutron Team",
+    Accent = InitialAccent,
+    Tags = {
+        {
+            Text = "V-xicochfh",
+            Color = Color3.fromRGB(255, 204, 0),
+            TextColor = Color3.fromRGB(0, 0, 0),
+        },
+        {
+            Text = "Universal",
+            Color = Color3.fromRGB(46, 230, 110),
+            TextColor = Color3.fromRGB(0, 0, 0),
+        },
+    },
 })
 
-local WalkSpeedToggle = dev:CreateToggle({
-   Name = "Turn ON/OFF WalkSpeed",
-   CurrentValue = false,
-   Flag = "WalkSpeedToggle",
-   Callback = function(Value)
-      _G.walkspeedActive = Value
-      local humanoid = getHumanoid()
-      
-      if Value then
-         -- AKTIFKAN: Terapkan nilai slider
-         if humanoid then
-            humanoid.WalkSpeed = _G.walkspeedValue
-         end
-         Rayfield:Notify({
-            Title = "WalkSpeed ON",
-            Content = "WalkSpeed on with value " .. _G.walkspeedValue,
-            Duration = 5,
-            Image = "zap",
-         })
-      else
-         -- NONAKTIFKAN: Reset ke default (16)
-         if humanoid then
-            humanoid.WalkSpeed = 16
-         end
-         Rayfield:Notify({
-            Title = "WalkSpeed OFF",
-            Content = "WalkSpeed disable (reset to 16)",
-            Duration = 5,
-            Image = "x-circle",
-         })
-      end
-   end,
+if not Window then
+    warn("Failed to create a Window!", 0)
+end
+
+local function SetAppAccent(color)
+    if type(Library.SetAccent) == "function" then
+        Library:SetAccent(color)
+    end
+
+    if Window and not Window._destroyed and type(Window.SetAccent) == "function" then
+        Window:SetAccent(color)
+    end
+end
+
+-- =========================================================
+-- THEME PRESETS
+-- =========================================================
+-- ZethHub saat ini belum punya ModifyTheme penuh seperti Rayfield.
+-- Jadi theme di sini mengubah Accent + Rainbow/YinYang border.
+local THEME_PRESETS = {
+    Default = {
+        Accent = Color3.fromRGB(50, 138, 220),
+        Rainbow = false,
+    },
+    AmberGlow = {
+        Accent = Color3.fromRGB(255, 170, 85),
+        Rainbow = false,
+    },
+    Bloom = {
+        Accent = Color3.fromRGB(255, 140, 170),
+        Rainbow = false,
+    },
+    Amethyst = {
+        Accent = Color3.fromRGB(150, 100, 200),
+        Rainbow = false,
+    },
+    DarkBlue = {
+        Accent = Color3.fromRGB(0, 150, 240),
+        Rainbow = false,
+    },
+    Green = {
+        Accent = Color3.fromRGB(100, 180, 100),
+        Rainbow = false,
+    },
+    Light = {
+        Accent = Color3.fromRGB(255, 255, 255),
+        Rainbow = false,
+    },
+    Ocean = {
+        Accent = Color3.fromRGB(0, 160, 160),
+        Rainbow = false,
+    },
+    YinYang = {
+        Accent = Color3.fromRGB(255, 255, 255),
+        Rainbow = true,
+    },
+    Rainbow = {
+        Accent = Color3.fromRGB(255, 255, 255),
+        Rainbow = true,
+    },
+}
+
+local function applyTheme(themeName)
+    local preset = THEME_PRESETS[themeName]
+
+    if not preset then
+        notify(
+            "Theme Error",
+            "Theme not found: " .. tostring(themeName),
+            5,
+            "x-circle"
+        )
+        return
+    end
+
+    if type(Library.SetRainbow) == "function" then
+        Library:SetRainbow(preset.Rainbow == true)
+    end
+
+    SetAppAccent(preset.Accent or InitialAccent)
+
+    notify(
+        "Theme",
+        "Theme applied: " .. tostring(themeName),
+        4,
+        "check-circle"
+    )
+end
+
+-- =========================================================
+-- TABS
+-- =========================================================
+local ChangelogTab = Window:CreateTab("Changelog", "mail")
+local MainMenuTab = Window:CreateTab("Main Menu", "gamepad-2")
+local ToolsTab = Window:CreateTab("Tools", "wrench")
+local SettingsTab = Window:CreateTab("Theme & Settings", "settings")
+
+-- =========================================================
+-- CHANGELOG TAB
+-- =========================================================
+ChangelogTab:CreateSection("Information & Version")
+
+ChangelogTab:CreateParagraph({
+    Title = "V-LLQCH3DC",
+    Content = {
+        "- [+] Added Script & Fixed Some Bugs",
+        "- [+] Updated Key System UI & Key Generator",
+        "- [+] Added 🥚 Steal an Egg",
+    },
+    Icon = "file-text",
 })
 
--- ============================================
--- JUMPPOWER SECTION
--- ============================================
-
-local JumpPowerSlider = dev:CreateSlider({
-   Name = "⬆️ JumpPower",
-   Range = {0, 5000},
-   Increment = 1,
-   Suffix = " Power",
-   CurrentValue = 50,
-   Flag = "JumpPowerSlider",
-   Callback = function(Value)
-      _G.jumppowerValue = Value
-      -- Update langsung jika toggle sedang aktif
-      if _G.jumppowerActive then
-         local humanoid = getHumanoid()
-         if humanoid then
-            humanoid.UseJumpPower = true
-            humanoid.JumpPower = Value
-         end
-      end
-   end,
+ChangelogTab:CreateParagraph({
+    Title = "V-7H4RXYE5",
+    Content = {
+        "- [!!] Deleted 🎮 Automatic [Picker]",
+        "- [+] Buffer Wait scripts 3 sec >> 2 sec",
+        "- [!!] Deleted Key System & Key Generator",
+        "- [!!] Deleted Checking User/players",
+        "- [+] Updated 🥚 Steal an Egg",
+    },
+    Icon = "file-text",
 })
 
-local JumpPowerToggle = dev:CreateToggle({
-   Name = "Turn ON/OFF JumpPower",
-   CurrentValue = false,
-   Flag = "JumpPowerToggle",
-   Callback = function(Value)
-      _G.jumppowerActive = Value
-      local humanoid = getHumanoid()
-      
-      if Value then
-         -- AKTIFKAN: Terapkan nilai slider
-         if humanoid then
-            humanoid.UseJumpPower = true
-            humanoid.JumpPower = _G.jumppowerValue
-         end
-         Rayfield:Notify({
-            Title = "JumpPower ON",
-            Content = "JumpPower on with value " .. _G.jumppowerValue,
-            Duration = 5,
-            Image = "trending-up",
-         })
-      else
-         -- NONAKTIFKAN: Reset ke default (50)
-         if humanoid then
-            humanoid.JumpPower = 50
-         end
-         Rayfield:Notify({
-            Title = "JumpPower OFF",
-            Content = "JumpPower disable (reset to 50)",
-            Duration = 5,
-            Image = "x-circle",
-         })
-      end
-   end,
+ChangelogTab:CreateParagraph({
+    Title = "V-EESpz2Xk",
+    Content = {
+        "- [+] Added Select Script in Visual Player",
+        "- [+] Added Script Headless & Korblox",
+        "- [+] Added Script Animation Roblox",
+        "- [+] Added More Icon & Detail",
+        "- [!!] Fixed Bugs Loading Screen",
+    },
+    Icon = "file-text",
 })
 
--- ============================================
--- AUTO REAPPLY SAAT RESPAWN
--- ============================================
-plr.CharacterAdded:Connect(function(char)
-   task.wait(1) -- Tunggu humanoid siap
-   local humanoid = char:WaitForChild("Humanoid", 5)
-   if not humanoid then return end
-   
-   if _G.walkspeedActive then
-      humanoid.WalkSpeed = _G.walkspeedValue
-   end
-   if _G.jumppowerActive then
-      humanoid.UseJumpPower = true
-      humanoid.JumpPower = _G.jumppowerValue
-   end
+ChangelogTab:CreateParagraph({
+    Title = "V-xicochfh",
+    Content = {
+        "- [+] Release New Library",
+        "- [+] Fixed Notification Bug",
+        "- [+] Fixed Mini-Box Limit",
+        "- [+] Added Change Theme",
+        "- [+] Added Action On Close Button",
+        "- [+] Deleted Icon Default >> Lucide",
+    },
+    Icon = "file-text",
+})
+
+ChangelogTab:CreateSection("Next Update & Version")
+
+ChangelogTab:CreateParagraph({
+    Title = "V-sTi2Br5D",
+    Content = "Unknown, Coming Soon!",
+    Icon = "timer",
+})
+
+-- =========================================================
+-- MAIN MENU TAB
+-- =========================================================
+MainMenuTab:CreateSection("Game Support")
+
+MainMenuTab:CreateParagraph({
+    Title = "System Information",
+    Content = {
+        "- Choose Your Script and execute that script",
+        "- This scripts Not my Own",
+    },
+    Icon = "shield",
+})
+
+MainMenuTab:CreateParagraph({
+    Title = "Guide Information",
+    Content = "When executed, the automatic picker selects and runs the appropriate script based on the game being played. if the game is supported, it uses a different script than it would for an unsupported game",
+    Icon = "book-open",
+})
+
+local MAIN_SCRIPT_OPTIONS = {
+    "None",
+    "👑 Zeutron [HUB]",
+    "🛠️ TLK Prison",
+    "🎯 Area 51 Remake",
+    "🚗 Jailbreak",
+    "🔪 Violence District",
+    "🔥 Power Incremental",
+    "🥚 Steal an Egg",
+    "🚀 Untitled Upgrade Tree",
+}
+
+local MAIN_SCRIPT_URLS = {
+    ["👑 Zeutron [HUB]"] = "https://raw.githubusercontent.com/Zyptrue/Release/refs/heads/main/New%20Interface",
+    ["🛠️ TLK Prison"] = "https://raw.githubusercontent.com/IOERHUB/CheckingV2/refs/heads/main/Protection",
+    ["🎯 Area 51 Remake"] = "https://raw.githubusercontent.com/zeutronxsite/Area-51-Remake/refs/heads/main/Latest%20Version",
+    ["🚗 Jailbreak"] = "https://raw.githubusercontent.com/zeutronxsite/M6txEKBDBreak/refs/heads/main/Working",
+    ["🔪 Violence District"] = "https://raw.githubusercontent.com/Uo2iQnNhD/Maintenance/refs/heads/main/XptC65ba-MainVD.lua",
+    ["🔥 Power Incremental"] = "https://raw.githubusercontent.com/IOERHUB/Power-Incremental/refs/heads/main/Working",
+    ["🥚 Steal an Egg"] = "https://raw.githubusercontent.com/Uo2iQnNhD/Maintenance/refs/heads/main/sAcfzDLt-Steal%20An%20Egg.lua",
+    ["🚀 Untitled Upgrade Tree"] = "https://raw.githubusercontent.com/Uo2iQnNhD/Maintenance/refs/heads/main/XoDBQiPs-Untitled%20Upg%20Tree",
+}
+
+local selectedMainScript = "None"
+
+MainMenuTab:CreateDropdown({
+    Name = "Select Scripts",
+    Options = MAIN_SCRIPT_OPTIONS,
+    Default = "None",
+    Flag = "MainScriptDropdown",
+    Icon = "chevron-down",
+    Tooltip = "Pilih script game yang ingin dijalankan",
+    Callback = function(value)
+        selectedMainScript = value
+    end,
+})
+
+MainMenuTab:CreateButton({
+    Name = "Execute Selected Scripts",
+    Icon = "play",
+    Tooltip = "Jalankan script yang dipilih",
+    Callback = function()
+        if not selectedMainScript or selectedMainScript == "None" then
+            notify(
+                "Error",
+                "Please select a script first!",
+                5,
+                "x-circle"
+            )
+            return
+        end
+
+        executeRemoteScript(MAIN_SCRIPT_URLS[selectedMainScript], selectedMainScript)
+    end,
+})
+
+MainMenuTab:CreateSection("???-Locked")
+
+MainMenuTab:CreateParagraph({
+    Title = "Information",
+    Content = "More Stuff Is coming Soon",
+    Icon = "megaphone",
+})
+
+-- =========================================================
+-- TOOLS TAB - MOVEMENT
+-- =========================================================
+ToolsTab:CreateSection("Movement")
+
+_G.infinjump = false
+
+local function getHumanoid()
+    local char = LocalPlayer.Character
+    if char then
+        return char:FindFirstChildOfClass("Humanoid")
+    end
+    return nil
+end
+
+ToolsTab:CreateToggle({
+    Name = "Infinite Jump",
+    Default = false,
+    Flag = "InfiniteJumpToggle",
+    Icon = "activity",
+    Tooltip = "Turn ON/OFF Inf Jump",
+    Callback = function(value)
+        _G.infinjump = value
+
+        if value then
+            notify(
+                "System Information",
+                "Infinite Jump Has Been Activated",
+                5,
+                "info"
+            )
+        else
+            notify(
+                "System Information",
+                "Infinite Jump Has Been Disabled",
+                5,
+                "info"
+            )
+        end
+    end,
+})
+
+UserInputService.JumpRequest:Connect(function()
+    if not _G.infinjump then
+        return
+    end
+
+    local char = LocalPlayer.Character
+    if not char then
+        return
+    end
+
+    local humanoid = char:FindFirstChildOfClass("Humanoid")
+    if not humanoid then
+        return
+    end
+
+    humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
 end)
 
-local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
-local lp = Players.LocalPlayer
+-- WalkSpeed
+_G.walkspeedValue = 16
+_G.walkspeedActive = false
+
+ToolsTab:CreateSlider({
+    Name = "WalkSpeed",
+    Min = 0,
+    Max = 5000,
+    Default = 16,
+    Flag = "WalkSpeedSlider",
+    Icon = "gauge",
+    Tooltip = "Nilai WalkSpeed",
+    Callback = function(value)
+        _G.walkspeedValue = value
+
+        if _G.walkspeedActive then
+            local humanoid = getHumanoid()
+            if humanoid then
+                humanoid.WalkSpeed = value
+            end
+        end
+    end,
+})
+
+ToolsTab:CreateToggle({
+    Name = "Turn ON/OFF WalkSpeed",
+    Default = false,
+    Flag = "WalkSpeedToggle",
+    Icon = "toggle-right",
+    Tooltip = "Aktifkan/nonaktifkan WalkSpeed",
+    Callback = function(value)
+        _G.walkspeedActive = value
+        local humanoid = getHumanoid()
+
+        if value then
+            if humanoid then
+                humanoid.WalkSpeed = _G.walkspeedValue
+            end
+
+            notify(
+                "WalkSpeed ON",
+                "WalkSpeed on with value " .. tostring(_G.walkspeedValue),
+                5,
+                "check-circle"
+            )
+        else
+            if humanoid then
+                humanoid.WalkSpeed = 16
+            end
+
+            notify(
+                "WalkSpeed OFF",
+                "WalkSpeed disable (reset to 16)",
+                5,
+                "x-circle"
+            )
+        end
+    end,
+})
+
+-- JumpPower
+_G.jumppowerValue = 50
+_G.jumppowerActive = false
+
+ToolsTab:CreateSlider({
+    Name = "JumpPower",
+    Min = 0,
+    Max = 5000,
+    Default = 50,
+    Flag = "JumpPowerSlider",
+    Icon = "chevron-up",
+    Tooltip = "Nilai JumpPower",
+    Callback = function(value)
+        _G.jumppowerValue = value
+
+        if _G.jumppowerActive then
+            local humanoid = getHumanoid()
+            if humanoid then
+                humanoid.UseJumpPower = true
+                humanoid.JumpPower = value
+            end
+        end
+    end,
+})
+
+ToolsTab:CreateToggle({
+    Name = "Turn ON/OFF JumpPower",
+    Default = false,
+    Flag = "JumpPowerToggle",
+    Icon = "toggle-right",
+    Tooltip = "Aktifkan/nonaktifkan JumpPower",
+    Callback = function(value)
+        _G.jumppowerActive = value
+        local humanoid = getHumanoid()
+
+        if value then
+            if humanoid then
+                humanoid.UseJumpPower = true
+                humanoid.JumpPower = _G.jumppowerValue
+            end
+
+            notify(
+                "JumpPower ON",
+                "JumpPower on with value " .. tostring(_G.jumppowerValue),
+                5,
+                "check-circle"
+            )
+        else
+            if humanoid then
+                humanoid.UseJumpPower = true
+                humanoid.JumpPower = 50
+            end
+
+            notify(
+                "JumpPower OFF",
+                "JumpPower disable (reset to 50)",
+                5,
+                "x-circle"
+            )
+        end
+    end,
+})
+
+LocalPlayer.CharacterAdded:Connect(function(char)
+    task.wait(1)
+
+    local humanoid = char:WaitForChild("Humanoid", 5)
+    if not humanoid then
+        return
+    end
+
+    if _G.walkspeedActive then
+        humanoid.WalkSpeed = _G.walkspeedValue
+    end
+
+    if _G.jumppowerActive then
+        humanoid.UseJumpPower = true
+        humanoid.JumpPower = _G.jumppowerValue
+    end
+end)
+
+-- =========================================================
+-- TOOLS TAB - EXTERNAL SCRIPTS
+-- =========================================================
+ToolsTab:CreateSection("External Scripts")
+
+ToolsTab:CreateParagraph({
+    Title = "🛡️ System Information",
+    Content = "All these scripts work with all games",
+    Icon = "shield",
+})
+
+local TOOL_SCRIPT_OPTIONS = {
+    "None",
+    "♾️ Infinite Yield",
+    "🖥️ Executor Editor [BETA]",
+    "📌 Waypoint Manager [S.W.P]",
+    "🛡️ Anti-Fling [Protection]",
+    "🎭 Animation Roblox [Working]",
+    "👁️ Esp Monster [Beta]",
+}
+
+local TOOL_SCRIPT_URLS = {
+    ["♾️ Infinite Yield"] = "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source",
+    ["🖥️ Executor Editor [BETA]"] = "https://raw.githubusercontent.com/zeutronxsite/nf5guunQd-exec/refs/heads/main/executor.luau",
+    ["📌 Waypoint Manager [S.W.P]"] = "https://raw.githubusercontent.com/Uo2iQnNhD/Maintenance/refs/heads/main/xtvqz7us-Waypoint.lua",
+    ["🛡️ Anti-Fling [Protection]"] = "https://pastebin.com/raw/MhJDcWjR",
+    ["🎭 Animation Roblox [Working]"] = "https://raw.githubusercontent.com/Bac0nHck/Scripts/refs/heads/main/BundleAnimations.lua",
+    ["👁️ Esp Monster [Beta]"] = "https://raw.githubusercontent.com/Uo2iQnNhD/Maintenance/refs/heads/main/aXXcS4rE-Esp%20Monster.lua",
+}
+
+local selectedToolScript = "None"
+
+ToolsTab:CreateDropdown({
+    Name = "Select Scripts",
+    Options = TOOL_SCRIPT_OPTIONS,
+    Default = "None",
+    Flag = "ToolScriptDropdown",
+    Icon = "chevron-down",
+    Tooltip = "Pilih external script",
+    Callback = function(value)
+        selectedToolScript = value
+    end,
+})
+
+ToolsTab:CreateButton({
+    Name = "Execute Selected Scripts",
+    Icon = "play",
+    Tooltip = "Jalankan external script yang dipilih",
+    Callback = function()
+        if not selectedToolScript or selectedToolScript == "None" then
+            notify(
+                "Error",
+                "Please select a script first!",
+                5,
+                "x-circle"
+            )
+            return
+        end
+
+        executeRemoteScript(TOOL_SCRIPT_URLS[selectedToolScript], selectedToolScript)
+    end,
+})
+
+-- =========================================================
+-- TOOLS TAB - ESP PLAYER
+-- =========================================================
+ToolsTab:CreateSection("Visual / ESP")
 
 local espEnabled = false
-local espObjects = {} -- Menyimpan semua BillboardGui ESP
+local espObjects = {}
+local espCharacterConnections = {}
 local updateConnection = nil
 
--- ==========================================
--- Mapping Warna Team
--- ==========================================
+local function collectKeys(tbl)
+    local keys = {}
+    for key in pairs(tbl) do
+        table.insert(keys, key)
+    end
+    return keys
+end
+
 local function getTeamColor(player)
-    local team = player.Team
-    local teamName = team and team.Name or ""
-    
+    local team = nil
+    pcall(function()
+        team = player.Team
+    end)
+
+    local teamName = (team and team.Name) or ""
+
     local teamColorMap = {
         ["Fugitive"] = Color3.fromRGB(255, 50, 50),
-        ["Prison"]   = Color3.fromRGB(255, 150, 0),
-        ["Police"]   = Color3.fromRGB(0, 100, 255),
+        ["Prison"] = Color3.fromRGB(255, 150, 0),
+        ["Police"] = Color3.fromRGB(0, 100, 255),
         ["Civilian"] = Color3.fromRGB(50, 255, 50),
-        
-        -- === TEAM TAMBAHAN & DIUBAH WARNA NYA ===
-        ["Hostage"]  = Color3.fromRGB(255, 0, 255),
-        ["Choosing"] = Color3.fromRGB(0, 255, 255),
-        ["ADMIN"]    = Color3.fromRGB(255, 215, 0),
 
-        -- === Color Picker Team ===
-        ["Red"]      = Color3.fromRGB(255, 50, 50),
-        ["Blue"]     = Color3.fromRGB(50, 100, 255),
-        ["Green"]    = Color3.fromRGB(50, 255, 50),
-        ["Yellow"]   = Color3.fromRGB(255, 255, 50),
-        ["Purple"]   = Color3.fromRGB(200, 50, 255),
-        ["White"]    = Color3.fromRGB(255, 255, 255),
-        ["Black"]    = Color3.fromRGB(50, 50, 50),
+        ["Hostage"] = Color3.fromRGB(255, 0, 255),
+        ["Choosing"] = Color3.fromRGB(0, 255, 255),
+        ["ADMIN"] = Color3.fromRGB(255, 215, 0),
+
+        ["Red"] = Color3.fromRGB(255, 50, 50),
+        ["Blue"] = Color3.fromRGB(50, 100, 255),
+        ["Green"] = Color3.fromRGB(50, 255, 50),
+        ["Yellow"] = Color3.fromRGB(255, 255, 50),
+        ["Purple"] = Color3.fromRGB(200, 50, 255),
+        ["White"] = Color3.fromRGB(255, 255, 255),
+        ["Black"] = Color3.fromRGB(50, 50, 50),
     }
-    
+
     for name, color in pairs(teamColorMap) do
         if string.lower(teamName) == string.lower(name) then
             return color
         end
     end
-    
-    if team and team.TeamColor then
-        return team.TeamColor.Color
-    end
-    
-    return Color3.fromRGB(255, 255, 255)
+
+    local teamColor = nil
+    pcall(function()
+        teamColor = team and team.TeamColor and team.TeamColor.Color
+    end)
+
+    return teamColor or Color3.fromRGB(255, 255, 255)
 end
 
--- ==========================================
--- Fungsi untuk Membuat ESP ke satu Player
--- ==========================================
+local function clearPlayerESP(player)
+    local data = espObjects[player]
+    if data then
+        pcall(function()
+            if data.billboard then
+                data.billboard:Destroy()
+            end
+        end)
+
+        pcall(function()
+            if data.highlight then
+                data.highlight:Destroy()
+            end
+        end)
+
+        espObjects[player] = nil
+    end
+
+    local conn = espCharacterConnections[player]
+    if conn then
+        pcall(function()
+            conn:Disconnect()
+        end)
+
+        espCharacterConnections[player] = nil
+    end
+end
+
+local function clearAllESP()
+    for _, player in ipairs(collectKeys(espObjects)) do
+        clearPlayerESP(player)
+    end
+
+    for _, player in ipairs(collectKeys(espCharacterConnections)) do
+        clearPlayerESP(player)
+    end
+
+    espObjects = {}
+end
+
 local function createESP(targetPlayer)
-    if targetPlayer == lp then return end
-    
+    if targetPlayer == LocalPlayer then
+        return
+    end
+
     local function setupESP(char)
-        if not char then return end
+        if not char then
+            return
+        end
+
         local head = char:WaitForChild("Head", 5)
         local hum = char:WaitForChild("Humanoid", 5)
         local hrp = char:WaitForChild("HumanoidRootPart", 5)
-        if not head or not hum or not hrp then return end
-        
+
+        if not head or not hum or not hrp then
+            return
+        end
+
         local teamColor = getTeamColor(targetPlayer)
-        
-        -- Hapus ESP lama (mencegah duplikat)
+
         if head:FindFirstChild("PlayerESP_GUI") then
             head.PlayerESP_GUI:Destroy()
         end
+
         if char:FindFirstChild("PlayerESP_HL") then
             char.PlayerESP_HL:Destroy()
         end
-        
-        -- 1. Highlight (Outline Player)
+
+        -- Highlight
         local highlight = Instance.new("Highlight")
         highlight.Name = "PlayerESP_HL"
-        highlight.FillColor = teamColor
-        highlight.OutlineColor = Color3.fromRGB(0, 0, 0)
-        highlight.FillTransparency = 0.7
-        highlight.OutlineTransparency = 0
-        highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+
+        pcall(function()
+            highlight.FillColor = teamColor
+            highlight.OutlineColor = Color3.fromRGB(0, 0, 0)
+            highlight.FillTransparency = 0.7
+            highlight.OutlineTransparency = 0
+            highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+        end)
+
         highlight.Adornee = char
         highlight.Parent = char
-        
-        -- 2. BillboardGui (Wadah untuk semua info)
+
+        -- Billboard
         local billboard = Instance.new("BillboardGui")
         billboard.Name = "PlayerESP_GUI"
         billboard.Adornee = head
-        billboard.Size = UDim2.new(0, 140, 0, 60) -- Diperbesar untuk menampung info baru
+        billboard.Size = UDim2.new(0, 140, 0, 60)
         billboard.StudsOffset = Vector3.new(0, 3, 0)
         billboard.AlwaysOnTop = true
         billboard.ResetOnSpawn = false
         billboard.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
         billboard.Parent = head
-        
-        -- 3. Nama Player
+
+        -- Name
         local nameLabel = Instance.new("TextLabel")
         nameLabel.Name = "NameLabel"
         nameLabel.Size = UDim2.new(1, 0, 0, 14)
@@ -643,8 +825,8 @@ local function createESP(targetPlayer)
         nameLabel.Font = Enum.Font.GothamBold
         nameLabel.TextSize = 12
         nameLabel.Parent = billboard
-        
-        -- 4. Label Jarak (BARU)
+
+        -- Distance
         local distanceLabel = Instance.new("TextLabel")
         distanceLabel.Name = "DistanceLabel"
         distanceLabel.Size = UDim2.new(1, 0, 0, 12)
@@ -657,8 +839,8 @@ local function createESP(targetPlayer)
         distanceLabel.Font = Enum.Font.GothamBold
         distanceLabel.TextSize = 11
         distanceLabel.Parent = billboard
-        
-        -- 5. Health Bar Background
+
+        -- HP Background
         local hpBg = Instance.new("Frame")
         hpBg.Name = "HealthBg"
         hpBg.Size = UDim2.new(0, 120, 0, 6)
@@ -666,24 +848,24 @@ local function createESP(targetPlayer)
         hpBg.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
         hpBg.BorderSizePixel = 0
         hpBg.Parent = billboard
-        
+
         local hpCornerBg = Instance.new("UICorner")
         hpCornerBg.CornerRadius = UDim.new(0, 3)
         hpCornerBg.Parent = hpBg
-        
-        -- 6. Health Bar Fill
+
+        -- HP Fill
         local hpFill = Instance.new("Frame")
         hpFill.Name = "HealthFill"
         hpFill.Size = UDim2.new(1, 0, 1, 0)
         hpFill.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
         hpFill.BorderSizePixel = 0
         hpFill.Parent = hpBg
-        
+
         local hpCornerFill = Instance.new("UICorner")
         hpCornerFill.CornerRadius = UDim.new(0, 3)
         hpCornerFill.Parent = hpFill
-        
-        -- 7. Label HP (BARU) - Contoh: "HP: 100/100"
+
+        -- HP Label
         local hpLabel = Instance.new("TextLabel")
         hpLabel.Name = "HPLabel"
         hpLabel.Size = UDim2.new(1, 0, 0, 12)
@@ -696,22 +878,21 @@ local function createESP(targetPlayer)
         hpLabel.Font = Enum.Font.GothamBold
         hpLabel.TextSize = 11
         hpLabel.Parent = billboard
-        
-        -- 8. Label Team (BARU - opsional, agar lebih informatif)
+
+        -- Team Label
         local teamLabel = Instance.new("TextLabel")
         teamLabel.Name = "TeamLabel"
         teamLabel.Size = UDim2.new(1, 0, 0, 10)
         teamLabel.Position = UDim2.new(0, 0, 0, 46)
         teamLabel.BackgroundTransparency = 1
-        teamLabel.Text = "[" .. (targetPlayer.Team and targetPlayer.Team.Name or "No Team") .. "]"
+        teamLabel.Text = "[" .. ((targetPlayer.Team and targetPlayer.Team.Name) or "No Team") .. "]"
         teamLabel.TextColor3 = teamColor
         teamLabel.TextStrokeTransparency = 0
         teamLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
         teamLabel.Font = Enum.Font.Gotham
         teamLabel.TextSize = 10
         teamLabel.Parent = billboard
-        
-        -- Simpan referensi untuk update
+
         espObjects[targetPlayer] = {
             billboard = billboard,
             highlight = highlight,
@@ -722,46 +903,34 @@ local function createESP(targetPlayer)
             teamLabel = teamLabel,
             humanoid = hum,
             hrp = hrp,
-            character = char
+            character = char,
         }
     end
-    
+
     if targetPlayer.Character then
         setupESP(targetPlayer.Character)
     end
-    
-    targetPlayer.CharacterAdded:Connect(function(char)
-        if espEnabled then
-            task.wait(0.5)
-            setupESP(char)
-        end
-    end)
-end
 
--- ==========================================
--- Fungsi Hapus Semua ESP
--- ==========================================
-local function clearAllESP()
-    for _, data in pairs(espObjects) do
-        pcall(function()
-            if data.billboard then data.billboard:Destroy() end
-            if data.highlight then data.highlight:Destroy() end
+    if not espCharacterConnections[targetPlayer] then
+        espCharacterConnections[targetPlayer] = targetPlayer.CharacterAdded:Connect(function(char)
+            if espEnabled then
+                task.wait(0.5)
+                setupESP(char)
+            end
         end)
     end
-    espObjects = {}
 end
 
--- ==========================================
--- Fungsi Update: HP + Jarak (Looping)
--- ==========================================
 local function startUpdateLoop()
-    if updateConnection then updateConnection:Disconnect() end
-    
+    if updateConnection then
+        updateConnection:Disconnect()
+        updateConnection = nil
+    end
+
     updateConnection = RunService.RenderStepped:Connect(function()
-        -- Dapatkan HRP player lokal
-        local myChar = lp.Character
+        local myChar = LocalPlayer.Character
         local myHRP = myChar and myChar:FindFirstChild("HumanoidRootPart")
-        
+
         for player, data in pairs(espObjects) do
             pcall(function()
                 local hum = data.humanoid
@@ -769,20 +938,16 @@ local function startUpdateLoop()
                 local fill = data.hpFill
                 local hpLabel = data.hpLabel
                 local distLabel = data.distanceLabel
-                
-                -- === Update HP Bar & Label ===
+
+                -- HP
                 if hum and fill and hpLabel and hum.Parent then
                     local currentHP = math.floor(hum.Health)
                     local maxHP = math.floor(hum.MaxHealth)
                     local percent = math.clamp(hum.Health / hum.MaxHealth, 0, 1)
-                    
-                    -- Update ukuran bar
+
                     fill.Size = UDim2.new(percent, 0, 1, 0)
-                    
-                    -- Update teks HP: "HP: 100/100"
                     hpLabel.Text = string.format("HP: %d/%d", currentHP, maxHP)
-                    
-                    -- Warna bar berubah: Hijau -> Kuning -> Merah
+
                     if percent > 0.6 then
                         fill.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
                         hpLabel.TextColor3 = Color3.fromRGB(0, 255, 0)
@@ -794,15 +959,12 @@ local function startUpdateLoop()
                         hpLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
                     end
                 end
-                
-                -- === Update Jarak (Meter) ===
+
+                -- Distance
                 if myHRP and hrp and hrp.Parent and distLabel then
                     local distance = (myHRP.Position - hrp.Position).Magnitude
-                    
-                    -- Format jarak bulat
                     distLabel.Text = string.format("[%dm]", math.floor(distance))
-                    
-                    -- Warna jarak: Merah (dekat), Kuning (sedang), Putih (jauh)
+
                     if distance < 15 then
                         distLabel.TextColor3 = Color3.fromRGB(255, 50, 50)
                     elseif distance < 40 then
@@ -816,462 +978,456 @@ local function startUpdateLoop()
     end)
 end
 
--- ==========================================
--- Fungsi Toggle ESP ON/OFF
--- ==========================================
 local function toggleESP(state)
     espEnabled = state
-    
+
     if state then
         for _, player in ipairs(Players:GetPlayers()) do
-            if player ~= lp then
+            if player ~= LocalPlayer then
                 createESP(player)
             end
         end
+
         startUpdateLoop()
     else
         if updateConnection then
             updateConnection:Disconnect()
             updateConnection = nil
         end
+
         clearAllESP()
     end
 end
 
--- ==========================================
--- Handle Player Baru Join / Leave
--- ==========================================
 Players.PlayerAdded:Connect(function(player)
-    if espEnabled and player ~= lp then
+    if espEnabled and player ~= LocalPlayer then
         createESP(player)
     end
 end)
 
 Players.PlayerRemoving:Connect(function(player)
-    if espObjects[player] then
-        pcall(function()
-            if espObjects[player].billboard then espObjects[player].billboard:Destroy() end
-            if espObjects[player].highlight then espObjects[player].highlight:Destroy() end
-        end)
-        espObjects[player] = nil
-    end
+    clearPlayerESP(player)
 end)
 
--- ==========================================
--- UI Toggle (ESP Player)
--- ==========================================
-local Toggle = Theme:CreateToggle({
-   Name = "👁️ ESP Player",
-   CurrentValue = false,
-   Flag = "ESPPlayerToggle",
-   Callback = function(Value)
-       toggleESP(Value)
-   end,
+ToolsTab:CreateToggle({
+    Name = "👁️ ESP Player",
+    Default = false,
+    Flag = "ESPPlayerToggle",
+    Icon = "eye",
+    Tooltip = "Aktifkan ESP player dengan HP, distance, dan team",
+    Callback = function(value)
+        toggleESP(value)
+    end,
 })
 
--- ==========================================
--- Inisialisasi Awal
--- ==========================================
-if lp.Character then
-    -- Siap pakai, tinggal toggle untuk aktifkan
+-- =========================================================
+-- TOOLS TAB - PLAYER JOIN/LEAVE NOTIFICATION
+-- =========================================================
+ToolsTab:CreateSection("Server Notifications")
+
+_G.JoinLeaveEnabled = false
+
+-- Bersihkan GUI lama jika script dijalankan ulang
+local function removeOldJoinLeaveGui()
+    local parents = { PlayerGui }
+
+    if typeof(gethui) == "function" then
+        local ok, hui = pcall(gethui)
+        if ok and hui then
+            table.insert(parents, hui)
+        end
+    end
+
+    local okCore, CoreGui = pcall(function()
+        return game:GetService("CoreGui")
+    end)
+
+    if okCore and CoreGui then
+        table.insert(parents, CoreGui)
+    end
+
+    for _, parent in ipairs(parents) do
+        if parent then
+            for _, child in ipairs(parent:GetChildren()) do
+                if child:IsA("ScreenGui") and child.Name == "JoinLeaveNotificationGui" then
+                    pcall(function()
+                        child:Destroy()
+                    end)
+                end
+            end
+        end
+    end
 end
 
--- ============================================
--- PLAYER JOIN / LEAVE NOTIFICATION SYSTEM (ULTRA FIXED & SAFE)
--- ============================================
+removeOldJoinLeaveGui()
 
-local Players = game:GetService("Players")
-local TweenService = game:GetService("TweenService")
-local LocalPlayer = Players.LocalPlayer
-local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
-
--- Buat ScreenGui khusus untuk notifikasi
 local NotificationGui = Instance.new("ScreenGui")
 NotificationGui.Name = "JoinLeaveNotificationGui"
 NotificationGui.ResetOnSpawn = false
 NotificationGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 NotificationGui.IgnoreGuiInset = true
-NotificationGui.DisplayOrder = 999999 -- Paling depan dari UI lain (BIAR TIDAK KETIMPA)
-NotificationGui.Parent = PlayerGui
+NotificationGui.DisplayOrder = 999999
 
--- Flag global untuk mengontrol status toggle
-_G.JoinLeaveEnabled = false
+local notifParent = PlayerGui
 
--- Tabel untuk menyimpan referensi notifikasi yang sedang aktif
-local activeNotifications = {}
-
--- ============================================
--- SISTEM ANTREAN (QUEUE) AMAN
--- ============================================
-local notificationQueue = {}
-local isProcessingQueue = false
-
--- Deklarasi fungsi di awal agar pasti terbaca (hoisting)
-local processNotificationQueue
-local showPlayerNotification
-
-processNotificationQueue = function()
-	-- Jika sedang memproses atau antrean kosong, hentikan
-	if isProcessingQueue or #notificationQueue == 0 then return end
-	
-	isProcessingQueue = true
-	
-	-- Ambil data notifikasi pertama dari antrean
-	local data = table.remove(notificationQueue, 1)
-	
-	-- Panggil fungsi dengan pengecekan tipe data agar tidak "attempt to call a nil value"
-	if type(showPlayerNotification) == "function" then
-		showPlayerNotification(data.playerName, data.userId, data.isJoining)
-	end
-	
-	-- Beri delay sebelum memproses notifikasi berikutnya
-	task.delay(0.5, function()
-		isProcessingQueue = false
-		if type(processNotificationQueue) == "function" then
-			processNotificationQueue()
-		end
-	end)
-end
-
--- ============================================
--- FUNGSI UTAMA
--- ============================================
-
-local function getAvatarUrl(userId)
-	if not userId or userId == 0 then
-		return "rbxasset://textures/ui/GuiImagePlaceholder.png"
-	end
-	return "https://www.roblox.com/headshot-thumbnail/image?userId=" .. userId .. "&width=150&height=150&format=png"
-end
-
-local function getCurrentTime()
-	-- Gunakan pcall untuk mencegah error jika executor memblokir os.date
-	local success, time = pcall(function()
-		return os.date("*t")
-	end)
-	if success and time then
-		return string.format("%02d:%02d:%02d", time.hour, time.min, time.sec)
-	end
-	return "00:00:00"
-end
-
-local function updateNotificationPositions()
-	for i, frame in ipairs(activeNotifications) do
-		if frame.Parent then
-			local count = #activeNotifications
-			local yOffset = -(100 + (count - i) * 90)
-			local targetPosition = UDim2.new(1, -340, 1, yOffset)
-			
-			TweenService:Create(frame, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-				Position = targetPosition
-			}):Play()
-		end
-	end
-end
-
-showPlayerNotification = function(playerName, userId, isJoining)
-	local themeColor = isJoining and Color3.fromRGB(80, 200, 120) or Color3.fromRGB(255, 80, 80)
-	local actionText = isJoining and "Joined the Server" or "Left the Server"
-	
-	local notifFrame = Instance.new("Frame")
-	notifFrame.Name = "PlayerNotification"
-	notifFrame.Size = UDim2.new(0, 320, 0, 80)
-	notifFrame.Position = UDim2.new(1, 20, 1, 20) 
-	notifFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
-	notifFrame.BorderSizePixel = 0
-	notifFrame.Parent = NotificationGui
-	
-	local corner = Instance.new("UICorner")
-	corner.CornerRadius = UDim.new(0, 10)
-	corner.Parent = notifFrame
-	
-	local stroke = Instance.new("UIStroke")
-	stroke.Color = themeColor
-	stroke.Thickness = 2
-	stroke.Parent = notifFrame
-	
-	local avatarImage = Instance.new("ImageLabel")
-	avatarImage.Size = UDim2.new(0, 50, 0, 50)
-	avatarImage.Position = UDim2.new(0, 12, 0, 15)
-	avatarImage.BackgroundColor3 = Color3.fromRGB(40, 40, 45)
-	avatarImage.BorderSizePixel = 0
-	avatarImage.Image = getAvatarUrl(userId)
-	avatarImage.Parent = notifFrame
-	
-	local avatarCorner = Instance.new("UICorner")
-	avatarCorner.CornerRadius = UDim.new(1, 0)
-	avatarCorner.Parent = avatarImage
-	
-	local titleLabel = Instance.new("TextLabel")
-	titleLabel.Size = UDim2.new(1, -75, 0, 20)
-	titleLabel.Position = UDim2.new(0, 72, 0, 12)
-	titleLabel.BackgroundTransparency = 1
-	titleLabel.Text = actionText
-	titleLabel.TextColor3 = themeColor
-	titleLabel.TextSize = 14
-	titleLabel.Font = Enum.Font.GothamBold
-	titleLabel.TextXAlignment = Enum.TextXAlignment.Left
-	titleLabel.Parent = notifFrame
-	
-	local nameLabel = Instance.new("TextLabel")
-	nameLabel.Size = UDim2.new(1, -75, 0, 20)
-	nameLabel.Position = UDim2.new(0, 72, 0, 30)
-	nameLabel.BackgroundTransparency = 1
-	nameLabel.Text = playerName
-	nameLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-	nameLabel.TextSize = 15
-	nameLabel.Font = Enum.Font.GothamBold
-	nameLabel.TextXAlignment = Enum.TextXAlignment.Left
-	nameLabel.Parent = notifFrame
-	
-	-- ============================================
-	-- PERBAIKAN UTAMA: Menggunakan pcall untuk game.MaxPlayers
-	-- ============================================
-	local currentPlayers = #Players:GetPlayers()
-	if not isJoining then
-		currentPlayers = math.max(0, currentPlayers - 1)
-	end
-
-	-- Coba ambil game.MaxPlayers dengan aman. Jika error (seperti di game UGC), gunakan fallback 99
-	local maxPlayers = 99 
-	local success, result = pcall(function()
-		return game.MaxPlayers
-	end)
-	
-	if success and type(result) == "number" and result > 0 then
-		maxPlayers = result
-	end
-	
-	local infoText = string.format("Players Left: %d | Time: %s", 
-		currentPlayers, 
-		getCurrentTime()
-	)
-	
-	local infoLabel = Instance.new("TextLabel")
-	infoLabel.Size = UDim2.new(1, -75, 0, 18)
-	infoLabel.Position = UDim2.new(0, 72, 0, 50)
-	infoLabel.BackgroundTransparency = 1
-	infoLabel.Text = infoText
-	infoLabel.TextColor3 = Color3.fromRGB(150, 150, 150)
-	infoLabel.TextSize = 11
-	infoLabel.Font = Enum.Font.Gotham
-	infoLabel.TextXAlignment = Enum.TextXAlignment.Left
-	infoLabel.Parent = notifFrame
-	
-	table.insert(activeNotifications, notifFrame)
-	updateNotificationPositions()
-	
-	task.delay(4, function()
-		if not notifFrame.Parent then return end
-		
-		TweenService:Create(notifFrame, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
-			Position = UDim2.new(1, 20, 1, 20),
-			BackgroundTransparency = 1
-		}):Play()
-		
-		TweenService:Create(avatarImage, TweenInfo.new(0.5), {ImageTransparency = 1}):Play()
-		TweenService:Create(titleLabel, TweenInfo.new(0.5), {TextTransparency = 1}):Play()
-		TweenService:Create(nameLabel, TweenInfo.new(0.5), {TextTransparency = 1}):Play()
-		TweenService:Create(infoLabel, TweenInfo.new(0.5), {TextTransparency = 1}):Play()
-		
-		task.wait(0.5)
-		notifFrame:Destroy()
-		
-		for idx, frame in ipairs(activeNotifications) do
-			if frame == notifFrame then
-				table.remove(activeNotifications, idx)
-				break
-			end
-		end
-		
-		updateNotificationPositions()
-	end)
-end
-
--- ============================================
--- EVENT LISTENERS (JOIN / LEAVE)
--- ============================================
-
-Players.PlayerAdded:Connect(function(player)
-	if not _G.JoinLeaveEnabled then return end
-	
-	table.insert(notificationQueue, {
-		playerName = player.Name, 
-		userId = player.UserId, 
-		isJoining = true
-	})
-	if type(processNotificationQueue) == "function" then
-		processNotificationQueue()
-	end
-end)
-
-Players.PlayerRemoving:Connect(function(player)
-	if not _G.JoinLeaveEnabled then return end
-	
-	table.insert(notificationQueue, {
-		playerName = player.Name, 
-		userId = player.UserId, 
-		isJoining = false
-	})
-	if type(processNotificationQueue) == "function" then
-		processNotificationQueue()
-	end
-end)
-
--- ============================================
--- UI LIBRARY TOGGLE (RAYFIELD)
--- ============================================
-
--- Pastikan variabel 'dev' (Tab/Window Rayfield) sudah didefinisikan di atas script ini
-local JoinLeaveToggle = Theme:CreateToggle({
-   Name = "🌐 Player Notification",
-   CurrentValue = false,
-   Flag = "ToggleJoinLeaveNotif", 
-   Callback = function(Value)
-      _G.JoinLeaveEnabled = Value
-      
-      if Value then
-         -- Safeguard: Pastikan LocalPlayer ada sebelum mengambil data
-         local pName = (LocalPlayer and LocalPlayer.Name) or "Unknown"
-         local pId = (LocalPlayer and LocalPlayer.UserId) or 0
-         
-         table.insert(notificationQueue, {
-            playerName = pName .. " (You)", 
-            userId = pId, 
-            isJoining = true
-         })
-         
-         -- Safeguard: Cek apakah fungsi benar-benar ada sebelum dipanggil
-         if type(processNotificationQueue) == "function" then
-            processNotificationQueue()
-         else
-            warn("Rayfield Fix: processNotificationQueue is nil!")
-         end
-      end
-   end,
-})
-
-
-local MainSection = dev:CreateSection("Visual Player")
-
-local Paragraph = dev:CreateParagraph({Title = "🛡️ System Information", Content = "All these scripts work with all games"})
-
--- Initialize with because the CurrentOption default
-local selectedOptions = {}
-
-local function runScript4(optionName)
-    if optionName == "♾️ Infinite Yield" then
-        Rayfield:Notify({
-            Title = "Executed Scripts",
-            Content = "Scripts Successfully Executed, Please wait 2 second!",
-            Duration = 4,
-            Image = "check",
-        })
-        task.wait(2)
-        pcall(function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
-        end)
-
-
-    elseif optionName == "🖥️ Executor Editor [BETA]" then
-        Rayfield:Notify({
-            Title = "Executed Scripts",
-            Content = "Scripts Successfully Executed, Please wait 2 second!",
-            Duration = 4,
-            Image = "check",
-        })
-        task.wait(2)
-        pcall(function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/zeutronxsite/nf5guunQd-exec/refs/heads/main/executor.luau"))()
-        end)
-
-    elseif optionName == "📌 Waypoint Manager [S.W.P]" then
-        Rayfield:Notify({
-            Title = "Executed Scripts",
-            Content = "Scripts Successfully Executed, Please wait 2 second!",
-            Duration = 4,
-            Image = "check",
-        })
-        task.wait(2)
-        pcall(function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/Uo2iQnNhD/Maintenance/refs/heads/main/xtvqz7us-Waypoint.lua"))()
-        end)
-
-    elseif optionName == "🛡️ Anti-Fling [Protection]" then
-        Rayfield:Notify({
-            Title = "Executed Scripts",
-            Content = "Scripts Successfully Executed, Please wait 2 second!",
-            Duration = 4,
-            Image = "check",
-        })
-        task.wait(2)
-        pcall(function()
-            loadstring(game:HttpGet("https://pastebin.com/raw/MhJDcWjR"))()
-        end)
-
-    elseif optionName == "🎭 Animation Roblox [Working]" then
-        Rayfield:Notify({
-            Title = "Executed Scripts",
-            Content = "Scripts Successfully Executed, Please wait 2 second!",
-            Duration = 4,
-            Image = "check",
-        })
-        task.wait(2)
-        pcall(function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/Bac0nHck/Scripts/refs/heads/main/BundleAnimations.lua"))()
-        end)	
-
-    elseif optionName == "👁️ Esp Monster [Beta]" then
-        Rayfield:Notify({
-            Title = "Executed Scripts",
-            Content = "Scripts Successfully Executed, Please wait 2 second!",
-            Duration = 4,
-            Image = "check",
-        })
-        task.wait(2)
-        pcall(function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/Uo2iQnNhD/Maintenance/refs/heads/main/aXXcS4rE-Esp%20Monster.lua"))()
-        end)        
-
+if typeof(gethui) == "function" then
+    local ok, hui = pcall(gethui)
+    if ok and hui then
+        notifParent = hui
     end
 end
 
-local Dropdown = dev:CreateDropdown({
-    Name = "Select Scripts",
-    Options = {"♾️ Infinite Yield", "🖥️ Executor Editor [BETA]", "📌 Waypoint Manager [S.W.P]","🛡️ Anti-Fling [Protection]", "🎭 Animation Roblox [Working]", "👁️ Esp Monster [Beta]"},
-    CurrentOption = {"None"},
-    MultipleOptions = false,
-    Flag = "Dropdown1",
-    Callback = function(options)
-        -- Handle both table and string returns
-        if type(options) == "table" then
-            selectedOptions = options
-        elseif type(options) == "string" then
-            selectedOptions = {options}
-        else
-            selectedOptions = {}
+NotificationGui.Parent = notifParent
+
+local activeNotifications = {}
+local notificationQueue = {}
+local isProcessingQueue = false
+
+local processNotificationQueue
+local showPlayerNotification
+
+local function getAvatarUrl(userId)
+    if not userId or userId == 0 then
+        return "rbxasset://textures/ui/GuiImagePlaceholder.png"
+    end
+
+    return "https://www.roblox.com/headshot-thumbnail/image?userId="
+        .. userId
+        .. "&width=150&height=150&format=png"
+end
+
+local function getCurrentTime()
+    local success, time = pcall(function()
+        return os.date("*t")
+    end)
+
+    if success and time then
+        return string.format("%02d:%02d:%02d", time.hour, time.min, time.sec)
+    end
+
+    return "00:00:00"
+end
+
+local function updateNotificationPositions()
+    for i, frame in ipairs(activeNotifications) do
+        if frame.Parent then
+            local count = #activeNotifications
+            local yOffset = -(100 + (count - i) * 90)
+            local targetPosition = UDim2.new(1, -340, 1, yOffset)
+
+            TweenService:Create(
+                frame,
+                TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+                { Position = targetPosition }
+            ):Play()
+        end
+    end
+end
+
+showPlayerNotification = function(playerName, userId, isJoining)
+    local themeColor = isJoining and Color3.fromRGB(80, 200, 120) or Color3.fromRGB(255, 80, 80)
+    local actionText = isJoining and "Joined the Server" or "Left the Server"
+
+    local notifFrame = Instance.new("Frame")
+    notifFrame.Name = "PlayerNotification"
+    notifFrame.Size = UDim2.new(0, 320, 0, 80)
+    notifFrame.Position = UDim2.new(1, 20, 1, 20)
+    notifFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
+    notifFrame.BorderSizePixel = 0
+    notifFrame.Parent = NotificationGui
+
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 10)
+    corner.Parent = notifFrame
+
+    local stroke = Instance.new("UIStroke")
+    stroke.Color = themeColor
+    stroke.Thickness = 2
+    stroke.Parent = notifFrame
+
+    local avatarImage = Instance.new("ImageLabel")
+    avatarImage.Size = UDim2.new(0, 50, 0, 50)
+    avatarImage.Position = UDim2.new(0, 12, 0, 15)
+    avatarImage.BackgroundColor3 = Color3.fromRGB(40, 40, 45)
+    avatarImage.BorderSizePixel = 0
+    avatarImage.Image = getAvatarUrl(userId)
+    avatarImage.Parent = notifFrame
+
+    local avatarCorner = Instance.new("UICorner")
+    avatarCorner.CornerRadius = UDim.new(1, 0)
+    avatarCorner.Parent = avatarImage
+
+    local titleLabel = Instance.new("TextLabel")
+    titleLabel.Size = UDim2.new(1, -75, 0, 20)
+    titleLabel.Position = UDim2.new(0, 72, 0, 12)
+    titleLabel.BackgroundTransparency = 1
+    titleLabel.Text = actionText
+    titleLabel.TextColor3 = themeColor
+    titleLabel.TextSize = 14
+    titleLabel.Font = Enum.Font.GothamBold
+    titleLabel.TextXAlignment = Enum.TextXAlignment.Left
+    titleLabel.Parent = notifFrame
+
+    local nameLabel = Instance.new("TextLabel")
+    nameLabel.Size = UDim2.new(1, -75, 0, 20)
+    nameLabel.Position = UDim2.new(0, 72, 0, 30)
+    nameLabel.BackgroundTransparency = 1
+    nameLabel.Text = playerName
+    nameLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    nameLabel.TextSize = 15
+    nameLabel.Font = Enum.Font.GothamBold
+    nameLabel.TextXAlignment = Enum.TextXAlignment.Left
+    nameLabel.Parent = notifFrame
+
+    local currentPlayers = #Players:GetPlayers()
+    if not isJoining then
+        currentPlayers = math.max(0, currentPlayers - 1)
+    end
+
+    local maxPlayers = 99
+    local success, result = pcall(function()
+        return game.MaxPlayers
+    end)
+
+    if success and type(result) == "number" and result > 0 then
+        maxPlayers = result
+    end
+
+    local infoText = string.format(
+        "Players: %d/%d | Time: %s",
+        currentPlayers,
+        maxPlayers,
+        getCurrentTime()
+    )
+
+    local infoLabel = Instance.new("TextLabel")
+    infoLabel.Size = UDim2.new(1, -75, 0, 18)
+    infoLabel.Position = UDim2.new(0, 72, 0, 50)
+    infoLabel.BackgroundTransparency = 1
+    infoLabel.Text = infoText
+    infoLabel.TextColor3 = Color3.fromRGB(150, 150, 150)
+    infoLabel.TextSize = 11
+    infoLabel.Font = Enum.Font.Gotham
+    infoLabel.TextXAlignment = Enum.TextXAlignment.Left
+    infoLabel.Parent = notifFrame
+
+    table.insert(activeNotifications, notifFrame)
+    updateNotificationPositions()
+
+    task.delay(4, function()
+        if not notifFrame.Parent then
+            return
+        end
+
+        TweenService:Create(
+            notifFrame,
+            TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
+            {
+                Position = UDim2.new(1, 20, 1, 20),
+                BackgroundTransparency = 1,
+            }
+        ):Play()
+
+        TweenService:Create(avatarImage, TweenInfo.new(0.5), { ImageTransparency = 1 }):Play()
+        TweenService:Create(titleLabel, TweenInfo.new(0.5), { TextTransparency = 1 }):Play()
+        TweenService:Create(nameLabel, TweenInfo.new(0.5), { TextTransparency = 1 }):Play()
+        TweenService:Create(infoLabel, TweenInfo.new(0.5), { TextTransparency = 1 }):Play()
+
+        task.wait(0.5)
+        notifFrame:Destroy()
+
+        for idx, frame in ipairs(activeNotifications) do
+            if frame == notifFrame then
+                table.remove(activeNotifications, idx)
+                break
+            end
+        end
+
+        updateNotificationPositions()
+    end)
+end
+
+processNotificationQueue = function()
+    if isProcessingQueue or #notificationQueue == 0 then
+        return
+    end
+
+    isProcessingQueue = true
+
+    local data = table.remove(notificationQueue, 1)
+
+    if type(showPlayerNotification) == "function" then
+        showPlayerNotification(data.playerName, data.userId, data.isJoining)
+    end
+
+    task.delay(0.5, function()
+        isProcessingQueue = false
+
+        if type(processNotificationQueue) == "function" then
+            processNotificationQueue()
+        end
+    end)
+end
+
+Players.PlayerAdded:Connect(function(player)
+    if not _G.JoinLeaveEnabled then
+        return
+    end
+
+    table.insert(notificationQueue, {
+        playerName = player.Name,
+        userId = player.UserId,
+        isJoining = true,
+    })
+
+    if type(processNotificationQueue) == "function" then
+        processNotificationQueue()
+    end
+end)
+
+Players.PlayerRemoving:Connect(function(player)
+    if not _G.JoinLeaveEnabled then
+        return
+    end
+
+    table.insert(notificationQueue, {
+        playerName = player.Name,
+        userId = player.UserId,
+        isJoining = false,
+    })
+
+    if type(processNotificationQueue) == "function" then
+        processNotificationQueue()
+    end
+end)
+
+ToolsTab:CreateToggle({
+    Name = "Player Notification",
+    Default = false,
+    Flag = "JoinLeaveNotifToggle",
+    Icon = "users",
+    Tooltip = "Tampilkan notifikasi player join/leave",
+    Callback = function(value)
+        _G.JoinLeaveEnabled = value
+
+        if value then
+            local pName = (LocalPlayer and LocalPlayer.Name) or "Unknown"
+            local pId = (LocalPlayer and LocalPlayer.UserId) or 0
+
+            table.insert(notificationQueue, {
+                playerName = pName .. " (You)",
+                userId = pId,
+                isJoining = true,
+            })
+
+            if type(processNotificationQueue) == "function" then
+                processNotificationQueue()
+            else
+                warn("[Zeutron Hub] processNotificationQueue is nil!")
+            end
         end
     end,
 })
 
-local Button = dev:CreateButton({
-    Name = "Execute Selected Scripts",
+-- =========================================================
+-- SETTINGS TAB - THEME
+-- =========================================================
+SettingsTab:CreateSection("Theme")
+
+SettingsTab:CreateParagraph({
+    Title = "Guide Information",
+    Content = "Select a theme to change accent/rainbow. ZethHub saat ini belum memiliki sistem theme penuh seperti Rayfield.",
+    Icon = "palette",
+})
+
+local THEME_OPTIONS = {
+    "Default",
+    "AmberGlow",
+    "Bloom",
+    "Amethyst",
+    "DarkBlue",
+    "Green",
+    "Light",
+    "Ocean",
+    "YinYang",
+}
+
+local selectedTheme = "Default"
+
+SettingsTab:CreateDropdown({
+    Name = "Select Theme",
+    Options = THEME_OPTIONS,
+    Default = "Default",
+    Flag = "ThemeDropdown",
+    Icon = "chevron-down",
+    Tooltip = "Pilih theme preset",
+    Callback = function(value)
+        selectedTheme = value
+    end,
+})
+
+SettingsTab:CreateButton({
+    Name = "Apply Selected Theme",
+    Icon = "check",
+    Tooltip = "Terapkan theme yang dipilih",
     Callback = function()
-        if #selectedOptions == 0 or selectedOptions[1] == "None" then
-            Rayfield:Notify({
-                Title = "Error",
-                Content = "Please select a script first!",
-                Duration = 5,
-                Image = "triangle-alert",
-            })
+        if not selectedTheme or selectedTheme == "" then
+            notify(
+                "Error",
+                "Please select a theme first!",
+                5,
+                "x-circle"
+            )
             return
         end
-        
-        -- Loop through every item in selectedOptions
-        for _, option in pairs(selectedOptions) do
-            if option and option ~= "None" then
-                runScript4(option)
-            end
-        end
-    end
+
+        applyTheme(selectedTheme)
+    end,
 })
+
+-- =========================================================
+-- SETTINGS TAB - MORE SETTINGS
+-- =========================================================
+SettingsTab:CreateSection("More Settings")
+
+SettingsTab:CreateButton({
+    Name = "Korblox & Headless",
+    Icon = "gem",
+    Tooltip = "Load script Korblox & Headless",
+    Callback = function()
+        executeRemoteScript(
+            "https://raw.githubusercontent.com/Uo2iQnNhD/Maintenance/refs/heads/main/SYtg4g76-Korblox%20%26%20Headless.lua",
+            "Korblox & Headless"
+        )
+    end,
+})
+
+SettingsTab:CreateButton({
+    Name = "Destroy Interface",
+    Icon = "trash-2",
+    Tooltip = "Hancurkan UI ZethHub",
+    Callback = function()
+        notify(
+            "Warning Detected",
+            "The script will self-destruct in 7 seconds!",
+            7,
+            "info"
+        )
+
+        task.wait(7)
+
+        if Window and not Window._destroyed and type(Window.Destroy) == "function" then
+            Window:Destroy()
+        end
+    end,
+})
+
+-- =========================================================
+-- FINAL NOTIFY
+-- =========================================================
+notify(
+    "ZethHub",
+    "Universal port loaded successfully!",
+    4,
+    "badge-check"
+)
