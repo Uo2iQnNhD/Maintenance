@@ -362,7 +362,7 @@ MainMenuTab:CreateDropdown({
     Default = "None",
     Flag = "MainScriptDropdown",
     Icon = "chevron-down",
-    Tooltip = "Pilih script game yang ingin dijalankan",
+    Tooltip = "Select the game script you want to run",
     Callback = function(value)
         selectedMainScript = value
     end,
@@ -371,7 +371,7 @@ MainMenuTab:CreateDropdown({
 MainMenuTab:CreateButton({
     Name = "Execute Selected Scripts",
     Icon = "play",
-    Tooltip = "Jalankan script yang dipilih",
+    Tooltip = "Run the selected script",
     Callback = function()
         if not selectedMainScript or selectedMainScript == "None" then
             notify(
@@ -466,7 +466,7 @@ ToolsTab:CreateSlider({
     Default = 16,
     Flag = "WalkSpeedSlider",
     Icon = "gauge",
-    Tooltip = "Nilai WalkSpeed",
+    Tooltip = "Value WalkSpeed",
     Callback = function(value)
         _G.walkspeedValue = value
 
@@ -484,7 +484,7 @@ ToolsTab:CreateToggle({
     Default = false,
     Flag = "WalkSpeedToggle",
     Icon = "toggle-right",
-    Tooltip = "Aktifkan/nonaktifkan WalkSpeed",
+    Tooltip = "Turn ON/OFF WalkSpeed",
     Callback = function(value)
         _G.walkspeedActive = value
         local humanoid = getHumanoid()
@@ -526,7 +526,7 @@ ToolsTab:CreateSlider({
     Default = 50,
     Flag = "JumpPowerSlider",
     Icon = "chevron-up",
-    Tooltip = "Nilai JumpPower",
+    Tooltip = "Value JumpPower",
     Callback = function(value)
         _G.jumppowerValue = value
 
@@ -545,7 +545,7 @@ ToolsTab:CreateToggle({
     Default = false,
     Flag = "JumpPowerToggle",
     Icon = "toggle-right",
-    Tooltip = "Aktifkan/nonaktifkan JumpPower",
+    Tooltip = "Turn ON/OFFJumpPower",
     Callback = function(value)
         _G.jumppowerActive = value
         local humanoid = getHumanoid()
@@ -634,7 +634,7 @@ ToolsTab:CreateDropdown({
     Default = "None",
     Flag = "ToolScriptDropdown",
     Icon = "chevron-down",
-    Tooltip = "Pilih external script",
+    Tooltip = "Choose external script",
     Callback = function(value)
         selectedToolScript = value
     end,
@@ -643,7 +643,7 @@ ToolsTab:CreateDropdown({
 ToolsTab:CreateButton({
     Name = "Execute Selected Scripts",
     Icon = "play",
-    Tooltip = "Jalankan external script yang dipilih",
+    Tooltip = "Run the selected external script",
     Callback = function()
         if not selectedToolScript or selectedToolScript == "None" then
             notify(
@@ -1014,7 +1014,7 @@ ToolsTab:CreateToggle({
     Default = false,
     Flag = "ESPPlayerToggle",
     Icon = "eye",
-    Tooltip = "Aktifkan ESP player dengan HP, distance, dan team",
+    Tooltip = "Activate ESP players with HP, distance, and team",
     Callback = function(value)
         toggleESP(value)
     end,
@@ -1306,7 +1306,7 @@ ToolsTab:CreateToggle({
     Default = false,
     Flag = "JoinLeaveNotifToggle",
     Icon = "users",
-    Tooltip = "Tampilkan notifikasi player join/leave",
+    Tooltip = "Show player join/leave notifications",
     Callback = function(value)
         _G.JoinLeaveEnabled = value
 
@@ -1360,7 +1360,7 @@ SettingsTab:CreateDropdown({
     Default = "Default",
     Flag = "ThemeDropdown",
     Icon = "chevron-down",
-    Tooltip = "Pilih theme preset",
+    Tooltip = "Choose theme preset",
     Callback = function(value)
         selectedTheme = value
     end,
@@ -1369,7 +1369,7 @@ SettingsTab:CreateDropdown({
 SettingsTab:CreateButton({
     Name = "Apply Selected Theme",
     Icon = "check",
-    Tooltip = "Terapkan theme yang dipilih",
+    Tooltip = "Apply the selected theme",
     Callback = function()
         if not selectedTheme or selectedTheme == "" then
             notify(
@@ -1393,7 +1393,7 @@ SettingsTab:CreateSection("More Settings")
 SettingsTab:CreateButton({
     Name = "Korblox & Headless",
     Icon = "gem",
-    Tooltip = "Load script Korblox & Headless",
+    Tooltip = "This script is client only And Not real",
     Callback = function()
         executeRemoteScript(
             "https://raw.githubusercontent.com/Uo2iQnNhD/Maintenance/refs/heads/main/SYtg4g76-Korblox%20%26%20Headless.lua",
@@ -1405,7 +1405,7 @@ SettingsTab:CreateButton({
 SettingsTab:CreateButton({
     Name = "Destroy Interface",
     Icon = "trash-2",
-    Tooltip = "Hancurkan UI ZethHub",
+    Tooltip = "Destroyed Library",
     Callback = function()
         notify(
             "Warning Detected",
