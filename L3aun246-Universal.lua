@@ -137,7 +137,7 @@ end
 Library.ToggleKey = Enum.KeyCode.RightShift
 
 local Window = Library:CreateWindow({
-    Title = "Hyperzero Hub",
+    Title = "HyperZero Hub",
     Subtitle = "By Exterminate0 & Zeutron Team",
     Accent = InitialAccent,
     Tags = {
@@ -1426,8 +1426,8 @@ SettingsTab:CreateButton({
 -- FINAL NOTIFY
 -- =========================================================
 notify(
-    "ZethHub",
-    "Universal port loaded successfully!",
+    "Maintenance",
+    "Library loaded successfully!",
     4,
     "badge-check"
 )
