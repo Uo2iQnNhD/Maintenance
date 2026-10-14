@@ -602,7 +602,7 @@ end)
 ToolsTab:CreateSection("External Scripts")
 
 ToolsTab:CreateParagraph({
-    Title = "🛡️ System Information",
+    Title = "System Information",
     Content = "All these scripts work with all games",
     Icon = "shield",
 })
@@ -1010,7 +1010,7 @@ Players.PlayerRemoving:Connect(function(player)
 end)
 
 ToolsTab:CreateToggle({
-    Name = "👁️ ESP Player",
+    Name = "ESP Player",
     Default = false,
     Flag = "ESPPlayerToggle",
     Icon = "eye",
