@@ -119,7 +119,7 @@ end
 -- =========================================================
 -- WINDOW SETUP
 -- =========================================================
-local InitialAccent = Color3.fromRGB(50, 138, 220)
+local InitialAccent = Color3.fromRGB(0, 12, 255)
 
 if type(Library.SetAccent) == "function" then
     Library:SetAccent(InitialAccent)
@@ -129,10 +129,10 @@ if type(Library.SetRainbow) == "function" then
     Library:SetRainbow(false)
 end
 
-Library.ToggleKey = Enum.KeyCode.RightShift
+Library.ToggleKey = Enum.KeyCode.K
 
 local Window = Library:CreateWindow({
-    Title = "Supreme-XYZ",
+    Title = "Super Zeutron",
     Subtitle = "By Exterminate0 & Zeutron Team",
     Accent = InitialAccent,
     Tags = {
