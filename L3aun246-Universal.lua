@@ -39,11 +39,6 @@ local function notificationText(value)
     return tostring(value or "")
 end
 
--- Gaya baru:
--- notify("Title", "Content", 5, "icon")
---
--- Opsional color:
--- notify("Title", "Content", 5, "icon", Color3.fromRGB(255, 80, 80))
 local function notify(title, content, duration, icon, color)
     if type(Library) ~= "table" or type(Library.Notify) ~= "function" then
         return
@@ -137,17 +132,17 @@ end
 Library.ToggleKey = Enum.KeyCode.RightShift
 
 local Window = Library:CreateWindow({
-    Title = "HyperZero Hub",
+    Title = "Supreme-XYZ",
     Subtitle = "By Exterminate0 & Zeutron Team",
     Accent = InitialAccent,
     Tags = {
         {
-            Text = "V-xicochfh",
+            Text = "Universal",
             Color = Color3.fromRGB(255, 204, 0),
             TextColor = Color3.fromRGB(0, 0, 0),
         },
         {
-            Text = "Universal",
+            Text = "V-xicochfh",
             Color = Color3.fromRGB(46, 230, 110),
             TextColor = Color3.fromRGB(0, 0, 0),
         },
