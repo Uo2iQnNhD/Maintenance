@@ -1,5 +1,4 @@
 -- LocalScript
-
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local HttpService = game:GetService("HttpService")
@@ -110,20 +109,102 @@ local COLOR_DELETE_HOVER = Color3.fromRGB(120, 40, 40)
 
 local COLOR_ICON = Color3.fromRGB(255, 255, 255)
 
+local COLOR_BUTTON_NORMAL = Color3.fromRGB(38, 38, 38)
+local COLOR_BUTTON_HOVER = Color3.fromRGB(58, 58, 58)
+
+local COLOR_LOOP_ACTIVE = Color3.fromRGB(190, 110, 35)
+local COLOR_LOOP_ACTIVE_HOVER = Color3.fromRGB(215, 135, 55)
+
+local COLOR_SLIDER_TRACK = Color3.fromRGB(15, 15, 15)
+local COLOR_SLIDER_KNOB = Color3.fromRGB(245, 245, 245)
+
 -- Ukuran dasar UI. Nanti di-scale otomatis untuk mobile.
 local BASE_WIDTH = 420
-local BASE_HEIGHT = 480
+local BASE_HEIGHT = 540
 
 local OPEN_SIZE = UDim2.new(0, BASE_WIDTH, 0, BASE_HEIGHT)
 local CLOSED_SIZE = UDim2.new(0, 0, 0, 0)
+
+-- ============ RGB GRADIENT HELPER ============
+local rgbGradients = {}
+
+local function createRainbowColorSequence()
+	local keypoints = {
+		ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 0, 0)),
+		ColorSequenceKeypoint.new(1 / 6, Color3.fromRGB(255, 255, 0)),
+		ColorSequenceKeypoint.new(2 / 6, Color3.fromRGB(0, 255, 0)),
+		ColorSequenceKeypoint.new(3 / 6, Color3.fromRGB(0, 255, 255)),
+		ColorSequenceKeypoint.new(4 / 6, Color3.fromRGB(0, 0, 255)),
+		ColorSequenceKeypoint.new(5 / 6, Color3.fromRGB(255, 0, 255)),
+		ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 0, 0)),
+	}
+
+	return ColorSequence.new(keypoints)
+end
+
+local function registerGradient(gradient, speed)
+	table.insert(rgbGradients, {
+		Gradient = gradient,
+		Speed = speed or 0.12
+	})
+
+	return gradient
+end
+
+local function createRGBBorder(parent, thickness, radius, maskColor, zIndexBase)
+	thickness = thickness or 2
+	radius = radius or 10
+	zIndexBase = zIndexBase or 1
+
+	local border = Instance.new("Frame")
+	border.Name = "RGBBorder"
+	border.Size = UDim2.new(1, 0, 1, 0)
+	border.Position = UDim2.new(0, 0, 0, 0)
+	border.BackgroundColor3 = Color3.new(1, 1, 1)
+	border.BackgroundTransparency = 0
+	border.BorderSizePixel = 0
+	border.Active = false
+	border.ZIndex = zIndexBase
+	border.Parent = parent
+
+	local gradient = Instance.new("UIGradient")
+	gradient.Color = createRainbowColorSequence()
+	gradient.Offset = Vector2.new(0, 0)
+	pcall(function()
+		gradient.Rotation = 0
+	end)
+	gradient.Parent = border
+
+	registerGradient(gradient, 0.10)
+
+	local mask = Instance.new("Frame")
+	mask.Name = "RGBBorderMask"
+	mask.AnchorPoint = Vector2.new(0.5, 0.5)
+	mask.Position = UDim2.new(0.5, 0, 0.5, 0)
+	mask.Size = UDim2.new(1, -thickness * 2, 1, -thickness * 2)
+	mask.BackgroundColor3 = maskColor or COLOR_MAIN_BG
+	mask.BackgroundTransparency = 0
+	mask.BorderSizePixel = 0
+	mask.Active = false
+	mask.ZIndex = zIndexBase + 1
+	mask.Parent = parent
+
+	if radius > thickness then
+		local maskCorner = Instance.new("UICorner")
+		maskCorner.CornerRadius = UDim.new(0, radius - thickness)
+		maskCorner.Parent = mask
+	end
+
+	return border, mask
+end
 
 -- ============ SCREEN GUI ============
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "WaypointSystemUI"
 ScreenGui.ResetOnSpawn = false
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-ScreenGui.IgnoreGuiInset = true -- PENTING: biar koordinat drag = layar penuh (batas hilang)
-ScreenGui.DisplayOrder = 999999   -- PENTING: biar tidak tertimpa script lain
+ScreenGui.IgnoreGuiInset = true
+ScreenGui.DisplayOrder = 999999
 ScreenGui.Parent = playerGui
 
 local function getSafeViewportSize()
@@ -138,6 +219,24 @@ local function getSafeViewportSize()
 	return getViewportSize()
 end
 
+-- ============ INPUT HELPERS ============
+local function isPressInput(input)
+	return input.UserInputType == Enum.UserInputType.MouseButton1
+		or input.UserInputType == Enum.UserInputType.Touch
+end
+
+local function isMoveInput(input)
+	return input.UserInputType == Enum.UserInputType.MouseMovement
+		or input.UserInputType == Enum.UserInputType.Touch
+end
+
+-- Drag / slider state
+local draggingTarget = nil -- "main" atau "mini"
+local dragStart
+local dragStartPos
+local miniMoved = false
+local sliderDragging = false
+
 -- ============ MINI SHOW/HIDE BUTTON ============
 local MiniToggle = Instance.new("TextButton")
 MiniToggle.Name = "MiniToggle"
@@ -146,11 +245,12 @@ MiniToggle.AnchorPoint = Vector2.new(0.5, 0.5)
 MiniToggle.Position = UDim2.new(0, 42, 0, 360)
 MiniToggle.BackgroundColor3 = COLOR_MAIN_BG
 MiniToggle.BackgroundTransparency = 0
-MiniToggle.Text = "" -- teks dihapus, diganti ikon gambar
+MiniToggle.Text = ""
 MiniToggle.BorderSizePixel = 0
 MiniToggle.AutoButtonColor = false
 MiniToggle.Active = true
 MiniToggle.Visible = true
+MiniToggle.ClipsDescendants = true
 MiniToggle.ZIndex = 50
 MiniToggle.Parent = ScreenGui
 
@@ -158,11 +258,7 @@ local MiniCorner = Instance.new("UICorner")
 MiniCorner.CornerRadius = UDim.new(0, 10)
 MiniCorner.Parent = MiniToggle
 
-local MiniStroke = Instance.new("UIStroke")
-MiniStroke.Color = Color3.fromRGB(255, 0, 0)
-MiniStroke.Thickness = 2
-MiniStroke.Transparency = 0
-MiniStroke.Parent = MiniToggle
+local _, MiniMask = createRGBBorder(MiniToggle, 2, 10, COLOR_MAIN_BG, 1)
 
 -- Helper: buat satu garis ikon
 local function makeIconLine(parent, width, height, rotation, yOffset)
@@ -212,7 +308,7 @@ IconClose.Parent = MiniToggle
 makeIconLine(IconClose, 28, 3, 45, 0)
 makeIconLine(IconClose, 28, 3, -45, 0)
 
--- Clamp posisi CENTER mini box ke tepi layar sejati (bebas, tapi tidak hilang)
+-- Clamp posisi CENTER mini box ke tepi layar sejati
 local function clampMiniCenterPos(centerX, centerY)
 	local viewport = getSafeViewportSize()
 
@@ -266,15 +362,47 @@ local MainCorner = Instance.new("UICorner")
 MainCorner.CornerRadius = UDim.new(0, 10)
 MainCorner.Parent = MainFrame
 
-local MainStroke = Instance.new("UIStroke")
-MainStroke.Color = Color3.fromRGB(255, 0, 0)
-MainStroke.Thickness = 2
-MainStroke.Transparency = 0
-MainStroke.Parent = MainFrame
+createRGBBorder(MainFrame, 2, 10, COLOR_MAIN_BG, 1)
 
 -- Responsive scale untuk mobile
 local MainScale = Instance.new("UIScale")
 MainScale.Parent = MainFrame
+
+local function clampMainFramePosition()
+	local viewport = getSafeViewportSize()
+	local scale = math.max(MainScale.Scale, 0.1)
+
+	local sizeX = MainFrame.AbsoluteSize.X
+	local sizeY = MainFrame.AbsoluteSize.Y
+
+	if sizeX <= 0 then
+		sizeX = MainFrame.Size.X.Offset * scale
+	end
+
+	if sizeY <= 0 then
+		sizeY = MainFrame.Size.Y.Offset * scale
+	end
+
+	if sizeX <= 0 or sizeY <= 0 then
+		return
+	end
+
+	local halfX = sizeX / 2
+	local halfY = sizeY / 2
+
+	local centerX = viewport.X * 0.5 + MainFrame.Position.X.Offset
+	local centerY = viewport.Y * 0.5 + MainFrame.Position.Y.Offset
+
+	centerX = clampNumber(centerX, halfX, math.max(halfX, viewport.X - halfX))
+	centerY = clampNumber(centerY, halfY, math.max(halfY, viewport.Y - halfY))
+
+	MainFrame.Position = UDim2.new(
+		0.5,
+		centerX - viewport.X * 0.5,
+		0.5,
+		centerY - viewport.Y * 0.5
+	)
+end
 
 local function updateResponsiveScale()
 	local viewport = getSafeViewportSize()
@@ -290,6 +418,8 @@ local function updateResponsiveScale()
 		MiniToggle.Position.X.Offset,
 		MiniToggle.Position.Y.Offset
 	)
+
+	clampMainFramePosition()
 end
 
 updateResponsiveScale()
@@ -343,11 +473,21 @@ Subtitle.Parent = DragHandle
 local AccentLine = Instance.new("Frame")
 AccentLine.Size = UDim2.new(1, -40, 0, 2)
 AccentLine.Position = UDim2.new(0, 20, 0, 62)
-AccentLine.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+AccentLine.BackgroundColor3 = Color3.new(1, 1, 1)
 AccentLine.BorderSizePixel = 0
 AccentLine.Active = false
 AccentLine.ZIndex = 3
 AccentLine.Parent = MainFrame
+
+local AccentGradient = Instance.new("UIGradient")
+AccentGradient.Color = createRainbowColorSequence()
+AccentGradient.Offset = Vector2.new(0, 0)
+pcall(function()
+	AccentGradient.Rotation = 0
+end)
+AccentGradient.Parent = AccentLine
+
+registerGradient(AccentGradient, 0.18)
 
 -- Close Button
 local CloseBtn = Instance.new("TextButton")
@@ -410,10 +550,166 @@ local SaveBtnCorner = Instance.new("UICorner")
 SaveBtnCorner.CornerRadius = UDim.new(0, 6)
 SaveBtnCorner.Parent = SaveBtn
 
+-- ============ TWEEN SPEED SLIDER ============
+local MIN_TWEEN_SPEED = 1
+local MAX_TWEEN_SPEED = 2500
+local DEFAULT_TWEEN_SPEED = 50
+
+
+local tweenSpeed = DEFAULT_TWEEN_SPEED
+
+local SpeedFrame = Instance.new("Frame")
+SpeedFrame.Size = UDim2.new(1, -40, 0, 56)
+SpeedFrame.Position = UDim2.new(0, 20, 0, 114)
+SpeedFrame.BackgroundColor3 = COLOR_PANEL_BG
+SpeedFrame.BorderSizePixel = 0
+SpeedFrame.Active = false
+SpeedFrame.ZIndex = 3
+SpeedFrame.Parent = MainFrame
+
+local SpeedFrameCorner = Instance.new("UICorner")
+SpeedFrameCorner.CornerRadius = UDim.new(0, 8)
+SpeedFrameCorner.Parent = SpeedFrame
+
+local SpeedFrameStroke = Instance.new("UIStroke")
+SpeedFrameStroke.Color = COLOR_ITEM_NORMAL_STROKE
+SpeedFrameStroke.Thickness = 1
+SpeedFrameStroke.Parent = SpeedFrame
+
+local SpeedTitle = Instance.new("TextLabel")
+SpeedTitle.Size = UDim2.new(1, -80, 0, 16)
+SpeedTitle.Position = UDim2.new(0, 10, 0, 8)
+SpeedTitle.BackgroundTransparency = 1
+SpeedTitle.Text = "TWEEN SPEED"
+SpeedTitle.TextColor3 = Color3.fromRGB(170, 170, 170)
+SpeedTitle.TextSize = 11
+SpeedTitle.Font = Enum.Font.GothamBold
+SpeedTitle.TextXAlignment = Enum.TextXAlignment.Left
+SpeedTitle.Active = false
+SpeedTitle.ZIndex = 5
+SpeedTitle.Parent = SpeedFrame
+
+local SpeedValue = Instance.new("TextLabel")
+SpeedValue.Size = UDim2.new(0, 60, 0, 16)
+SpeedValue.Position = UDim2.new(1, -70, 0, 8)
+SpeedValue.BackgroundTransparency = 1
+SpeedValue.Text = "50"
+SpeedValue.TextColor3 = COLOR_GREEN
+SpeedValue.TextSize = 12
+SpeedValue.Font = Enum.Font.GothamBold
+SpeedValue.TextXAlignment = Enum.TextXAlignment.Right
+SpeedValue.Active = false
+SpeedValue.ZIndex = 5
+SpeedValue.Parent = SpeedFrame
+
+local SliderTrack = Instance.new("Frame")
+SliderTrack.Size = UDim2.new(1, -20, 0, 10)
+SliderTrack.Position = UDim2.new(0, 10, 0, 34)
+SliderTrack.BackgroundColor3 = COLOR_SLIDER_TRACK
+SliderTrack.BorderSizePixel = 0
+SliderTrack.Active = true
+SliderTrack.ZIndex = 4
+SliderTrack.Parent = SpeedFrame
+
+local SliderTrackCorner = Instance.new("UICorner")
+SliderTrackCorner.CornerRadius = UDim.new(0, 5)
+SliderTrackCorner.Parent = SliderTrack
+
+local SliderTrackStroke = Instance.new("UIStroke")
+SliderTrackStroke.Color = Color3.fromRGB(55, 55, 55)
+SliderTrackStroke.Thickness = 1
+SliderTrackStroke.Parent = SliderTrack
+
+local SliderFill = Instance.new("Frame")
+SliderFill.Size = UDim2.new(0.246, 0, 1, 0)
+SliderFill.Position = UDim2.new(0, 0, 0, 0)
+SliderFill.BackgroundColor3 = Color3.new(1, 1, 1)
+SliderFill.BorderSizePixel = 0
+SliderFill.Active = false
+SliderFill.ZIndex = 5
+SliderFill.Parent = SliderTrack
+
+local SliderFillCorner = Instance.new("UICorner")
+SliderFillCorner.CornerRadius = UDim.new(0, 5)
+SliderFillCorner.Parent = SliderFill
+
+local SliderFillGradient = Instance.new("UIGradient")
+SliderFillGradient.Color = createRainbowColorSequence()
+SliderFillGradient.Offset = Vector2.new(0, 0)
+pcall(function()
+	SliderFillGradient.Rotation = 0
+end)
+SliderFillGradient.Parent = SliderFill
+
+registerGradient(SliderFillGradient, 0.22)
+
+local SliderKnob = Instance.new("Frame")
+SliderKnob.Size = UDim2.new(0, 18, 0, 18)
+SliderKnob.AnchorPoint = Vector2.new(0.5, 0.5)
+SliderKnob.Position = UDim2.new(0.246, 0, 0.5, 0)
+SliderKnob.BackgroundColor3 = COLOR_SLIDER_KNOB
+SliderKnob.BorderSizePixel = 0
+SliderKnob.Active = true
+SliderKnob.ZIndex = 6
+SliderKnob.Parent = SliderTrack
+
+local SliderKnobCorner = Instance.new("UICorner")
+SliderKnobCorner.CornerRadius = UDim.new(0, 9)
+SliderKnobCorner.Parent = SliderKnob
+
+local SliderKnobStroke = Instance.new("UIStroke")
+SliderKnobStroke.Color = Color3.fromRGB(30, 30, 30)
+SliderKnobStroke.Thickness = 2
+SliderKnobStroke.Parent = SliderKnob
+
+local function setSliderRatio(ratio)
+	ratio = clampNumber(ratio, 0, 1)
+
+	tweenSpeed = math.floor(
+		MIN_TWEEN_SPEED + ratio * (MAX_TWEEN_SPEED - MIN_TWEEN_SPEED) + 0.5
+	)
+
+	tweenSpeed = clampNumber(tweenSpeed, MIN_TWEEN_SPEED, MAX_TWEEN_SPEED)
+
+	SliderFill.Size = UDim2.new(ratio, 0, 1, 0)
+	SliderKnob.Position = UDim2.new(ratio, 0, 0.5, 0)
+	SpeedValue.Text = tostring(tweenSpeed)
+end
+
+local function updateSliderFromScreenPos(screenPosition)
+	local absPos = SliderTrack.AbsolutePosition
+	local absSize = SliderTrack.AbsoluteSize
+
+	if absSize.X <= 0 then
+		return
+	end
+
+	local ratio = (screenPosition.X - absPos.X) / absSize.X
+	setSliderRatio(ratio)
+end
+
+SliderTrack.InputBegan:Connect(function(input)
+	if isPressInput(input) and not draggingTarget and not sliderDragging then
+		sliderDragging = true
+		updateSliderFromScreenPos(input.Position)
+	end
+end)
+
+SliderKnob.InputBegan:Connect(function(input)
+	if isPressInput(input) and not draggingTarget and not sliderDragging then
+		sliderDragging = true
+		updateSliderFromScreenPos(input.Position)
+	end
+end)
+
+setSliderRatio(
+	(tweenSpeed - MIN_TWEEN_SPEED) / (MAX_TWEEN_SPEED - MIN_TWEEN_SPEED)
+)
+
 -- ============ LIST SECTION ============
 local ListFrame = Instance.new("Frame")
-ListFrame.Size = UDim2.new(1, -40, 0, 238)
-ListFrame.Position = UDim2.new(0, 20, 0, 116)
+ListFrame.Size = UDim2.new(1, -40, 0, 208)
+ListFrame.Position = UDim2.new(0, 20, 0, 178)
 ListFrame.BackgroundColor3 = COLOR_LIST_BG
 ListFrame.BorderSizePixel = 0
 ListFrame.Active = false
@@ -450,7 +746,7 @@ UIListLayout.Parent = ScrollingFrame
 -- ============ SELECTED WAYPOINT DISPLAY ============
 local SelectedFrame = Instance.new("Frame")
 SelectedFrame.Size = UDim2.new(1, -40, 0, 34)
-SelectedFrame.Position = UDim2.new(0, 20, 0, 364)
+SelectedFrame.Position = UDim2.new(0, 20, 0, 392)
 SelectedFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 SelectedFrame.BorderSizePixel = 0
 SelectedFrame.Active = false
@@ -481,8 +777,8 @@ SelectedLabel.Parent = SelectedFrame
 
 -- ============ ACTION BUTTONS ============
 local ActionFrame = Instance.new("Frame")
-ActionFrame.Size = UDim2.new(1, -40, 0, 36)
-ActionFrame.Position = UDim2.new(0, 20, 0, 408)
+ActionFrame.Size = UDim2.new(1, -40, 0, 34)
+ActionFrame.Position = UDim2.new(0, 20, 0, 432)
 ActionFrame.BackgroundTransparency = 1
 ActionFrame.Active = false
 ActionFrame.ZIndex = 3
@@ -491,7 +787,7 @@ ActionFrame.Parent = MainFrame
 local GotoBtn = Instance.new("TextButton")
 GotoBtn.Size = UDim2.new(0.32, 0, 1, 0)
 GotoBtn.Position = UDim2.new(0, 0, 0, 0)
-GotoBtn.BackgroundColor3 = Color3.fromRGB(38, 38, 38)
+GotoBtn.BackgroundColor3 = COLOR_BUTTON_NORMAL
 GotoBtn.Text = "🚀 GOTO"
 GotoBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 GotoBtn.TextSize = 12
@@ -512,7 +808,7 @@ GotoStroke.Parent = GotoBtn
 local TweenBtn = Instance.new("TextButton")
 TweenBtn.Size = UDim2.new(0.32, 0, 1, 0)
 TweenBtn.Position = UDim2.new(0.34, 0, 0, 0)
-TweenBtn.BackgroundColor3 = Color3.fromRGB(38, 38, 38)
+TweenBtn.BackgroundColor3 = COLOR_BUTTON_NORMAL
 TweenBtn.Text = "🌊 TWEEN"
 TweenBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 TweenBtn.TextSize = 12
@@ -533,7 +829,7 @@ TweenStroke.Parent = TweenBtn
 local WalkBtn = Instance.new("TextButton")
 WalkBtn.Size = UDim2.new(0.32, 0, 1, 0)
 WalkBtn.Position = UDim2.new(0.68, 0, 0, 0)
-WalkBtn.BackgroundColor3 = Color3.fromRGB(38, 38, 38)
+WalkBtn.BackgroundColor3 = COLOR_BUTTON_NORMAL
 WalkBtn.Text = "🚶 WALK"
 WalkBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 WalkBtn.TextSize = 12
@@ -551,10 +847,82 @@ WalkStroke.Color = Color3.fromRGB(60, 60, 60)
 WalkStroke.Thickness = 1
 WalkStroke.Parent = WalkBtn
 
+-- ============ LOOP BUTTONS ============
+local LoopFrame = Instance.new("Frame")
+LoopFrame.Size = UDim2.new(1, -40, 0, 34)
+LoopFrame.Position = UDim2.new(0, 20, 0, 472)
+LoopFrame.BackgroundTransparency = 1
+LoopFrame.Active = false
+LoopFrame.ZIndex = 3
+LoopFrame.Parent = MainFrame
+
+local LoopGotoBtn = Instance.new("TextButton")
+LoopGotoBtn.Size = UDim2.new(0.32, 0, 1, 0)
+LoopGotoBtn.Position = UDim2.new(0, 0, 0, 0)
+LoopGotoBtn.BackgroundColor3 = COLOR_BUTTON_NORMAL
+LoopGotoBtn.Text = "🔁 LOOP GOTO"
+LoopGotoBtn.TextColor3 = COLOR_TEXT
+LoopGotoBtn.TextSize = 11
+LoopGotoBtn.Font = Enum.Font.GothamBold
+LoopGotoBtn.BorderSizePixel = 0
+LoopGotoBtn.AutoButtonColor = false
+LoopGotoBtn.Active = true
+LoopGotoBtn.ZIndex = 4
+LoopGotoBtn.Parent = LoopFrame
+
+Instance.new("UICorner", LoopGotoBtn).CornerRadius = UDim.new(0, 6)
+
+local LoopGotoStroke = Instance.new("UIStroke")
+LoopGotoStroke.Color = Color3.fromRGB(60, 60, 60)
+LoopGotoStroke.Thickness = 1
+LoopGotoStroke.Parent = LoopGotoBtn
+
+local LoopTweenBtn = Instance.new("TextButton")
+LoopTweenBtn.Size = UDim2.new(0.32, 0, 1, 0)
+LoopTweenBtn.Position = UDim2.new(0.34, 0, 0, 0)
+LoopTweenBtn.BackgroundColor3 = COLOR_BUTTON_NORMAL
+LoopTweenBtn.Text = "🔁 LOOP TWEEN"
+LoopTweenBtn.TextColor3 = COLOR_TEXT
+LoopTweenBtn.TextSize = 11
+LoopTweenBtn.Font = Enum.Font.GothamBold
+LoopTweenBtn.BorderSizePixel = 0
+LoopTweenBtn.AutoButtonColor = false
+LoopTweenBtn.Active = true
+LoopTweenBtn.ZIndex = 4
+LoopTweenBtn.Parent = LoopFrame
+
+Instance.new("UICorner", LoopTweenBtn).CornerRadius = UDim.new(0, 6)
+
+local LoopTweenStroke = Instance.new("UIStroke")
+LoopTweenStroke.Color = Color3.fromRGB(60, 60, 60)
+LoopTweenStroke.Thickness = 1
+LoopTweenStroke.Parent = LoopTweenBtn
+
+local LoopWalkBtn = Instance.new("TextButton")
+LoopWalkBtn.Size = UDim2.new(0.32, 0, 1, 0)
+LoopWalkBtn.Position = UDim2.new(0.68, 0, 0, 0)
+LoopWalkBtn.BackgroundColor3 = COLOR_BUTTON_NORMAL
+LoopWalkBtn.Text = "🔁 LOOP WALK"
+LoopWalkBtn.TextColor3 = COLOR_TEXT
+LoopWalkBtn.TextSize = 11
+LoopWalkBtn.Font = Enum.Font.GothamBold
+LoopWalkBtn.BorderSizePixel = 0
+LoopWalkBtn.AutoButtonColor = false
+LoopWalkBtn.Active = true
+LoopWalkBtn.ZIndex = 4
+LoopWalkBtn.Parent = LoopFrame
+
+Instance.new("UICorner", LoopWalkBtn).CornerRadius = UDim.new(0, 6)
+
+local LoopWalkStroke = Instance.new("UIStroke")
+LoopWalkStroke.Color = Color3.fromRGB(60, 60, 60)
+LoopWalkStroke.Thickness = 1
+LoopWalkStroke.Parent = LoopWalkBtn
+
 -- ============ STATUS LABEL ============
 local StatusLabel = Instance.new("TextLabel")
 StatusLabel.Size = UDim2.new(1, -40, 0, 16)
-StatusLabel.Position = UDim2.new(0, 20, 0, 452)
+StatusLabel.Position = UDim2.new(0, 20, 0, 512)
 StatusLabel.BackgroundTransparency = 1
 StatusLabel.Text = ""
 StatusLabel.TextColor3 = COLOR_GREEN
@@ -584,6 +952,7 @@ RenameBox.Position = UDim2.new(0.5, 0, 0.5, 0)
 RenameBox.Size = UDim2.new(0, 320, 0, 176)
 RenameBox.BackgroundColor3 = COLOR_PANEL_BG
 RenameBox.BorderSizePixel = 0
+RenameBox.ClipsDescendants = true
 RenameBox.ZIndex = 21
 RenameBox.Parent = RenameOverlay
 
@@ -595,10 +964,7 @@ local RenameCorner = Instance.new("UICorner")
 RenameCorner.CornerRadius = UDim.new(0, 10)
 RenameCorner.Parent = RenameBox
 
-local RenameStroke = Instance.new("UIStroke")
-RenameStroke.Color = Color3.fromRGB(120, 60, 220)
-RenameStroke.Thickness = 2
-RenameStroke.Parent = RenameBox
+createRGBBorder(RenameBox, 2, 10, COLOR_PANEL_BG, 1)
 
 local RenameTitle = Instance.new("TextLabel")
 RenameTitle.Size = UDim2.new(1, -30, 0, 24)
@@ -692,6 +1058,9 @@ local isOpen = false
 local statusToken = 0
 local renamingWaypoint = nil
 
+local loopMode = nil -- "goto", "tween", "walk", atau nil
+local loopToken = 0
+
 -- ============ FUNCTIONS ============
 local function showStatus(text, color)
 	statusToken = statusToken + 1
@@ -717,6 +1086,14 @@ local function generateWaypointName()
 		i = i + 1
 	end
 	return "Waypoint " .. i
+end
+
+local function getTweenDuration(fromPosition, toPosition)
+	local distance = (toPosition - fromPosition).Magnitude
+	local speed = math.max(1, tweenSpeed)
+	local duration = distance / speed
+
+	return clampNumber(duration, 0.08, 60)
 end
 
 local function applyItemStyle(name)
@@ -782,6 +1159,257 @@ local function openRename(name)
 	):Play()
 end
 
+-- ============ HOVER & CLICK EFFECTS ============
+local function addHoverEffect(button, hoverColor, normalColor)
+	button.MouseEnter:Connect(function()
+		TweenService:Create(button, TweenInfo.new(0.15), {BackgroundColor3 = hoverColor}):Play()
+	end)
+
+	button.MouseLeave:Connect(function()
+		TweenService:Create(button, TweenInfo.new(0.15), {BackgroundColor3 = normalColor}):Play()
+	end)
+end
+
+local function addClickEffect(button)
+	button.MouseButton1Click:Connect(function()
+		local originalSize = button.Size
+
+		TweenService:Create(
+			button,
+			TweenInfo.new(0.07),
+			{
+				Size = UDim2.new(
+					originalSize.X.Scale,
+					originalSize.X.Offset - 3,
+					originalSize.Y.Scale,
+					originalSize.Y.Offset - 3
+				)
+			}
+		):Play()
+
+		task.delay(0.07, function()
+			TweenService:Create(button, TweenInfo.new(0.07), {Size = originalSize}):Play()
+		end)
+	end)
+end
+
+-- ============ LOOP SYSTEM ============
+local loopButtonData = {
+	{
+		Button = LoopGotoBtn,
+		Mode = "goto",
+		Normal = COLOR_BUTTON_NORMAL,
+		Hover = COLOR_BUTTON_HOVER,
+		Active = COLOR_LOOP_ACTIVE
+	},
+	{
+		Button = LoopTweenBtn,
+		Mode = "tween",
+		Normal = COLOR_BUTTON_NORMAL,
+		Hover = COLOR_BUTTON_HOVER,
+		Active = COLOR_LOOP_ACTIVE
+	},
+	{
+		Button = LoopWalkBtn,
+		Mode = "walk",
+		Normal = COLOR_BUTTON_NORMAL,
+		Hover = COLOR_BUTTON_HOVER,
+		Active = COLOR_LOOP_ACTIVE
+	}
+}
+
+local function updateLoopButtons()
+	for _, data in ipairs(loopButtonData) do
+		local isActive = loopMode == data.Mode
+
+		if isActive then
+			data.Button.BackgroundColor3 = data.Active
+			data.Button.TextColor3 = Color3.fromRGB(255, 255, 255)
+		else
+			data.Button.BackgroundColor3 = data.Normal
+			data.Button.TextColor3 = COLOR_TEXT
+		end
+	end
+end
+
+local function stopAllLoops(silent)
+	local hadLoop = loopMode ~= nil
+
+	loopMode = nil
+	loopToken = loopToken + 1
+
+	updateLoopButtons()
+
+	if hadLoop and not silent then
+		showStatus("Loop stopped", COLOR_ORANGE)
+	end
+end
+
+local function waitForLoop(token, seconds)
+	local elapsed = 0
+
+	while elapsed < seconds do
+		if loopMode == nil or token ~= loopToken then
+			return false
+		end
+
+		local step = math.min(0.1, seconds - elapsed)
+		task.wait(step)
+		elapsed = elapsed + step
+	end
+
+	return true
+end
+
+local function setLoopMode(mode)
+	if loopMode == mode then
+		stopAllLoops(false)
+		return
+	end
+
+	loopMode = mode
+	loopToken = loopToken + 1
+
+	local token = loopToken
+	updateLoopButtons()
+
+	if mode == "goto" then
+		showStatus("Loop GOTO enabled", COLOR_GREEN)
+
+		task.spawn(function()
+			while loopMode == "goto" and token == loopToken do
+				local wp = currentWaypoint
+
+				if not wp or not waypoints[wp] then
+					stopAllLoops(true)
+					showStatus("Loop stopped: waypoint missing", COLOR_RED)
+					return
+				end
+
+				local hrp = getHRP()
+
+				if not hrp or not hrp.Parent then
+					stopAllLoops(true)
+					showStatus("Loop stopped: character missing", COLOR_RED)
+					return
+				end
+
+				local pos = waypoints[wp].Position
+				hrp.CFrame = CFrame.new(Vector3.new(pos.X, pos.Y, pos.Z) + Vector3.new(0, 3, 0))
+
+				if not waitForLoop(token, 0.12) then
+					return
+				end
+			end
+		end)
+
+	elseif mode == "tween" then
+		showStatus("Loop TWEEN enabled", COLOR_GREEN)
+
+		task.spawn(function()
+			while loopMode == "tween" and token == loopToken do
+				local wp = currentWaypoint
+
+				if not wp or not waypoints[wp] then
+					stopAllLoops(true)
+					showStatus("Loop stopped: waypoint missing", COLOR_RED)
+					return
+				end
+
+				local hrp = getHRP()
+
+				if not hrp or not hrp.Parent then
+					stopAllLoops(true)
+					showStatus("Loop stopped: character missing", COLOR_RED)
+					return
+				end
+
+				local pos = waypoints[wp].Position
+				local targetPos = Vector3.new(pos.X, pos.Y, pos.Z) + Vector3.new(0, 3, 0)
+				local targetCFrame = CFrame.new(targetPos)
+
+				if (targetPos - hrp.Position).Magnitude < 0.5 then
+					if not waitForLoop(token, 0.25) then
+						return
+					end
+				else
+					local duration = getTweenDuration(hrp.Position, targetPos)
+					local tween = TweenService:Create(
+						hrp,
+						TweenInfo.new(duration, Enum.EasingStyle.Linear, Enum.EasingDirection.Out),
+						{CFrame = targetCFrame}
+					)
+
+					tween:Play()
+
+					if not waitForLoop(token, duration + 0.05) then
+						return
+					end
+
+					if not hrp or not hrp.Parent then
+						stopAllLoops(true)
+						showStatus("Loop stopped: character missing", COLOR_RED)
+						return
+					end
+				end
+			end
+		end)
+
+	elseif mode == "walk" then
+		showStatus("Loop WALK enabled", COLOR_GREEN)
+
+		task.spawn(function()
+			while loopMode == "walk" and token == loopToken do
+				local wp = currentWaypoint
+
+				if not wp or not waypoints[wp] then
+					stopAllLoops(true)
+					showStatus("Loop stopped: waypoint missing", COLOR_RED)
+					return
+				end
+
+				local character = player.Character
+				local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+				local hrp = getHRP()
+
+				if not humanoid or not humanoid.Parent or not hrp or not hrp.Parent then
+					stopAllLoops(true)
+					showStatus("Loop stopped: character missing", COLOR_RED)
+					return
+				end
+
+				local pos = waypoints[wp].Position
+				humanoid:MoveTo(Vector3.new(pos.X, pos.Y + 3, pos.Z))
+
+				if not waitForLoop(token, 0.25) then
+					return
+				end
+			end
+		end)
+	end
+end
+
+for _, data in ipairs(loopButtonData) do
+	data.Button.MouseEnter:Connect(function()
+		if loopMode ~= data.Mode then
+			TweenService:Create(data.Button, TweenInfo.new(0.15), {BackgroundColor3 = data.Hover}):Play()
+		end
+	end)
+
+	data.Button.MouseLeave:Connect(function()
+		if loopMode ~= data.Mode then
+			TweenService:Create(data.Button, TweenInfo.new(0.15), {BackgroundColor3 = data.Normal}):Play()
+		end
+	end)
+
+	data.Button.MouseButton1Click:Connect(function()
+		setLoopMode(data.Mode)
+	end)
+
+	addClickEffect(data.Button)
+end
+
+-- ============ REFRESH LIST ============
 local function refreshList()
 	itemRefs = {}
 
@@ -948,6 +1576,10 @@ local function refreshList()
 					SelectedLabel.Text = "Selected: None"
 					SelectedLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
 					SelectedStroke.Color = Color3.fromRGB(120, 60, 220)
+
+					if loopMode then
+						stopAllLoops(true)
+					end
 				end
 
 				waypoints[name] = nil
@@ -959,6 +1591,7 @@ local function refreshList()
 	end
 end
 
+-- ============ OPEN / CLOSE ============
 local function setOpen(state)
 	if state == isOpen then
 		return
@@ -967,7 +1600,6 @@ local function setOpen(state)
 	isOpen = state
 
 	if state then
-		-- ganti ikon: menu -> close
 		IconMenu.Visible = false
 		IconClose.Visible = true
 		MainFrame.Visible = true
@@ -977,9 +1609,14 @@ local function setOpen(state)
 			TweenInfo.new(0.35, Enum.EasingStyle.Back, Enum.EasingDirection.Out),
 			{Size = OPEN_SIZE}
 		):Play()
+
+		task.delay(0.36, function()
+			if isOpen then
+				clampMainFramePosition()
+			end
+		end)
 	else
 		closeRename()
-		-- ganti ikon: close -> menu
 		IconClose.Visible = false
 		IconMenu.Visible = true
 
@@ -997,6 +1634,7 @@ local function setOpen(state)
 	end
 end
 
+-- ============ RENAME ============
 local function performRename()
 	if not renamingWaypoint then
 		return
@@ -1071,6 +1709,10 @@ SaveBtn.MouseButton1Click:Connect(function()
 end)
 
 GotoBtn.MouseButton1Click:Connect(function()
+	if loopMode then
+		stopAllLoops(true)
+	end
+
 	if not currentWaypoint or not waypoints[currentWaypoint] then
 		showStatus("Select a waypoint first!", COLOR_ORANGE)
 		return
@@ -1088,6 +1730,10 @@ GotoBtn.MouseButton1Click:Connect(function()
 end)
 
 TweenBtn.MouseButton1Click:Connect(function()
+	if loopMode then
+		stopAllLoops(true)
+	end
+
 	if not currentWaypoint or not waypoints[currentWaypoint] then
 		showStatus("Select a waypoint first!", COLOR_ORANGE)
 		return
@@ -1100,25 +1746,30 @@ TweenBtn.MouseButton1Click:Connect(function()
 	end
 
 	local pos = waypoints[currentWaypoint].Position
-	local targetCFrame = CFrame.new(Vector3.new(pos.X, pos.Y, pos.Z) + Vector3.new(0, 3, 0))
+	local targetPos = Vector3.new(pos.X, pos.Y, pos.Z) + Vector3.new(0, 3, 0)
+	local duration = getTweenDuration(hrp.Position, targetPos)
 
 	TweenService:Create(
 		hrp,
-		TweenInfo.new(2.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-		{CFrame = targetCFrame}
+		TweenInfo.new(duration, Enum.EasingStyle.Linear, Enum.EasingDirection.Out),
+		{CFrame = CFrame.new(targetPos)}
 	):Play()
 
-	showStatus("Tweening to: " .. currentWaypoint, COLOR_GREEN)
+	showStatus("Tweening to: " .. currentWaypoint .. " | speed: " .. tostring(tweenSpeed), COLOR_GREEN)
 end)
 
 WalkBtn.MouseButton1Click:Connect(function()
+	if loopMode then
+		stopAllLoops(true)
+	end
+
 	if not currentWaypoint or not waypoints[currentWaypoint] then
 		showStatus("Select a waypoint first!", COLOR_ORANGE)
 		return
 	end
 
 	local hrp = getHRP()
-	local humanoid = player.Character and player.Character:FindFirstChild("Humanoid")
+	local humanoid = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
 
 	if not hrp or not humanoid then
 		showStatus("Character not found!", COLOR_RED)
@@ -1144,85 +1795,62 @@ RenameInput.FocusLost:Connect(function(enterPressed)
 	end
 end)
 
--- ============ HOVER & CLICK EFFECTS ============
-local function addHoverEffect(button, hoverColor, normalColor)
-	button.MouseEnter:Connect(function()
-		TweenService:Create(button, TweenInfo.new(0.15), {BackgroundColor3 = hoverColor}):Play()
-	end)
-
-	button.MouseLeave:Connect(function()
-		TweenService:Create(button, TweenInfo.new(0.15), {BackgroundColor3 = normalColor}):Play()
-	end)
-end
-
-local function addClickEffect(button)
-	button.MouseButton1Click:Connect(function()
-		local originalSize = button.Size
-
-		TweenService:Create(
-			button,
-			TweenInfo.new(0.07),
-			{
-				Size = UDim2.new(
-					originalSize.X.Scale,
-					originalSize.X.Offset - 3,
-					originalSize.Y.Scale,
-					originalSize.Y.Offset - 3
-				)
-			}
-		):Play()
-
-		task.delay(0.07, function()
-			TweenService:Create(button, TweenInfo.new(0.07), {Size = originalSize}):Play()
-		end)
-	end)
-end
-
+-- ============ EXTRA HOVER / CLICK ============
 addHoverEffect(SaveBtn, Color3.fromRGB(55, 130, 55), Color3.fromRGB(45, 100, 45))
 addHoverEffect(CloseBtn, Color3.fromRGB(70, 35, 35), Color3.fromRGB(45, 25, 25))
-addHoverEffect(GotoBtn, Color3.fromRGB(58, 58, 58), Color3.fromRGB(38, 38, 38))
-addHoverEffect(TweenBtn, Color3.fromRGB(58, 58, 58), Color3.fromRGB(38, 38, 38))
-addHoverEffect(WalkBtn, Color3.fromRGB(58, 58, 58), Color3.fromRGB(38, 38, 38))
-addHoverEffect(MiniToggle, Color3.fromRGB(35, 35, 35), COLOR_MAIN_BG)
+addHoverEffect(GotoBtn, COLOR_BUTTON_HOVER, COLOR_BUTTON_NORMAL)
+addHoverEffect(TweenBtn, COLOR_BUTTON_HOVER, COLOR_BUTTON_NORMAL)
+addHoverEffect(WalkBtn, COLOR_BUTTON_HOVER, COLOR_BUTTON_NORMAL)
 addHoverEffect(RenameSaveBtn, Color3.fromRGB(55, 130, 55), Color3.fromRGB(45, 100, 45))
 addHoverEffect(RenameCancelBtn, Color3.fromRGB(70, 45, 45), Color3.fromRGB(55, 35, 35))
 
-local allButtons = {SaveBtn, CloseBtn, GotoBtn, TweenBtn, WalkBtn, RenameSaveBtn, RenameCancelBtn}
-for _, btn in ipairs(allButtons) do
+local standardButtons = {
+	SaveBtn,
+	CloseBtn,
+	GotoBtn,
+	TweenBtn,
+	WalkBtn,
+	RenameSaveBtn,
+	RenameCancelBtn
+}
+
+for _, btn in ipairs(standardButtons) do
 	addClickEffect(btn)
 end
 
+-- Mini toggle hover khusus, karena ada mask RGB border
+local MINI_HOVER = Color3.fromRGB(35, 35, 35)
+
+MiniToggle.MouseEnter:Connect(function()
+	TweenService:Create(MiniToggle, TweenInfo.new(0.15), {BackgroundColor3 = MINI_HOVER}):Play()
+	TweenService:Create(MiniMask, TweenInfo.new(0.15), {BackgroundColor3 = MINI_HOVER}):Play()
+end)
+
+MiniToggle.MouseLeave:Connect(function()
+	TweenService:Create(MiniToggle, TweenInfo.new(0.15), {BackgroundColor3 = COLOR_MAIN_BG}):Play()
+	TweenService:Create(MiniMask, TweenInfo.new(0.15), {BackgroundColor3 = COLOR_MAIN_BG}):Play()
+end)
+
 -- ============ RGB ANIMATION ============
-local hue = 0
+local rgbElapsed = 0
 
 RunService.RenderStepped:Connect(function(deltaTime)
-	hue = (hue + deltaTime * 0.18) % 1
-	local rgbColor = Color3.fromHSV(hue, 1, 1)
+	rgbElapsed = rgbElapsed + deltaTime
 
-	MainStroke.Color = rgbColor
-	MiniStroke.Color = rgbColor
-	AccentLine.BackgroundColor3 = rgbColor
-	RenameStroke.Color = rgbColor
+	for _, data in ipairs(rgbGradients) do
+		local phase = (rgbElapsed * (data.Speed or 0.12)) % 1
+
+		data.Gradient.Offset = Vector2.new(phase, 0)
+
+		pcall(function()
+			data.Gradient.Rotation = phase * 360
+		end)
+	end
 end)
 
 -- ============ DRAGGABLE SYSTEM UNTUK PC & MOBILE ============
-local draggingTarget = nil -- "main" atau "mini"
-local dragStart
-local dragStartPos
-local miniMoved = false
-
-local function isPressInput(input)
-	return input.UserInputType == Enum.UserInputType.MouseButton1
-		or input.UserInputType == Enum.UserInputType.Touch
-end
-
-local function isMoveInput(input)
-	return input.UserInputType == Enum.UserInputType.MouseMovement
-		or input.UserInputType == Enum.UserInputType.Touch
-end
-
 DragHandle.InputBegan:Connect(function(input)
-	if isPressInput(input) and not draggingTarget then
+	if isPressInput(input) and not draggingTarget and not sliderDragging then
 		draggingTarget = "main"
 		dragStart = input.Position
 		dragStartPos = MainFrame.Position
@@ -1230,7 +1858,7 @@ DragHandle.InputBegan:Connect(function(input)
 end)
 
 MiniToggle.InputBegan:Connect(function(input)
-	if isPressInput(input) and not draggingTarget then
+	if isPressInput(input) and not draggingTarget and not sliderDragging then
 		draggingTarget = "mini"
 		miniMoved = false
 		dragStart = input.Position
@@ -1240,6 +1868,11 @@ end)
 
 UserInputService.InputChanged:Connect(function(input)
 	if not isMoveInput(input) then
+		return
+	end
+
+	if sliderDragging then
+		updateSliderFromScreenPos(input.Position)
 		return
 	end
 
@@ -1253,6 +1886,8 @@ UserInputService.InputChanged:Connect(function(input)
 			dragStartPos.Y.Scale,
 			dragStartPos.Y.Offset + delta.Y / scale
 		)
+
+		clampMainFramePosition()
 	elseif draggingTarget == "mini" then
 		local delta = input.Position - dragStart
 
@@ -1272,6 +1907,11 @@ UserInputService.InputEnded:Connect(function(input)
 		return
 	end
 
+	if sliderDragging then
+		sliderDragging = false
+		return
+	end
+
 	if draggingTarget == "mini" and not miniMoved then
 		setOpen(not isOpen)
 	end
@@ -1283,6 +1923,7 @@ end)
 -- ============ INITIAL RENDER ============
 refreshList()
 updateResponsiveScale()
+updateLoopButtons()
 
 -- Paksa muncul saat execute: mini frame + main frame
 setOpen(true)
