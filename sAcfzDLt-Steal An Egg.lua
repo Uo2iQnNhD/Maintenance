@@ -106,6 +106,13 @@ local Window = Library:CreateWindow({
     Title = "Super Zeutron",
     Subtitle = "By Exterminate0 & Zeutron Team",
     Accent = InitialAccent,
+
+    -- Warna close button / confirm modal
+    CloseColor = Color3.fromRGB(255, 80, 80),
+    CloseHoverColor = Color3.fromRGB(255, 120, 120),
+    ClosePressedColor = Color3.fromRGB(190, 50, 50),
+    CloseTextColor = Color3.fromRGB(255, 255, 255), -- opsional
+        
     Tags = {
         {
             Text = "Steal An Egg",
