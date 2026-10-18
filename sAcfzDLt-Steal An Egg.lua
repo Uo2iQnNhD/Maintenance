@@ -135,14 +135,15 @@ end
 -- THEME PRESETS & HELPER
 -- =========================================================
 local THEME_PRESETS = {
-    Default = { Accent = Color3.fromRGB(50, 138, 220), Rainbow = false },
-    AmberGlow = { Accent = Color3.fromRGB(255, 170, 85), Rainbow = false },
-    Bloom = { Accent = Color3.fromRGB(255, 140, 170), Rainbow = false },
-    Amethyst = { Accent = Color3.fromRGB(150, 100, 200), Rainbow = false },
-    DarkBlue = { Accent = Color3.fromRGB(0, 150, 240), Rainbow = false },
-    Green = { Accent = Color3.fromRGB(100, 180, 100), Rainbow = false },
-    Light = { Accent = Color3.fromRGB(255, 255, 255), Rainbow = false },
-    Ocean = { Accent = Color3.fromRGB(0, 160, 160), Rainbow = false },
+    Default = { Accent = Color3.fromRGB(50, 138, 220), Rainbow = true },
+    AmberGlow = { Accent = Color3.fromRGB(255, 170, 85), Rainbow = true },
+    Bloom = { Accent = Color3.fromRGB(255, 140, 170), Rainbow = true },
+    Amethyst = { Accent = Color3.fromRGB(150, 100, 200), Rainbow = true },
+    DarkBlue = { Accent = Color3.fromRGB(0, 150, 240), Rainbow = true },
+    Green = { Accent = Color3.fromRGB(100, 180, 100), Rainbow = true },
+    Light = { Accent = Color3.fromRGB(255, 255, 255), Rainbow = true },
+    Ocean = { Accent = Color3.fromRGB(0, 160, 160), Rainbow = true },
+    YinYang = { Accent = Color3.fromRGB(255, 255, 255), Rainbow = true },
 }
 
 local function applyTheme(themeName)
