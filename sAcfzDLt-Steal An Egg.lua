@@ -120,7 +120,7 @@ local Window = Library:CreateWindow({
             TextColor = Color3.fromRGB(0, 0, 0),
         },
         {
-            Text = "V-vVaLjCVc",
+            Text = "V-DdP4bugv",
             Color = Color3.fromRGB(46, 230, 110),
             TextColor = Color3.fromRGB(0, 0, 0),
         },
@@ -214,10 +214,20 @@ ChangelogTab:CreateParagraph({
     Icon = "file-text",
 })
 
+ChangelogTab:CreateParagraph({
+    Title = "🔁 V-DdP4bugv",
+    Content = {
+        "- [+] Added Scripts Venyx [HUB]",
+        "- [+] Added YinYang Theme",
+        "- [+] Fixed Some Bugs",
+    },
+    Icon = "file-text",
+})
+
 ChangelogTab:CreateSection("Next Update & Version")
 
 ChangelogTab:CreateParagraph({
-    Title = "❌ V-DdP4bugv",
+    Title = "❌ ",
     Content = "Unknown, Coming Soon!",
     Icon = "clock",
 })
@@ -244,6 +254,7 @@ local MAIN_SCRIPTS_OPTIONS = {
     "MIRANDA [HUB & KEYLESS]",
     "Chilli [HUB & FREE]",
     "Sena [HUB & V5]",
+    "Venyx [HUB]",
     "AXON [HUB & KEYLESS]",
     "LIMBO [FREE]",
 }
@@ -254,6 +265,7 @@ local MAIN_SCRIPTS_URLS = {
     ["MIRANDA [HUB & KEYLESS]"] = "https://flowauth.net/v1/ui/5f7a6b969f81332d7994e3b5eb71c686.lua",
     ["Chilli [HUB & FREE]"] = "https://raw.githubusercontent.com/tienkhanh1/spicy/main/Chilli.lua",
     ["Sena [HUB & V5]"] = "https://senahub.xyz/raw/loader",
+    ["Venyx [HUB]"] = "https://raw.githubusercontent.com/tienkhanh1/Venyx/main/VenyxHub",
     ["AXON [HUB & KEYLESS]"] = "https://api.luarmor.net/files/v3/loaders/97c3f6db55a2cf72141537a85458e5a7.lua",
     ["LIMBO [FREE]"] = "https://limbohub.my.id/loader.lua",
 }
@@ -362,6 +374,7 @@ local THEME_OPTIONS = {
     "Green",
     "Light",
     "Ocean",
+    "YinYang",
 }
 
 local selectedTheme = "Default"
