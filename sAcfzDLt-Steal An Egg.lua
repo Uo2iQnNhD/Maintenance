@@ -141,31 +141,31 @@ local THEME_PRESETS = {
     },
     AmberGlow = {
         Accent = Color3.fromRGB(255, 170, 85),
-        Rainbow = false,
+        Rainbow = true,
     },
     Bloom = {
         Accent = Color3.fromRGB(255, 140, 170),
-        Rainbow = false,
+        Rainbow = true,
     },
     Amethyst = {
         Accent = Color3.fromRGB(150, 100, 200),
-        Rainbow = false,
+        Rainbow = true,
     },
     DarkBlue = {
         Accent = Color3.fromRGB(0, 150, 240),
-        Rainbow = false,
+        Rainbow = true,
     },
     Green = {
         Accent = Color3.fromRGB(100, 180, 100),
-        Rainbow = false,
+        Rainbow = true,
     },
     Light = {
         Accent = Color3.fromRGB(255, 255, 255),
-        Rainbow = false,
+        Rainbow = true,
     },
     Ocean = {
         Accent = Color3.fromRGB(0, 160, 160),
-        Rainbow = false,
+        Rainbow = true,
     },
     YinYang = {
         Accent = Color3.fromRGB(255, 255, 255),
