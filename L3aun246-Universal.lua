@@ -662,367 +662,6 @@ ToolsTab:CreateButton({
 })
 
 -- =========================================================
--- TOOLS TAB - ESP PLAYER
--- =========================================================
-ToolsTab:CreateSection("Visual / ESP")
-
-local espEnabled = false
-local espObjects = {}
-local espCharacterConnections = {}
-local updateConnection = nil
-
-local function collectKeys(tbl)
-    local keys = {}
-    for key in pairs(tbl) do
-        table.insert(keys, key)
-    end
-    return keys
-end
-
-local function getTeamColor(player)
-    local team = nil
-    pcall(function()
-        team = player.Team
-    end)
-
-    local teamName = (team and team.Name) or ""
-
-    local teamColorMap = {
-        ["Fugitive"] = Color3.fromRGB(255, 50, 50),
-        ["Prison"] = Color3.fromRGB(255, 150, 0),
-        ["Police"] = Color3.fromRGB(0, 100, 255),
-        ["Civilian"] = Color3.fromRGB(50, 255, 50),
-
-        ["Hostage"] = Color3.fromRGB(255, 0, 255),
-        ["Choosing"] = Color3.fromRGB(0, 255, 255),
-        ["ADMIN"] = Color3.fromRGB(255, 215, 0),
-
-        ["Red"] = Color3.fromRGB(255, 50, 50),
-        ["Blue"] = Color3.fromRGB(50, 100, 255),
-        ["Green"] = Color3.fromRGB(50, 255, 50),
-        ["Yellow"] = Color3.fromRGB(255, 255, 50),
-        ["Purple"] = Color3.fromRGB(200, 50, 255),
-        ["White"] = Color3.fromRGB(255, 255, 255),
-        ["Black"] = Color3.fromRGB(50, 50, 50),
-    }
-
-    for name, color in pairs(teamColorMap) do
-        if string.lower(teamName) == string.lower(name) then
-            return color
-        end
-    end
-
-    local teamColor = nil
-    pcall(function()
-        teamColor = team and team.TeamColor and team.TeamColor.Color
-    end)
-
-    return teamColor or Color3.fromRGB(255, 255, 255)
-end
-
-local function clearPlayerESP(player)
-    local data = espObjects[player]
-    if data then
-        pcall(function()
-            if data.billboard then
-                data.billboard:Destroy()
-            end
-        end)
-
-        pcall(function()
-            if data.highlight then
-                data.highlight:Destroy()
-            end
-        end)
-
-        espObjects[player] = nil
-    end
-
-    local conn = espCharacterConnections[player]
-    if conn then
-        pcall(function()
-            conn:Disconnect()
-        end)
-
-        espCharacterConnections[player] = nil
-    end
-end
-
-local function clearAllESP()
-    for _, player in ipairs(collectKeys(espObjects)) do
-        clearPlayerESP(player)
-    end
-
-    for _, player in ipairs(collectKeys(espCharacterConnections)) do
-        clearPlayerESP(player)
-    end
-
-    espObjects = {}
-end
-
-local function createESP(targetPlayer)
-    if targetPlayer == LocalPlayer then
-        return
-    end
-
-    local function setupESP(char)
-        if not char then
-            return
-        end
-
-        local head = char:WaitForChild("Head", 5)
-        local hum = char:WaitForChild("Humanoid", 5)
-        local hrp = char:WaitForChild("HumanoidRootPart", 5)
-
-        if not head or not hum or not hrp then
-            return
-        end
-
-        local teamColor = getTeamColor(targetPlayer)
-
-        if head:FindFirstChild("PlayerESP_GUI") then
-            head.PlayerESP_GUI:Destroy()
-        end
-
-        if char:FindFirstChild("PlayerESP_HL") then
-            char.PlayerESP_HL:Destroy()
-        end
-
-        -- Highlight
-        local highlight = Instance.new("Highlight")
-        highlight.Name = "PlayerESP_HL"
-
-        pcall(function()
-            highlight.FillColor = teamColor
-            highlight.OutlineColor = Color3.fromRGB(0, 0, 0)
-            highlight.FillTransparency = 0.7
-            highlight.OutlineTransparency = 0
-            highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
-        end)
-
-        highlight.Adornee = char
-        highlight.Parent = char
-
-        -- Billboard
-        local billboard = Instance.new("BillboardGui")
-        billboard.Name = "PlayerESP_GUI"
-        billboard.Adornee = head
-        billboard.Size = UDim2.new(0, 140, 0, 60)
-        billboard.StudsOffset = Vector3.new(0, 3, 0)
-        billboard.AlwaysOnTop = true
-        billboard.ResetOnSpawn = false
-        billboard.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-        billboard.Parent = head
-
-        -- Name
-        local nameLabel = Instance.new("TextLabel")
-        nameLabel.Name = "NameLabel"
-        nameLabel.Size = UDim2.new(1, 0, 0, 14)
-        nameLabel.Position = UDim2.new(0, 0, 0, 0)
-        nameLabel.BackgroundTransparency = 1
-        nameLabel.Text = targetPlayer.Name
-        nameLabel.TextColor3 = teamColor
-        nameLabel.TextStrokeTransparency = 0
-        nameLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
-        nameLabel.Font = Enum.Font.GothamBold
-        nameLabel.TextSize = 12
-        nameLabel.Parent = billboard
-
-        -- Distance
-        local distanceLabel = Instance.new("TextLabel")
-        distanceLabel.Name = "DistanceLabel"
-        distanceLabel.Size = UDim2.new(1, 0, 0, 12)
-        distanceLabel.Position = UDim2.new(0, 0, 0, 13)
-        distanceLabel.BackgroundTransparency = 1
-        distanceLabel.Text = "[0m]"
-        distanceLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-        distanceLabel.TextStrokeTransparency = 0
-        distanceLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
-        distanceLabel.Font = Enum.Font.GothamBold
-        distanceLabel.TextSize = 11
-        distanceLabel.Parent = billboard
-
-        -- HP Background
-        local hpBg = Instance.new("Frame")
-        hpBg.Name = "HealthBg"
-        hpBg.Size = UDim2.new(0, 120, 0, 6)
-        hpBg.Position = UDim2.new(0.5, -60, 0, 26)
-        hpBg.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-        hpBg.BorderSizePixel = 0
-        hpBg.Parent = billboard
-
-        local hpCornerBg = Instance.new("UICorner")
-        hpCornerBg.CornerRadius = UDim.new(0, 3)
-        hpCornerBg.Parent = hpBg
-
-        -- HP Fill
-        local hpFill = Instance.new("Frame")
-        hpFill.Name = "HealthFill"
-        hpFill.Size = UDim2.new(1, 0, 1, 0)
-        hpFill.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
-        hpFill.BorderSizePixel = 0
-        hpFill.Parent = hpBg
-
-        local hpCornerFill = Instance.new("UICorner")
-        hpCornerFill.CornerRadius = UDim.new(0, 3)
-        hpCornerFill.Parent = hpFill
-
-        -- HP Label
-        local hpLabel = Instance.new("TextLabel")
-        hpLabel.Name = "HPLabel"
-        hpLabel.Size = UDim2.new(1, 0, 0, 12)
-        hpLabel.Position = UDim2.new(0, 0, 0, 34)
-        hpLabel.BackgroundTransparency = 1
-        hpLabel.Text = "HP: 100/100"
-        hpLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-        hpLabel.TextStrokeTransparency = 0
-        hpLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
-        hpLabel.Font = Enum.Font.GothamBold
-        hpLabel.TextSize = 11
-        hpLabel.Parent = billboard
-
-        -- Team Label
-        local teamLabel = Instance.new("TextLabel")
-        teamLabel.Name = "TeamLabel"
-        teamLabel.Size = UDim2.new(1, 0, 0, 10)
-        teamLabel.Position = UDim2.new(0, 0, 0, 46)
-        teamLabel.BackgroundTransparency = 1
-        teamLabel.Text = "[" .. ((targetPlayer.Team and targetPlayer.Team.Name) or "No Team") .. "]"
-        teamLabel.TextColor3 = teamColor
-        teamLabel.TextStrokeTransparency = 0
-        teamLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
-        teamLabel.Font = Enum.Font.Gotham
-        teamLabel.TextSize = 10
-        teamLabel.Parent = billboard
-
-        espObjects[targetPlayer] = {
-            billboard = billboard,
-            highlight = highlight,
-            hpFill = hpFill,
-            hpLabel = hpLabel,
-            distanceLabel = distanceLabel,
-            nameLabel = nameLabel,
-            teamLabel = teamLabel,
-            humanoid = hum,
-            hrp = hrp,
-            character = char,
-        }
-    end
-
-    if targetPlayer.Character then
-        setupESP(targetPlayer.Character)
-    end
-
-    if not espCharacterConnections[targetPlayer] then
-        espCharacterConnections[targetPlayer] = targetPlayer.CharacterAdded:Connect(function(char)
-            if espEnabled then
-                task.wait(0.5)
-                setupESP(char)
-            end
-        end)
-    end
-end
-
-local function startUpdateLoop()
-    if updateConnection then
-        updateConnection:Disconnect()
-        updateConnection = nil
-    end
-
-    updateConnection = RunService.RenderStepped:Connect(function()
-        local myChar = LocalPlayer.Character
-        local myHRP = myChar and myChar:FindFirstChild("HumanoidRootPart")
-
-        for player, data in pairs(espObjects) do
-            pcall(function()
-                local hum = data.humanoid
-                local hrp = data.hrp
-                local fill = data.hpFill
-                local hpLabel = data.hpLabel
-                local distLabel = data.distanceLabel
-
-                -- HP
-                if hum and fill and hpLabel and hum.Parent then
-                    local currentHP = math.floor(hum.Health)
-                    local maxHP = math.floor(hum.MaxHealth)
-                    local percent = math.clamp(hum.Health / hum.MaxHealth, 0, 1)
-
-                    fill.Size = UDim2.new(percent, 0, 1, 0)
-                    hpLabel.Text = string.format("HP: %d/%d", currentHP, maxHP)
-
-                    if percent > 0.6 then
-                        fill.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
-                        hpLabel.TextColor3 = Color3.fromRGB(0, 255, 0)
-                    elseif percent > 0.3 then
-                        fill.BackgroundColor3 = Color3.fromRGB(255, 200, 0)
-                        hpLabel.TextColor3 = Color3.fromRGB(255, 200, 0)
-                    else
-                        fill.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
-                        hpLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
-                    end
-                end
-
-                -- Distance
-                if myHRP and hrp and hrp.Parent and distLabel then
-                    local distance = (myHRP.Position - hrp.Position).Magnitude
-                    distLabel.Text = string.format("[%dm]", math.floor(distance))
-
-                    if distance < 15 then
-                        distLabel.TextColor3 = Color3.fromRGB(255, 50, 50)
-                    elseif distance < 40 then
-                        distLabel.TextColor3 = Color3.fromRGB(255, 200, 0)
-                    else
-                        distLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-                    end
-                end
-            end)
-        end
-    end)
-end
-
-local function toggleESP(state)
-    espEnabled = state
-
-    if state then
-        for _, player in ipairs(Players:GetPlayers()) do
-            if player ~= LocalPlayer then
-                createESP(player)
-            end
-        end
-
-        startUpdateLoop()
-    else
-        if updateConnection then
-            updateConnection:Disconnect()
-            updateConnection = nil
-        end
-
-        clearAllESP()
-    end
-end
-
-Players.PlayerAdded:Connect(function(player)
-    if espEnabled and player ~= LocalPlayer then
-        createESP(player)
-    end
-end)
-
-Players.PlayerRemoving:Connect(function(player)
-    clearPlayerESP(player)
-end)
-
-ToolsTab:CreateToggle({
-    Name = "ESP Player",
-    Default = false,
-    Flag = "ESPPlayerToggle",
-    Icon = "eye",
-    Tooltip = "Activate ESP players with HP, distance, and team",
-    Callback = function(value)
-        toggleESP(value)
-    end,
-})
-
--- =========================================================
 -- TOOLS TAB - PLAYER JOIN/LEAVE NOTIFICATION
 -- =========================================================
 ToolsTab:CreateSection("Server Notifications")
@@ -1391,6 +1030,366 @@ SettingsTab:CreateButton({
 -- SETTINGS TAB - MORE SETTINGS
 -- =========================================================
 SettingsTab:CreateSection("More Settings")
+
+-- =========================================================
+-- TOOLS TAB - ESP PLAYER
+-- =========================================================
+
+local espEnabled = false
+local espObjects = {}
+local espCharacterConnections = {}
+local updateConnection = nil
+
+local function collectKeys(tbl)
+    local keys = {}
+    for key in pairs(tbl) do
+        table.insert(keys, key)
+    end
+    return keys
+end
+
+local function getTeamColor(player)
+    local team = nil
+    pcall(function()
+        team = player.Team
+    end)
+
+    local teamName = (team and team.Name) or ""
+
+    local teamColorMap = {
+        ["Fugitive"] = Color3.fromRGB(255, 50, 50),
+        ["Prison"] = Color3.fromRGB(255, 150, 0),
+        ["Police"] = Color3.fromRGB(0, 100, 255),
+        ["Civilian"] = Color3.fromRGB(50, 255, 50),
+
+        ["Hostage"] = Color3.fromRGB(255, 0, 255),
+        ["Choosing"] = Color3.fromRGB(0, 255, 255),
+        ["ADMIN"] = Color3.fromRGB(255, 215, 0),
+
+        ["Red"] = Color3.fromRGB(255, 50, 50),
+        ["Blue"] = Color3.fromRGB(50, 100, 255),
+        ["Green"] = Color3.fromRGB(50, 255, 50),
+        ["Yellow"] = Color3.fromRGB(255, 255, 50),
+        ["Purple"] = Color3.fromRGB(200, 50, 255),
+        ["White"] = Color3.fromRGB(255, 255, 255),
+        ["Black"] = Color3.fromRGB(50, 50, 50),
+    }
+
+    for name, color in pairs(teamColorMap) do
+        if string.lower(teamName) == string.lower(name) then
+            return color
+        end
+    end
+
+    local teamColor = nil
+    pcall(function()
+        teamColor = team and team.TeamColor and team.TeamColor.Color
+    end)
+
+    return teamColor or Color3.fromRGB(255, 255, 255)
+end
+
+local function clearPlayerESP(player)
+    local data = espObjects[player]
+    if data then
+        pcall(function()
+            if data.billboard then
+                data.billboard:Destroy()
+            end
+        end)
+
+        pcall(function()
+            if data.highlight then
+                data.highlight:Destroy()
+            end
+        end)
+
+        espObjects[player] = nil
+    end
+
+    local conn = espCharacterConnections[player]
+    if conn then
+        pcall(function()
+            conn:Disconnect()
+        end)
+
+        espCharacterConnections[player] = nil
+    end
+end
+
+local function clearAllESP()
+    for _, player in ipairs(collectKeys(espObjects)) do
+        clearPlayerESP(player)
+    end
+
+    for _, player in ipairs(collectKeys(espCharacterConnections)) do
+        clearPlayerESP(player)
+    end
+
+    espObjects = {}
+end
+
+local function createESP(targetPlayer)
+    if targetPlayer == LocalPlayer then
+        return
+    end
+
+    local function setupESP(char)
+        if not char then
+            return
+        end
+
+        local head = char:WaitForChild("Head", 5)
+        local hum = char:WaitForChild("Humanoid", 5)
+        local hrp = char:WaitForChild("HumanoidRootPart", 5)
+
+        if not head or not hum or not hrp then
+            return
+        end
+
+        local teamColor = getTeamColor(targetPlayer)
+
+        if head:FindFirstChild("PlayerESP_GUI") then
+            head.PlayerESP_GUI:Destroy()
+        end
+
+        if char:FindFirstChild("PlayerESP_HL") then
+            char.PlayerESP_HL:Destroy()
+        end
+
+        -- Highlight
+        local highlight = Instance.new("Highlight")
+        highlight.Name = "PlayerESP_HL"
+
+        pcall(function()
+            highlight.FillColor = teamColor
+            highlight.OutlineColor = Color3.fromRGB(0, 0, 0)
+            highlight.FillTransparency = 0.7
+            highlight.OutlineTransparency = 0
+            highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+        end)
+
+        highlight.Adornee = char
+        highlight.Parent = char
+
+        -- Billboard
+        local billboard = Instance.new("BillboardGui")
+        billboard.Name = "PlayerESP_GUI"
+        billboard.Adornee = head
+        billboard.Size = UDim2.new(0, 140, 0, 60)
+        billboard.StudsOffset = Vector3.new(0, 3, 0)
+        billboard.AlwaysOnTop = true
+        billboard.ResetOnSpawn = false
+        billboard.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+        billboard.Parent = head
+
+        -- Name
+        local nameLabel = Instance.new("TextLabel")
+        nameLabel.Name = "NameLabel"
+        nameLabel.Size = UDim2.new(1, 0, 0, 14)
+        nameLabel.Position = UDim2.new(0, 0, 0, 0)
+        nameLabel.BackgroundTransparency = 1
+        nameLabel.Text = targetPlayer.Name
+        nameLabel.TextColor3 = teamColor
+        nameLabel.TextStrokeTransparency = 0
+        nameLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+        nameLabel.Font = Enum.Font.GothamBold
+        nameLabel.TextSize = 12
+        nameLabel.Parent = billboard
+
+        -- Distance
+        local distanceLabel = Instance.new("TextLabel")
+        distanceLabel.Name = "DistanceLabel"
+        distanceLabel.Size = UDim2.new(1, 0, 0, 12)
+        distanceLabel.Position = UDim2.new(0, 0, 0, 13)
+        distanceLabel.BackgroundTransparency = 1
+        distanceLabel.Text = "[0m]"
+        distanceLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+        distanceLabel.TextStrokeTransparency = 0
+        distanceLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+        distanceLabel.Font = Enum.Font.GothamBold
+        distanceLabel.TextSize = 11
+        distanceLabel.Parent = billboard
+
+        -- HP Background
+        local hpBg = Instance.new("Frame")
+        hpBg.Name = "HealthBg"
+        hpBg.Size = UDim2.new(0, 120, 0, 6)
+        hpBg.Position = UDim2.new(0.5, -60, 0, 26)
+        hpBg.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+        hpBg.BorderSizePixel = 0
+        hpBg.Parent = billboard
+
+        local hpCornerBg = Instance.new("UICorner")
+        hpCornerBg.CornerRadius = UDim.new(0, 3)
+        hpCornerBg.Parent = hpBg
+
+        -- HP Fill
+        local hpFill = Instance.new("Frame")
+        hpFill.Name = "HealthFill"
+        hpFill.Size = UDim2.new(1, 0, 1, 0)
+        hpFill.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+        hpFill.BorderSizePixel = 0
+        hpFill.Parent = hpBg
+
+        local hpCornerFill = Instance.new("UICorner")
+        hpCornerFill.CornerRadius = UDim.new(0, 3)
+        hpCornerFill.Parent = hpFill
+
+        -- HP Label
+        local hpLabel = Instance.new("TextLabel")
+        hpLabel.Name = "HPLabel"
+        hpLabel.Size = UDim2.new(1, 0, 0, 12)
+        hpLabel.Position = UDim2.new(0, 0, 0, 34)
+        hpLabel.BackgroundTransparency = 1
+        hpLabel.Text = "HP: 100/100"
+        hpLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+        hpLabel.TextStrokeTransparency = 0
+        hpLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+        hpLabel.Font = Enum.Font.GothamBold
+        hpLabel.TextSize = 11
+        hpLabel.Parent = billboard
+
+        -- Team Label
+        local teamLabel = Instance.new("TextLabel")
+        teamLabel.Name = "TeamLabel"
+        teamLabel.Size = UDim2.new(1, 0, 0, 10)
+        teamLabel.Position = UDim2.new(0, 0, 0, 46)
+        teamLabel.BackgroundTransparency = 1
+        teamLabel.Text = "[" .. ((targetPlayer.Team and targetPlayer.Team.Name) or "No Team") .. "]"
+        teamLabel.TextColor3 = teamColor
+        teamLabel.TextStrokeTransparency = 0
+        teamLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+        teamLabel.Font = Enum.Font.Gotham
+        teamLabel.TextSize = 10
+        teamLabel.Parent = billboard
+
+        espObjects[targetPlayer] = {
+            billboard = billboard,
+            highlight = highlight,
+            hpFill = hpFill,
+            hpLabel = hpLabel,
+            distanceLabel = distanceLabel,
+            nameLabel = nameLabel,
+            teamLabel = teamLabel,
+            humanoid = hum,
+            hrp = hrp,
+            character = char,
+        }
+    end
+
+    if targetPlayer.Character then
+        setupESP(targetPlayer.Character)
+    end
+
+    if not espCharacterConnections[targetPlayer] then
+        espCharacterConnections[targetPlayer] = targetPlayer.CharacterAdded:Connect(function(char)
+            if espEnabled then
+                task.wait(0.5)
+                setupESP(char)
+            end
+        end)
+    end
+end
+
+local function startUpdateLoop()
+    if updateConnection then
+        updateConnection:Disconnect()
+        updateConnection = nil
+    end
+
+    updateConnection = RunService.RenderStepped:Connect(function()
+        local myChar = LocalPlayer.Character
+        local myHRP = myChar and myChar:FindFirstChild("HumanoidRootPart")
+
+        for player, data in pairs(espObjects) do
+            pcall(function()
+                local hum = data.humanoid
+                local hrp = data.hrp
+                local fill = data.hpFill
+                local hpLabel = data.hpLabel
+                local distLabel = data.distanceLabel
+
+                -- HP
+                if hum and fill and hpLabel and hum.Parent then
+                    local currentHP = math.floor(hum.Health)
+                    local maxHP = math.floor(hum.MaxHealth)
+                    local percent = math.clamp(hum.Health / hum.MaxHealth, 0, 1)
+
+                    fill.Size = UDim2.new(percent, 0, 1, 0)
+                    hpLabel.Text = string.format("HP: %d/%d", currentHP, maxHP)
+
+                    if percent > 0.6 then
+                        fill.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+                        hpLabel.TextColor3 = Color3.fromRGB(0, 255, 0)
+                    elseif percent > 0.3 then
+                        fill.BackgroundColor3 = Color3.fromRGB(255, 200, 0)
+                        hpLabel.TextColor3 = Color3.fromRGB(255, 200, 0)
+                    else
+                        fill.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+                        hpLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+                    end
+                end
+
+                -- Distance
+                if myHRP and hrp and hrp.Parent and distLabel then
+                    local distance = (myHRP.Position - hrp.Position).Magnitude
+                    distLabel.Text = string.format("[%dm]", math.floor(distance))
+
+                    if distance < 15 then
+                        distLabel.TextColor3 = Color3.fromRGB(255, 50, 50)
+                    elseif distance < 40 then
+                        distLabel.TextColor3 = Color3.fromRGB(255, 200, 0)
+                    else
+                        distLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+                    end
+                end
+            end)
+        end
+    end)
+end
+
+local function toggleESP(state)
+    espEnabled = state
+
+    if state then
+        for _, player in ipairs(Players:GetPlayers()) do
+            if player ~= LocalPlayer then
+                createESP(player)
+            end
+        end
+
+        startUpdateLoop()
+    else
+        if updateConnection then
+            updateConnection:Disconnect()
+            updateConnection = nil
+        end
+
+        clearAllESP()
+    end
+end
+
+Players.PlayerAdded:Connect(function(player)
+    if espEnabled and player ~= LocalPlayer then
+        createESP(player)
+    end
+end)
+
+Players.PlayerRemoving:Connect(function(player)
+    clearPlayerESP(player)
+end)
+
+SettingsTab:CreateToggle({
+    Name = "ESP Player",
+    Default = false,
+    Flag = "ESPPlayerToggle",
+    Icon = "eye",
+    Tooltip = "Activate ESP players with HP, distance, and team",
+    Callback = function(value)
+        toggleESP(value)
+    end,
+})
 
 SettingsTab:CreateButton({
     Name = "Korblox & Headless",
