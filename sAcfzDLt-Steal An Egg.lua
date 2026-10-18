@@ -259,7 +259,7 @@ ChangelogTab:CreateParagraph({
 ChangelogTab:CreateSection("Next Update & Version")
 
 ChangelogTab:CreateParagraph({
-    Title = "❌ ",
+    Title = "❌ V-uZBUKGMe",
     Content = "Unknown, Coming Soon!",
     Icon = "clock",
 })
