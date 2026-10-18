@@ -8,8 +8,8 @@ local lp = Players.LocalPlayer
 
 --// Create Window
 local Window = Library:CreateWindow({
-	Title = "ZETHUB | JAILBREAK",
-	Subtitle = "V-jv2vZBaP • By Exterminate0",
+	Title = "Super Zeutron Hub",
+	Subtitle = "Powered By Exterminate0 & Zeutron Team",
 	Accent = Color3.fromRGB(255, 255, 255), -- Default White Accent
 	
 	Tags = {
