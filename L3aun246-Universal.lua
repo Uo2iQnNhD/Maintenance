@@ -149,7 +149,7 @@ local Window = Library:CreateWindow({
             TextColor = Color3.fromRGB(0, 0, 0),
         },
         {
-            Text = "V-xicochfh",
+            Text = "V-sTi2Br5D",
             Color = Color3.fromRGB(46, 230, 110),
             TextColor = Color3.fromRGB(0, 0, 0),
         },
@@ -259,28 +259,6 @@ local SettingsTab = Window:CreateTab("Theme & Settings", "settings")
 ChangelogTab:CreateSection("Information & Version")
 
 ChangelogTab:CreateParagraph({
-    Title = "V-LLQCH3DC",
-    Content = {
-        "- [+] Added Script & Fixed Some Bugs",
-        "- [+] Updated Key System UI & Key Generator",
-        "- [+] Added 🥚 Steal an Egg",
-    },
-    Icon = "file-text",
-})
-
-ChangelogTab:CreateParagraph({
-    Title = "V-7H4RXYE5",
-    Content = {
-        "- [!!] Deleted 🎮 Automatic [Picker]",
-        "- [+] Buffer Wait scripts 3 sec >> 2 sec",
-        "- [!!] Deleted Key System & Key Generator",
-        "- [!!] Deleted Checking User/players",
-        "- [+] Updated 🥚 Steal an Egg",
-    },
-    Icon = "file-text",
-})
-
-ChangelogTab:CreateParagraph({
     Title = "V-EESpz2Xk",
     Content = {
         "- [+] Added Select Script in Visual Player",
@@ -305,10 +283,20 @@ ChangelogTab:CreateParagraph({
     Icon = "file-text",
 })
 
+ChangelogTab:CreateParagraph({
+    Title = "V-sTi2Br5D",
+    Content = {
+        "- [+] Added Script The Hollow",
+        "- [+] Fixed Some Bugs",
+        "- [+] Fixed Replace Notification Player",
+    },
+    Icon = "file-text",
+})
+
 ChangelogTab:CreateSection("Next Update & Version")
 
 ChangelogTab:CreateParagraph({
-    Title = "V-sTi2Br5D",
+    Title = "V-xv7uSpNS",
     Content = "Unknown, Coming Soon!",
     Icon = "timer",
 })
@@ -343,6 +331,7 @@ local MAIN_SCRIPT_OPTIONS = {
     "🔥 Power Incremental",
     "🥚 Steal an Egg",
     "🚀 Untitled Upgrade Tree",
+    "🎃 The Hollow: Roblox",
 }
 
 local MAIN_SCRIPT_URLS = {
@@ -354,6 +343,7 @@ local MAIN_SCRIPT_URLS = {
     ["🔥 Power Incremental"] = "https://raw.githubusercontent.com/IOERHUB/Power-Incremental/refs/heads/main/Working",
     ["🥚 Steal an Egg"] = "https://raw.githubusercontent.com/Uo2iQnNhD/Maintenance/refs/heads/main/sAcfzDLt-Steal%20An%20Egg.lua",
     ["🚀 Untitled Upgrade Tree"] = "https://raw.githubusercontent.com/Uo2iQnNhD/Maintenance/refs/heads/main/XoDBQiPs-Untitled%20Upg%20Tree",
+    ["🎃 The Hollow: Roblox"] = "https://raw.githubusercontent.com/Uo2iQnNhD/Maintenance/refs/heads/main/The%20Hollow%3A%20Roblox.lua",
 }
 
 local selectedMainScript = "None"
@@ -662,9 +652,69 @@ ToolsTab:CreateButton({
 })
 
 -- =========================================================
+-- SETTINGS TAB - THEME
+-- =========================================================
+SettingsTab:CreateSection("Theme")
+
+SettingsTab:CreateParagraph({
+    Title = "Guide Information",
+    Content = "Select a theme to change accent/rainbow. ZethHub saat ini belum memiliki sistem theme penuh seperti Rayfield.",
+    Icon = "palette",
+})
+
+local THEME_OPTIONS = {
+    "Default",
+    "AmberGlow",
+    "Bloom",
+    "Amethyst",
+    "DarkBlue",
+    "Green",
+    "Light",
+    "Ocean",
+    "YinYang",
+}
+
+local selectedTheme = "Default"
+
+SettingsTab:CreateDropdown({
+    Name = "Select Theme",
+    Options = THEME_OPTIONS,
+    Default = "Default",
+    Flag = "ThemeDropdown",
+    Icon = "chevron-down",
+    Tooltip = "Choose theme preset",
+    Callback = function(value)
+        selectedTheme = value
+    end,
+})
+
+SettingsTab:CreateButton({
+    Name = "Apply Selected Theme",
+    Icon = "check",
+    Tooltip = "Apply the selected theme",
+    Callback = function()
+        if not selectedTheme or selectedTheme == "" then
+            notify(
+                "Error",
+                "Please select a theme first!",
+                5,
+                "x-circle"
+            )
+            return
+        end
+
+        applyTheme(selectedTheme)
+    end,
+})
+
+-- =========================================================
+-- SETTINGS TAB - MORE SETTINGS
+-- =========================================================
+SettingsTab:CreateSection("More Settings")
+
+-- =========================================================
 -- TOOLS TAB - PLAYER JOIN/LEAVE NOTIFICATION
 -- =========================================================
-ToolsTab:CreateSection("Server Notifications")
 
 _G.JoinLeaveEnabled = false
 
@@ -942,7 +992,7 @@ Players.PlayerRemoving:Connect(function(player)
     end
 end)
 
-ToolsTab:CreateToggle({
+SettingsTab:CreateToggle({
     Name = "Player Notification",
     Default = false,
     Flag = "JoinLeaveNotifToggle",
@@ -970,66 +1020,6 @@ ToolsTab:CreateToggle({
     end,
 })
 
--- =========================================================
--- SETTINGS TAB - THEME
--- =========================================================
-SettingsTab:CreateSection("Theme")
-
-SettingsTab:CreateParagraph({
-    Title = "Guide Information",
-    Content = "Select a theme to change accent/rainbow. ZethHub saat ini belum memiliki sistem theme penuh seperti Rayfield.",
-    Icon = "palette",
-})
-
-local THEME_OPTIONS = {
-    "Default",
-    "AmberGlow",
-    "Bloom",
-    "Amethyst",
-    "DarkBlue",
-    "Green",
-    "Light",
-    "Ocean",
-    "YinYang",
-}
-
-local selectedTheme = "Default"
-
-SettingsTab:CreateDropdown({
-    Name = "Select Theme",
-    Options = THEME_OPTIONS,
-    Default = "Default",
-    Flag = "ThemeDropdown",
-    Icon = "chevron-down",
-    Tooltip = "Choose theme preset",
-    Callback = function(value)
-        selectedTheme = value
-    end,
-})
-
-SettingsTab:CreateButton({
-    Name = "Apply Selected Theme",
-    Icon = "check",
-    Tooltip = "Apply the selected theme",
-    Callback = function()
-        if not selectedTheme or selectedTheme == "" then
-            notify(
-                "Error",
-                "Please select a theme first!",
-                5,
-                "x-circle"
-            )
-            return
-        end
-
-        applyTheme(selectedTheme)
-    end,
-})
-
--- =========================================================
--- SETTINGS TAB - MORE SETTINGS
--- =========================================================
-SettingsTab:CreateSection("More Settings")
 
 -- =========================================================
 -- TOOLS TAB - ESP PLAYER
