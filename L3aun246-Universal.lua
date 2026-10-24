@@ -289,6 +289,7 @@ ChangelogTab:CreateParagraph({
         "- [+] Added Script The Hollow",
         "- [+] Fixed Some Bugs",
         "- [+] Fixed Replace Notification Player",
+        "- [+] Added Script Murderer Vs Sheriff Duels",
     },
     Icon = "file-text",
 })
@@ -332,6 +333,7 @@ local MAIN_SCRIPT_OPTIONS = {
     "🥚 Steal an Egg",
     "🚀 Untitled Upgrade Tree",
     "🎃 The Hollow: Roblox",
+    "🔫 Murderer Vs Shiriff Duels",
 }
 
 local MAIN_SCRIPT_URLS = {
@@ -344,6 +346,7 @@ local MAIN_SCRIPT_URLS = {
     ["🥚 Steal an Egg"] = "https://raw.githubusercontent.com/Uo2iQnNhD/Maintenance/refs/heads/main/sAcfzDLt-Steal%20An%20Egg.lua",
     ["🚀 Untitled Upgrade Tree"] = "https://raw.githubusercontent.com/Uo2iQnNhD/Maintenance/refs/heads/main/XoDBQiPs-Untitled%20Upg%20Tree",
     ["🎃 The Hollow: Roblox"] = "https://raw.githubusercontent.com/Uo2iQnNhD/Maintenance/refs/heads/main/The%20Hollow%3A%20Roblox.lua",
+    ["🔫 Murderer Vs Shiriff Duels"] = "https://raw.githubusercontent.com/Uo2iQnNhD/Maintenance/refs/heads/main/eyPSrASq-MVSD.lua",
 }
 
 local selectedMainScript = "None"
