@@ -251,7 +251,7 @@ end
 local ChangelogTab = Window:CreateTab("Changelog", "mail")
 local MainMenuTab = Window:CreateTab("Main Menu", "gamepad-2")
 local ToolsTab = Window:CreateTab("Tools", "wrench")
-local SettingsTab = Window:CreateTab("Theme & Settings", "settings")
+local SettingsTab = Window:CreateTab("Settings", "settings")
 
 -- =========================================================
 -- CHANGELOG TAB
