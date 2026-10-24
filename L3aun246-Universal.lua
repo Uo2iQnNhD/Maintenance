@@ -661,7 +661,7 @@ SettingsTab:CreateSection("Theme")
 
 SettingsTab:CreateParagraph({
     Title = "Guide Information",
-    Content = "Select a theme to change accent/rainbow. ZethHub saat ini belum memiliki sistem theme penuh seperti Rayfield.",
+    Content = "Select a theme to change Accent/rainbow",
     Icon = "palette",
 })
 
