@@ -47,7 +47,7 @@ ChangelogTab:CreateSection("Information & Version")
 
 ChangelogTab:CreateParagraph({
 	Title = "🔁 V-sonKmbZZ",
-	Content = "- [+] Added Script Zephyr [HUB]\n- [+] Added Zephyr Farm [Auto]\n- [+] Added PepiGuzman [HUB]\n- [+] Fixed Some Bugs"
+	Content = "- [+] Added Script Zephyr [HUB]\n- [+] Added Zephyr Farm [Auto]\n- [+] Added PepiGuzman [HUB]\n- [+] Fixed Some Bugs\n- [+] Added PepiGuzman [HUB]"
 })
 
 
@@ -86,23 +86,25 @@ local function runMainScript(optionName)
 		end)
 
 	elseif optionName == "PepiGuzman [HUB]" then
-		Library:Notify("PepiGuzman [HUB]...", 4, "Status", "check")
+		Library:Notify("Executing PepiGuzman [HUB]...", 4, "Status", "check")
 		task.wait(0.5)
-        Library:Notify("Key: PepiGuzmanShop", 15, "Information", "bell")
+        Library:Notify("Key: PepiGuzmanShop", 20, "Information", "bell")
 		pcall(function()
 			loadstring(game:HttpGet("https://raw.githubusercontent.com/xxz18902-arch/Mvsd/refs/heads/main/obfuscated_script-1785806102417.lua"))()
 		end)
 
-	elseif optionName == "Coming Soon [???]" then
-		Library:Notify("Other scripts will be coming soon", 4, "Information", "x")
+	elseif optionName == "FrostRose [HUB]" then
+		Library:Notify("Executing FrostRose [HUB]", 4, "Information", "x")
 		task.wait(0.5)
 		pcall(function()
+			loadstring(game:HttpGet("https://raw.githubusercontent.com/Kusa1leaf/Mvsd_Frostrose/refs/heads/main/Frostrose_Mvsd"))()
 		end)
 
-	elseif optionName == "Coming Soon" then
-		Library:Notify("Other scripts will be coming soon", 4, "Information", "x")
+	elseif optionName == "MONO [HUB]" then
+		Library:Notify("Executing MONO [HUB]", 4, "Information", "x")
 		task.wait(0.5)
 		pcall(function()
+			loadstring(game:HttpGet("https://gist.githubusercontent.com/PALIPAM67/d758fd42a0c1cd05b34a467fe2a07762/raw/Babuinka_2288"))()
 		end)
 	end
 end
@@ -115,8 +117,8 @@ MainTab:CreateDropdown({
 		"Zephyr [HUB]",
 		"Zephyr Farm [Auto]",
 		"PepiGuzman [HUB]",
-		"Coming Soon [???]",
-		"Coming Soon"
+		"FrostRose [HUB]",
+		"MONO [HUB]"
 	},
 	Default = "None",
 	Flag = "MainScriptDropdown",
