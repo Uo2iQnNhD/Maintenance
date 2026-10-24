@@ -289,6 +289,7 @@ local MAIN_SCRIPTS_OPTIONS = {
     "Venyx [HUB]",
     "AXON [HUB & KEYLESS]",
     "LIMBO [FREE]",
+    "Sena [UPD]",
 }
 
 local MAIN_SCRIPTS_URLS = {
@@ -296,10 +297,11 @@ local MAIN_SCRIPTS_URLS = {
     ["LENNON [HUB & KEYLESS]"] = "https://flowauth.net/v1/ui/584e23b68f5f361081321954763ab5e5.lua",
     ["MIRANDA [HUB & KEYLESS]"] = "https://flowauth.net/v1/ui/5f7a6b969f81332d7994e3b5eb71c686.lua",
     ["Chilli [HUB & FREE]"] = "https://raw.githubusercontent.com/tienkhanh1/spicy/main/Chilli.lua",
-    ["Sena [HUB & V5]"] = "https://senahub.xyz/raw/loader",
+    ["Sena [BETA]"] = "https://senahub.xyz/raw/loader",
     ["Venyx [HUB]"] = "https://raw.githubusercontent.com/tienkhanh1/Venyx/main/VenyxHub",
     ["AXON [HUB & KEYLESS]"] = "https://api.luarmor.net/files/v3/loaders/97c3f6db55a2cf72141537a85458e5a7.lua",
     ["LIMBO [FREE]"] = "https://limbohub.my.id/loader.lua",
+    ["Sena [UPD]"] = "https://senahub.xyz/senaloader",
 }
 
 local selectedMainScript = "None"
