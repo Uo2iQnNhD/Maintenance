@@ -16,7 +16,7 @@ local Window = Library:CreateWindow({
 			TextColor = Color3.fromRGB(0, 0, 0)
 		},
 		{
-			Text = "V-sonKmbZZ",
+			Text = "V-f4CKn2bK",
 			Color = Color3.fromRGB(46, 230, 110),
 			TextColor = Color3.fromRGB(0, 0, 0)
 		},
@@ -50,11 +50,15 @@ ChangelogTab:CreateParagraph({
 	Content = "- [+] Added Script Zephyr [HUB]\n- [+] Added Zephyr Farm [Auto]\n- [+] Added PepiGuzman [HUB]\n- [+] Fixed Some Bugs\n- [+] Added PepiGuzman [HUB]"
 })
 
+ChangelogTab:CreateParagraph({
+	Title = "🔁 V-f4CKn2bK",
+	Content = "- [+] Added Package Script\n- [+] Fixed Some Bugs"
+})
 
 ChangelogTab:CreateSection("Next Update & Version")
 
 ChangelogTab:CreateParagraph({
-	Title = "❌ V-f4CKn2bK",
+	Title = "❌ V-urNFN5gn",
 	Content = "Unknown, Coming Soon!"
 })
 
