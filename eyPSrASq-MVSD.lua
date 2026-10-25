@@ -61,11 +61,11 @@ ChangelogTab:CreateParagraph({
 ------------------------------------------------------
 -- MAIN SCRIPTS TAB
 ------------------------------------------------------
-MainTab:CreateSection("Scripts UI/GUI")
+MainTab:CreateSection("Main Menu")
 
 MainTab:CreateParagraph({
 	Title = "🛡️ System Information",
-	Content = "These scripts are safe and tested.\nNote: All these scripts are not owned by me."
+	Content = "These scripts are safe and tested.\nNote: All these scripts are not owned by me"
 })
 
 local selectedScript = "None"
@@ -139,6 +139,57 @@ MainTab:CreateButton({
 		runMainScript(selectedScript)
 	end,
 })
+
+MainTab:CreateSection("Package Script")
+
+MainTab:CreateParagraph({
+	Title = "🛡️ System Information",
+	Content = "This script is a script combination of various scripts (will cause lag)"
+})
+
+local selectedScript = "None"
+
+local function runMainScript2(optionName)
+	if optionName == "Zephyr [HUB] + Mono [HUB] + Animation" then
+		Library:Notify("Executing The Package...", 4, "Status", "check")
+		task.wait(0.5)
+		pcall(function()
+			loadstring(game:HttpGet("https://raw.githubusercontent.com/TheRealAvrwm/Zephyr-V2/refs/heads/main/script.lua", true))()
+            wait(1)
+            loadstring(game:HttpGet("https://gist.githubusercontent.com/PALIPAM67/d758fd42a0c1cd05b34a467fe2a07762/raw/Babuinka_2288"))()
+            wait(1)
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Bac0nHck/Scripts/refs/heads/main/BundleAnimations.lua"))()
+		end)
+	end
+end
+
+MainTab:CreateDropdown({
+	Name = "Select Script",
+	Icon = "box",
+	Options = {
+		"None",
+		"Zephyr [HUB] + Mono [HUB] + Animation",
+	},
+	Default = "None",
+	Flag = "MainScriptDropdown",
+	Callback = function(option)
+		selectedScript = option
+	end,
+})
+
+MainTab:CreateButton({
+	Name = "Execute Selected Script",
+	Icon = "play",
+	Callback = function()
+		if selectedScript == "None" then
+			Library:Notify("Please select a script first!", 5, "Error", "x-circle")
+			return
+		end
+		
+		runMainScript2(selectedScript)
+	end,
+})
+
 ------------------------------------------------------
 -- SETTINGS TAB (THEME & DESTROY)
 ------------------------------------------------------
