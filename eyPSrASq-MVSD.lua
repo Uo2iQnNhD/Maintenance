@@ -154,7 +154,7 @@ MainTab:CreateParagraph({
 local selectedScript = "None"
 
 local function runMainScript2(optionName)
-	if optionName == "Zephyr [HUB] + Mono [HUB] + Animation" then
+	if optionName == "Zephyr [HUB] + Mono [HUB] + PepiGuzman + Animation" then
 		Library:Notify("Executing The Package...", 4, "Status", "check")
 		task.wait(0.5)
 		pcall(function()
@@ -163,6 +163,26 @@ local function runMainScript2(optionName)
             loadstring(game:HttpGet("https://gist.githubusercontent.com/PALIPAM67/d758fd42a0c1cd05b34a467fe2a07762/raw/Babuinka_2288"))()
             wait(1)
             loadstring(game:HttpGet("https://raw.githubusercontent.com/Bac0nHck/Scripts/refs/heads/main/BundleAnimations.lua"))()
+			wait(1)
+			loadstring(game:HttpGet("https://raw.githubusercontent.com/xxz18902-arch/Mvsd/refs/heads/main/obfuscated_script-1785806102417.lua"))()
+		end)
+
+	elseif optionName == "Zephyr [HUB] + Mono [HUB] + PepiGuzman" then
+		Library:Notify("Executing Zephyr Farm [Auto]...", 4, "Status", "check")
+		task.wait(0.5)
+		pcall(function()
+			loadstring(game:HttpGet("https://raw.githubusercontent.com/TheRealAvrwm/Zephyr-V2/refs/heads/main/script.lua", true))()
+            wait(1)
+            loadstring(game:HttpGet("https://gist.githubusercontent.com/PALIPAM67/d758fd42a0c1cd05b34a467fe2a07762/raw/Babuinka_2288"))()
+            wait(1)
+			loadstring(game:HttpGet("https://raw.githubusercontent.com/xxz18902-arch/Mvsd/refs/heads/main/obfuscated_script-1785806102417.lua"))()
+		end)
+		
+	elseif optionName == "Zephyr [HUB] + Mono [HUB]" then
+		pcall(function()
+			loadstring(game:HttpGet("https://raw.githubusercontent.com/TheRealAvrwm/Zephyr-V2/refs/heads/main/script.lua", true))()
+            wait(1)
+            loadstring(game:HttpGet("https://gist.githubusercontent.com/PALIPAM67/d758fd42a0c1cd05b34a467fe2a07762/raw/Babuinka_2288"))()
 		end)
 	end
 end
@@ -172,7 +192,9 @@ MainTab:CreateDropdown({
 	Icon = "box",
 	Options = {
 		"None",
-		"Zephyr [HUB] + Mono [HUB] + Animation",
+		"Zephyr [HUB] + Mono [HUB] + PepiGuzman + Animation",
+        "Zephyr [HUB] + Mono [HUB] + PepiGuzman",
+        "Zephyr [HUB] + Mono [HUB]"
 	},
 	Default = "None",
 	Flag = "MainScriptDropdown",
