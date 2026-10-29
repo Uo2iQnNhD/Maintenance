@@ -7,8 +7,8 @@ local lp = Players.LocalPlayer
 local Window = Library:CreateWindow({
 	Title = "Super Zeutron Hub",
 	Subtitle = "Powered By Exterminate0 & Zeutron Team",
-	Accent = Color3.fromRGB(255, 247, 0), -- Default White Accent
-	
+	Accent = Color3.fromRGB(255, 247, 0), -- Default Yellow Accent
+
 	Tags = {
 		{
 			Text = "MVSD DUELS",
@@ -38,8 +38,6 @@ end)
 ------------------------------------------------------
 local ChangelogTab = Window:CreateTab("Changelog", "file-text")
 local MainTab = Window:CreateTab("Main Scripts", "crosshair")
-local SettingsTab = Window:CreateTab("Settings", "settings")
-
 ------------------------------------------------------
 -- CHANGELOG TAB
 ------------------------------------------------------
@@ -69,10 +67,11 @@ MainTab:CreateSection("Main Menu")
 
 MainTab:CreateParagraph({
 	Title = "🛡️ System Information",
-	Content = "These scripts are safe and tested.\nNote: All these scripts are not owned by me"
+	Content = "These scripts are safe and tested.\nNote: All these scripts are not owned by me\nTip: Use MULTI-SELECT to run several scripts at once."
 })
 
-local selectedScript = "None"
+--// Daftar script yang dipilih (multi-select) -> table array of string
+local selectedScripts = {}
 
 local function runMainScript(optionName)
 	if optionName == "Zephyr [HUB]" then
@@ -92,7 +91,7 @@ local function runMainScript(optionName)
 	elseif optionName == "PepiGuzman [HUB]" then
 		Library:Notify("Executing PepiGuzman [HUB]...", 4, "Status", "check")
 		task.wait(0.5)
-        Library:Notify("Key: PepiGuzmanShop", 20, "Information", "bell")
+		Library:Notify("Key: PepiGuzmanShop", 20, "Information", "bell")
 		pcall(function()
 			loadstring(game:HttpGet("https://raw.githubusercontent.com/xxz18902-arch/Mvsd/refs/heads/main/obfuscated_script-1785806102417.lua"))()
 		end)
@@ -113,34 +112,47 @@ local function runMainScript(optionName)
 	end
 end
 
-MainTab:CreateDropdown({
-	Name = "Select Script",
-	Icon = "box",
+--// MULTI-DROPDOWN: pilih lebih dari 1 script
+MainTab:CreateMultiDropdown({
+	Name = "Select Scripts",
+	Icon = "layers",
 	Options = {
-		"None",
 		"Zephyr [HUB]",
 		"Zephyr Farm [Auto]",
 		"PepiGuzman [HUB]",
 		"FrostRose [HUB]",
-		"MONO [HUB]"
+		"MONO [HUB]",
 	},
-	Default = "None",
-	Flag = "MainScriptDropdown",
-	Callback = function(option)
-		selectedScript = option
+	Default = {},                 -- table kosong = tidak ada yang terpilih
+	Placeholder = "None selected",
+	Flag = "MainScriptMulti",     -- flag UNIK (tidak bentrok dengan package)
+	Callback = function(list)
+		selectedScripts = list    -- list = table array of string
 	end,
 })
 
 MainTab:CreateButton({
-	Name = "Execute Selected Script",
+	Name = "Execute Selected Scripts",
 	Icon = "play",
 	Callback = function()
-		if selectedScript == "None" then
-			Library:Notify("Please select a script first!", 5, "Error", "x-circle")
+		if type(selectedScripts) ~= "table" or #selectedScripts == 0 then
+			Library:Notify("Please select at least one script!", 5, "Error", "x-circle")
 			return
 		end
-		
-		runMainScript(selectedScript)
+
+		local count = #selectedScripts
+		Library:Notify("Executing " .. count .. " script(s)...", 4, "Status", "check")
+
+		-- Jalankan berurutan di thread terpisah agar UI tidak freeze
+		task.spawn(function()
+			for i, name in ipairs(selectedScripts) do
+				runMainScript(name)
+				if i < count then
+					task.wait(1.2) -- jeda aman antar hub
+				end
+			end
+			Library:Notify("All selected scripts executed.", 4, "Done", "check-circle")
+		end)
 	end,
 })
 
@@ -148,10 +160,11 @@ MainTab:CreateSection("Package Script")
 
 MainTab:CreateParagraph({
 	Title = "🛡️ System Information",
-	Content = "This script is a script combination of various scripts (will cause lag)"
+	Content = "This script is a script combination of various scripts (will cause lag).\nTip: MULTI-SELECT lets you stack several packages at once."
 })
 
-local selectedScript = "None"
+--// Daftar package yang dipilih (multi-select) -> table array of string
+local selectedPackages = {}
 
 local function runMainScript2(optionName)
 	if optionName == "Zephyr [HUB] + Mono [HUB] + PepiGuzman + Animation" then
@@ -159,144 +172,73 @@ local function runMainScript2(optionName)
 		task.wait(0.5)
 		pcall(function()
 			loadstring(game:HttpGet("https://raw.githubusercontent.com/TheRealAvrwm/Zephyr-V2/refs/heads/main/script.lua", true))()
-            wait(1)
-            loadstring(game:HttpGet("https://gist.githubusercontent.com/PALIPAM67/d758fd42a0c1cd05b34a467fe2a07762/raw/Babuinka_2288"))()
-            wait(1)
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/Bac0nHck/Scripts/refs/heads/main/BundleAnimations.lua"))()
+			wait(1)
+			loadstring(game:HttpGet("https://gist.githubusercontent.com/PALIPAM67/d758fd42a0c1cd05b34a467fe2a07762/raw/Babuinka_2288"))()
+			wait(1)
+			loadstring(game:HttpGet("https://raw.githubusercontent.com/Bac0nHck/Scripts/refs/heads/main/BundleAnimations.lua"))()
 			wait(1)
 			loadstring(game:HttpGet("https://raw.githubusercontent.com/xxz18902-arch/Mvsd/refs/heads/main/obfuscated_script-1785806102417.lua"))()
 		end)
 
 	elseif optionName == "Zephyr [HUB] + Mono [HUB] + PepiGuzman" then
-		Library:Notify("Executing Zephyr Farm [Auto]...", 4, "Status", "check")
+		Library:Notify("Executing Zephyr + Mono + PepiGuzman...", 4, "Status", "check")
 		task.wait(0.5)
 		pcall(function()
 			loadstring(game:HttpGet("https://raw.githubusercontent.com/TheRealAvrwm/Zephyr-V2/refs/heads/main/script.lua", true))()
-            wait(1)
-            loadstring(game:HttpGet("https://gist.githubusercontent.com/PALIPAM67/d758fd42a0c1cd05b34a467fe2a07762/raw/Babuinka_2288"))()
-            wait(1)
+			wait(1)
+			loadstring(game:HttpGet("https://gist.githubusercontent.com/PALIPAM67/d758fd42a0c1cd05b34a467fe2a07762/raw/Babuinka_2288"))()
+			wait(1)
 			loadstring(game:HttpGet("https://raw.githubusercontent.com/xxz18902-arch/Mvsd/refs/heads/main/obfuscated_script-1785806102417.lua"))()
 		end)
-		
+
 	elseif optionName == "Zephyr [HUB] + Mono [HUB]" then
+		Library:Notify("Executing Zephyr + Mono...", 4, "Status", "check")
+		task.wait(0.5)
 		pcall(function()
 			loadstring(game:HttpGet("https://raw.githubusercontent.com/TheRealAvrwm/Zephyr-V2/refs/heads/main/script.lua", true))()
-            wait(1)
-            loadstring(game:HttpGet("https://gist.githubusercontent.com/PALIPAM67/d758fd42a0c1cd05b34a467fe2a07762/raw/Babuinka_2288"))()
+			wait(1)
+			loadstring(game:HttpGet("https://gist.githubusercontent.com/PALIPAM67/d758fd42a0c1cd05b34a467fe2a07762/raw/Babuinka_2288"))()
 		end)
 	end
 end
 
-MainTab:CreateDropdown({
-	Name = "Select Script",
+--// MULTI-DROPDOWN: pilih lebih dari 1 package
+MainTab:CreateMultiDropdown({
+	Name = "Select Packages",
 	Icon = "box",
 	Options = {
-		"None",
 		"Zephyr [HUB] + Mono [HUB] + PepiGuzman + Animation",
-        "Zephyr [HUB] + Mono [HUB] + PepiGuzman",
-        "Zephyr [HUB] + Mono [HUB]"
+		"Zephyr [HUB] + Mono [HUB] + PepiGuzman",
+		"Zephyr [HUB] + Mono [HUB]",
 	},
-	Default = "None",
-	Flag = "MainScriptDropdown",
-	Callback = function(option)
-		selectedScript = option
+	Default = {},
+	Placeholder = "None selected",
+	Flag = "PackageMulti",        -- flag UNIK
+	Callback = function(list)
+		selectedPackages = list
 	end,
 })
 
 MainTab:CreateButton({
-	Name = "Execute Selected Script",
+	Name = "Execute Selected Packages",
 	Icon = "play",
 	Callback = function()
-		if selectedScript == "None" then
-			Library:Notify("Please select a script first!", 5, "Error", "x-circle")
+		if type(selectedPackages) ~= "table" or #selectedPackages == 0 then
+			Library:Notify("Please select at least one package!", 5, "Error", "x-circle")
 			return
 		end
-		
-		runMainScript2(selectedScript)
-	end,
-})
 
-------------------------------------------------------
--- SETTINGS TAB (THEME & DESTROY)
-------------------------------------------------------
-SettingsTab:CreateSection("Appearance")
+		local count = #selectedPackages
+		Library:Notify("Executing " .. count .. " package(s)... (may lag)", 4, "Status", "check")
 
-SettingsTab:CreateParagraph({
-	Title = "🎨 Theme Colors",
-	Content = "Change the accent color of the interface.\n(Note: Rayfield themes mapped to closest RGB)"
-})
-
--- Map Rayfield Themes to RGB for the new library
-local themeColors = {
-	Default = Color3.fromRGB(255, 255, 255),
-	AmberGlow = Color3.fromRGB(250, 150, 75),
-	Bloom = Color3.fromRGB(250, 160, 180),
-	Amethyst = Color3.fromRGB(130, 80, 180),
-	DarkBlue = Color3.fromRGB(0, 120, 210),
-	Green = Color3.fromRGB(70, 130, 70),
-	Light = Color3.fromRGB(100, 150, 200),
-	Ocean = Color3.fromRGB(0, 140, 140),
-}
-
-local currentTheme = "Default"
-
-SettingsTab:CreateDropdown({
-	Name = "Select Theme",
-	Icon = "palette",
-	Options = {
-		"Default",
-		"AmberGlow",
-		"Bloom",
-		"Amethyst",
-		"DarkBlue",
-		"Green",
-		"Light",
-		"Ocean"
-	},
-	Default = "Default",
-	Flag = "ThemeSelector",
-	Callback = function(themeName)
-		currentTheme = themeName
-		local color = themeColors[themeName] or themeColors.Default
-		
-		-- Apply accent color globally
-		Library:SetAccent(color)
-		
-		Library:Notify("Theme changed to: " .. themeName, 3, "System", "check")
-	end,
-})
-
-SettingsTab:CreateSection("More Settings")
-
-SettingsTab:CreateButton({
-	Name = "Go Back to Zeutron Hub",
-	Icon = "home",
-	Callback = function()
-		Library:Notify("Loading Zeutron Hub...", 3, "Navigation", "refresh-cw")
-		task.wait(1)
-		pcall(function()
-			loadstring(game:HttpGet("https://raw.githubusercontent.com/Uo2iQnNhD/Maintenance/refs/heads/main/L3aun246-Universal.lua"))()
-		end)
-	end,
-})
-
-SettingsTab:CreateButton({
-	Name = "Destroy Interface",
-	Icon = "trash-2",
-	Callback = function()
-		Library:Notify("Self-destructing in 7 seconds...", 7, "Warning", "shield-alert")
-		task.wait(7)
-		
-		-- Attempt to destroy via library method if exists, otherwise just hide/close
-		if type(Library.Destroy) == "function" then
-			Library:Destroy()
-		else
-			-- Fallback: Hide all windows manually if Destroy isn't implemented perfectly yet
-			for _, w in ipairs(Library._windows or {}) do
-				if type(w.Destroy) == "function" then
-					w:Destroy()
+		task.spawn(function()
+			for i, name in ipairs(selectedPackages) do
+				runMainScript2(name)
+				if i < count then
+					task.wait(1.5) -- jeda lebih panjang untuk package berat
 				end
 			end
-		end
+			Library:Notify("All selected packages executed.", 4, "Done", "check-circle")
+		end)
 	end,
 })
