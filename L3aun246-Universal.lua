@@ -251,8 +251,6 @@ end
 local ChangelogTab = Window:CreateTab("Changelog", "mail")
 local MainMenuTab = Window:CreateTab("Main Menu", "gamepad-2")
 local ToolsTab = Window:CreateTab("Tools", "wrench")
-local SettingsTab = Window:CreateTab("Settings", "settings")
-
 -- =========================================================
 -- CHANGELOG TAB
 -- =========================================================
@@ -654,66 +652,7 @@ ToolsTab:CreateButton({
     end,
 })
 
--- =========================================================
--- SETTINGS TAB - THEME
--- =========================================================
-SettingsTab:CreateSection("Theme")
-
-SettingsTab:CreateParagraph({
-    Title = "Guide Information",
-    Content = "Select a theme to change Accent/rainbow",
-    Icon = "palette",
-})
-
-local THEME_OPTIONS = {
-    "Default",
-    "AmberGlow",
-    "Bloom",
-    "Amethyst",
-    "DarkBlue",
-    "Green",
-    "Light",
-    "Ocean",
-    "YinYang",
-}
-
-local selectedTheme = "Default"
-
-SettingsTab:CreateDropdown({
-    Name = "Select Theme",
-    Options = THEME_OPTIONS,
-    Default = "Default",
-    Flag = "ThemeDropdown",
-    Icon = "chevron-down",
-    Tooltip = "Choose theme preset",
-    Callback = function(value)
-        selectedTheme = value
-    end,
-})
-
-SettingsTab:CreateButton({
-    Name = "Apply Selected Theme",
-    Icon = "check",
-    Tooltip = "Apply the selected theme",
-    Callback = function()
-        if not selectedTheme or selectedTheme == "" then
-            notify(
-                "Error",
-                "Please select a theme first!",
-                5,
-                "x-circle"
-            )
-            return
-        end
-
-        applyTheme(selectedTheme)
-    end,
-})
-
--- =========================================================
--- SETTINGS TAB - MORE SETTINGS
--- =========================================================
-SettingsTab:CreateSection("More Settings")
+ToolsTab:CreateSection("More Tools")
 
 -- =========================================================
 -- TOOLS TAB - PLAYER JOIN/LEAVE NOTIFICATION
@@ -995,7 +934,7 @@ Players.PlayerRemoving:Connect(function(player)
     end
 end)
 
-SettingsTab:CreateToggle({
+ToolsTab:CreateToggle({
     Name = "Player Notification",
     Default = false,
     Flag = "JoinLeaveNotifToggle",
@@ -1373,7 +1312,7 @@ Players.PlayerRemoving:Connect(function(player)
     clearPlayerESP(player)
 end)
 
-SettingsTab:CreateToggle({
+ToolsTab:CreateToggle({
     Name = "ESP Player",
     Default = false,
     Flag = "ESPPlayerToggle",
@@ -1384,7 +1323,7 @@ SettingsTab:CreateToggle({
     end,
 })
 
-SettingsTab:CreateButton({
+ToolsTab:CreateButton({
     Name = "Korblox & Headless",
     Icon = "gem",
     Tooltip = "This script is client only And Not real",
@@ -1393,26 +1332,6 @@ SettingsTab:CreateButton({
             "https://raw.githubusercontent.com/Uo2iQnNhD/Maintenance/refs/heads/main/SYtg4g76-Korblox%20%26%20Headless.lua",
             "Korblox & Headless"
         )
-    end,
-})
-
-SettingsTab:CreateButton({
-    Name = "Destroy Interface",
-    Icon = "trash-2",
-    Tooltip = "Destroyed Library",
-    Callback = function()
-        notify(
-            "Warning Detected",
-            "The script will self-destruct in 7 seconds!",
-            7,
-            "info"
-        )
-
-        task.wait(7)
-
-        if Window and not Window._destroyed and type(Window.Destroy) == "function" then
-            Window:Destroy()
-        end
     end,
 })
 
