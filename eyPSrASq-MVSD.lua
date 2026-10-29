@@ -50,7 +50,7 @@ ChangelogTab:CreateParagraph({
 
 ChangelogTab:CreateParagraph({
 	Title = "🔁 V-f4CKn2bK",
-	Content = "- [+] Added Package Script\n- [+] Fixed Some Bugs"
+	Content = "- [+] Added Package Script\n- [+] Fixed Some Bugs\n- [+] Added Multi-dropdown & Deleted Packaged"
 })
 
 ChangelogTab:CreateSection("Next Update & Version")
@@ -152,93 +152,6 @@ MainTab:CreateButton({
 				end
 			end
 			Library:Notify("All selected scripts executed.", 4, "Done", "check-circle")
-		end)
-	end,
-})
-
-MainTab:CreateSection("Package Script")
-
-MainTab:CreateParagraph({
-	Title = "🛡️ System Information",
-	Content = "This script is a script combination of various scripts (will cause lag).\nTip: MULTI-SELECT lets you stack several packages at once."
-})
-
---// Daftar package yang dipilih (multi-select) -> table array of string
-local selectedPackages = {}
-
-local function runMainScript2(optionName)
-	if optionName == "Zephyr [HUB] + Mono [HUB] + PepiGuzman + Animation" then
-		Library:Notify("Executing The Package...", 4, "Status", "check")
-		task.wait(0.5)
-		pcall(function()
-			loadstring(game:HttpGet("https://raw.githubusercontent.com/TheRealAvrwm/Zephyr-V2/refs/heads/main/script.lua", true))()
-			wait(1)
-			loadstring(game:HttpGet("https://gist.githubusercontent.com/PALIPAM67/d758fd42a0c1cd05b34a467fe2a07762/raw/Babuinka_2288"))()
-			wait(1)
-			loadstring(game:HttpGet("https://raw.githubusercontent.com/Bac0nHck/Scripts/refs/heads/main/BundleAnimations.lua"))()
-			wait(1)
-			loadstring(game:HttpGet("https://raw.githubusercontent.com/xxz18902-arch/Mvsd/refs/heads/main/obfuscated_script-1785806102417.lua"))()
-		end)
-
-	elseif optionName == "Zephyr [HUB] + Mono [HUB] + PepiGuzman" then
-		Library:Notify("Executing Zephyr + Mono + PepiGuzman...", 4, "Status", "check")
-		task.wait(0.5)
-		pcall(function()
-			loadstring(game:HttpGet("https://raw.githubusercontent.com/TheRealAvrwm/Zephyr-V2/refs/heads/main/script.lua", true))()
-			wait(1)
-			loadstring(game:HttpGet("https://gist.githubusercontent.com/PALIPAM67/d758fd42a0c1cd05b34a467fe2a07762/raw/Babuinka_2288"))()
-			wait(1)
-			loadstring(game:HttpGet("https://raw.githubusercontent.com/xxz18902-arch/Mvsd/refs/heads/main/obfuscated_script-1785806102417.lua"))()
-		end)
-
-	elseif optionName == "Zephyr [HUB] + Mono [HUB]" then
-		Library:Notify("Executing Zephyr + Mono...", 4, "Status", "check")
-		task.wait(0.5)
-		pcall(function()
-			loadstring(game:HttpGet("https://raw.githubusercontent.com/TheRealAvrwm/Zephyr-V2/refs/heads/main/script.lua", true))()
-			wait(1)
-			loadstring(game:HttpGet("https://gist.githubusercontent.com/PALIPAM67/d758fd42a0c1cd05b34a467fe2a07762/raw/Babuinka_2288"))()
-		end)
-	end
-end
-
---// MULTI-DROPDOWN: pilih lebih dari 1 package
-MainTab:CreateMultiDropdown({
-	Name = "Select Packages",
-	Icon = "box",
-	Options = {
-		"Zephyr [HUB] + Mono [HUB] + PepiGuzman + Animation",
-		"Zephyr [HUB] + Mono [HUB] + PepiGuzman",
-		"Zephyr [HUB] + Mono [HUB]",
-	},
-	Default = {},
-	Placeholder = "None selected",
-	Flag = "PackageMulti",        -- flag UNIK
-	Callback = function(list)
-		selectedPackages = list
-	end,
-})
-
-MainTab:CreateButton({
-	Name = "Execute Selected Packages",
-	Icon = "play",
-	Callback = function()
-		if type(selectedPackages) ~= "table" or #selectedPackages == 0 then
-			Library:Notify("Please select at least one package!", 5, "Error", "x-circle")
-			return
-		end
-
-		local count = #selectedPackages
-		Library:Notify("Executing " .. count .. " package(s)... (may lag)", 4, "Status", "check")
-
-		task.spawn(function()
-			for i, name in ipairs(selectedPackages) do
-				runMainScript2(name)
-				if i < count then
-					task.wait(1.5) -- jeda lebih panjang untuk package berat
-				end
-			end
-			Library:Notify("All selected packages executed.", 4, "Done", "check-circle")
 		end)
 	end,
 })
