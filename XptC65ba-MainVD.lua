@@ -1,264 +1,266 @@
-local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Uo2iQnNhD/Database/refs/heads/main/HX5cd2ms4-Release.luau"))()
 
-local Window = Rayfield:CreateWindow({
-   Name = "ZETHUB | Violence District | V-5bxRUFRb",
-   Icon = "utensils", -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
-   LoadingTitle = "Initializing......",
-   LoadingSubtitle = "By Exterminate0",
-   Theme = "Default", -- Check https://docs.sirius.menu/rayfield/configuration/themes
+local Players = game:GetService("Players")
+local lp = Players.LocalPlayer
 
-   DisableRayfieldPrompts = false,
-   DisableBuildWarnings = false, -- Prevents Rayfield from warning when the script has a version mismatch with the interface
+--// Create Window
+local Window = Library:CreateWindow({
+	Title = "Super Zeutron",
+	Subtitle = "Powered by Exterminate0 & Zeutron Team",
+	Accent = Color3.fromRGB(255, 255, 255),
 
-   ConfigurationSaving = {
-      Enabled = false,
-      FolderName = nil, -- Create a custom folder for your hub/game
-      FileName = "Zethubisbest"
-   },
+	Tags = {
+		{
+			Text = "Violence District",
+			Color = Color3.fromRGB(255, 70, 70),
+			TextColor = Color3.fromRGB(255, 255, 255)
+		},
+		{
+			Text = "LASTEST UPDATE",
+			Color = Color3.fromRGB(46, 230, 110),
+			TextColor = Color3.fromRGB(0, 0, 0)
+		},
+	},
 })
 
-Rayfield:Notify({
-   Title = "Notification Alert",
-   Content = "Thank you for using this scripts",
-   Duration = 6,
-   Image = "bell",
+--// Initial Notification
+task.delay(1, function()
+	Library:Notify(
+		"Thank you for using this script!",
+		6,
+		"Notification Alert",
+		"bell"
+	)
+end)
+
+------------------------------------------------------
+-- TABS
+------------------------------------------------------
+local ChangelogTab = Window:CreateTab("Changelog", "file-text")
+local MainTab = Window:CreateTab("Main Scripts", "crosshair")
+
+------------------------------------------------------
+-- CHANGELOG TAB
+------------------------------------------------------
+ChangelogTab:CreateSection("Information & Version")
+
+ChangelogTab:CreateParagraph({
+	Title = "🔁 V-YNRbnuCQ",
+	Content = "- [+] Added Scripts GUI And Auto Farm\n- [+] Added Changelog\n- [+] Added Theme and Destroy"
 })
 
--- Workspace
-local Change = Window:CreateTab("Changelog", "newspaper")
-local MainTab = Window:CreateTab("Main Scipts", "swords")
-local Theme = Window:CreateTab("Theme & Settings", "palette")
+ChangelogTab:CreateParagraph({
+	Title = "🔁 V-Ez6UbKcj",
+	Content = "- [+] Added More Scripts\n- [+] Fixed Scripts Not Working\n- [+] Fixed Zeutron Bugs"
+})
 
+ChangelogTab:CreateParagraph({
+	Title = "🔁 RBX-V/LATEST UPDATE",
+	Content = "- [+] Updated Script Bolong HUB\n- [+] Added More Icons & Details\n- [!] Fixed Some Bugs"
+})
 
--- Main Scripts
-local MainSection = Change:CreateSection("Information & Version")
+ChangelogTab:CreateSection("Next Update & Version")
 
-local Paragraph = Change:CreateParagraph({Title = "🔁 V-YNRbnuCQ", Content = "- [+] Add Scipts GUI And Auto farm\n- [+] Add Changelog\n- [+] Add Theme and Destroy"})
-local Paragraph = Change:CreateParagraph({Title = "🔁 V-Ez6UbKcj", Content = "- [+] Add More Scripts\n- [+] Fixed Scripts not working\n- [+] Fixed Zeutron Bugs"})
-local Paragraph = Change:CreateParagraph({Title = "🔁 V-5bxRUFRb", Content = "- [+] Updated Script Bolong HUB\n- [+] Added More Icon & Details\n- [+] Fixed Some bugs"})
+ChangelogTab:CreateParagraph({
+	Title = "❌ RBX-V???",
+	Content = "Unknown, Coming Soon!"
+})
 
-local MainSection = Change:CreateSection("Next Update & Version")
-local Paragraph = Change:CreateParagraph({Title = "❌ V-u5SHHhTP", Content = "Unknown, Coming Soon!"})
+------------------------------------------------------
+-- MAIN SCRIPTS TAB
+------------------------------------------------------
+MainTab:CreateSection("Main Menu")
 
+MainTab:CreateParagraph({
+	Title = "🛡️ System Information",
+	Content = "These scripts are safe and have been tested.\n- All these scripts are not mine."
+})
 
-local MainSection = MainTab:CreateSection("Main Menu")
+-- =========================================================
+-- HELPER MULTI DROPDOWN
+-- Jika helper ini sudah ada di script kamu, hapus bagian ini
+-- agar tidak duplikat.
+-- =========================================================
 
-local Paragraph = MainTab:CreateParagraph({Title = "🛡️ System Information", Content = "This Scripts Is safe and has been tested\n- All these scripts are not mine"})
+local function toSelectionList(input)
+	if type(input) == "string" then
+		return { input }
+	end
 
--- Initialize with because the CurrentOption default
-local selectedOptions = {}
+	if type(input) ~= "table" then
+		return {}
+	end
 
-local function runScript(optionName)
-    if optionName == "BolongHub [FREE]" then
-        Rayfield:Notify({
-            Title = "Executed Scripts",
-            Content = "Scripts Successfully Executed!",
-            Duration = 6,
-            Image = "check",
-        })
-        task.wait(0.5)
-        pcall(function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/RillBoys/bolong.cat/refs/heads/main/main/Loader", true))()
-        end)
-    
-    elseif optionName == "WisnuHub [FREE]" then
-        Rayfield:Notify({
-            Title = "Executed Scripts",
-            Content = "Scripts Successfully Executed!",
-            Duration = 6,
-            Image = "check",
-        })
-        task.wait(0.5)
-        pcall(function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/zeutronxsite/TjcqcZ2KDistrictV2/refs/heads/main/AcCVkYFU"))()
-        end)
+	local out = {}
+	local seen = {}
 
-    elseif optionName == "W424HUB [FREE]" then
-        Rayfield:Notify({
-            Title = "Executed Scripts",
-            Content = "Scripts Successfully Executed!",
-            Duration = 6,
-            Image = "check",
-        })
-        task.wait(0.5)
-        pcall(function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/zeutronxsite/N8GYFQc7DestrictV3/refs/heads/main/nTon3cet"))()
-        end)
+	-- Format array: { "Script A", "Script B" }
+	if #input > 0 then
+		for _, v in ipairs(input) do
+			if type(v) == "string" and not seen[v] then
+				seen[v] = true
+				table.insert(out, v)
+			end
+		end
 
-    elseif optionName == "4LynxX [FREE]" then
-        Rayfield:Notify({
-            Title = "Executed Scripts",
-            Content = "Scripts Successfully Executed!",
-            Duration = 6,
-            Image = "check",
-        })
-        task.wait(0.5)
-        pcall(function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/zeutronxsite/2CHCDGJVDistictV3/refs/heads/main/GxHqbZZLua"))()
-        end)
-    end
+		return out
+	end
+
+	-- Format dictionary:
+	-- { ["Script A"] = true, ["Script B"] = true }
+	for k, v in pairs(input) do
+		if type(k) == "string" and v == true and not seen[k] then
+			seen[k] = true
+			table.insert(out, k)
+		elseif type(v) == "string" and not seen[v] then
+			seen[v] = true
+			table.insert(out, v)
+		end
+	end
+
+	return out
 end
 
-local Dropdown = MainTab:CreateDropdown({
-    Name = "Select Scripts",
-    Options = {"BolongHub [FREE]", "WisnuHub [FREE]", "W424HUB [FREE]", "4LynxX [FREE]"},
-    CurrentOption = {"None"},
-    MultipleOptions = false,
-    Flag = "Dropdown1",
-    Callback = function(options)
-        -- Handle both table and string returns
-        if type(options) == "table" then
-            selectedOptions = options
-        elseif type(options) == "string" then
-            selectedOptions = {options}
-        else
-            selectedOptions = {}
-        end
-    end,
-})
+-- =========================================================
+-- MULTI DROPDOWN SCRIPTS
+-- =========================================================
 
-local Button = MainTab:CreateButton({
-    Name = "Execute Selected Scripts",
-    Callback = function()
-        if #selectedOptions == 0 or selectedOptions[1] == "None" then
-            Rayfield:Notify({
-                Title = "Error",
-                Content = "Please select a script first!",
-                Duration = 5,
-                Image = "triangle-alert",
-            })
-            return
-        end
-        
-        -- Loop through every item in selectedOptions
-        for _, option in pairs(selectedOptions) do
-            if option and option ~= "None" then
-                runScript(option)
-            end
-        end
-    end
-})
+local BOLONG_SCRIPT_OPTIONS = {
+	"BolongHub [FREE]",
+	"WisnuHub [FREE]",
+	"W424HUB [FREE]",
+	"4LynxX [FREE]",
+}
 
-local MainSection = MainTab:CreateSection("Auto Farm")
-local Paragraph = MainTab:CreateParagraph({Title = "🛡️ System Information", Content = "This feature is coming soon!"})
+local BOLONG_SCRIPT_DATA = {
+	["BolongHub [FREE]"] = {
+		url = "https://raw.githubusercontent.com/RillBoys/bolong.cat/refs/heads/main/main/Loader",
+		useCache = true,
+	},
 
+	["WisnuHub [FREE]"] = {
+		url = "https://raw.githubusercontent.com/zeutronxsite/TjcqcZ2KDistrictV2/refs/heads/main/AcCVkYFU",
+		useCache = nil,
+	},
 
+	["W424HUB [FREE]"] = {
+		url = "https://raw.githubusercontent.com/zeutronxsite/N8GYFQc7DestrictV3/refs/heads/main/nTon3cet",
+		useCache = nil,
+	},
 
-local MainSection = Theme:CreateSection("Select Theme")
-local Paragraph = Theme:CreateParagraph({Title = "📚 Guide Information", Content = "Select a color to change the Scripts"})
-local selectedOptions = {}
+	["4LynxX [FREE]"] = {
+		url = "https://raw.githubusercontent.com/zeutronxsite/2CHCDGJVDistictV3/refs/heads/main/GxHqbZZLua",
+		useCache = nil,
+	},
+}
 
-local function runScript2(optionName)
-    if optionName == "Default" then
-        task.wait(0.5)
-        pcall(function()
-            Window.ModifyTheme('Default')
-        end)
-    
-    elseif optionName == "AmberGlow" then
-        task.wait(0.5)
-        pcall(function()
-            Window.ModifyTheme('AmberGlow')
-        end)
+local selectedBolongScripts = {}
 
-    elseif optionName == "Bloom" then
-        task.wait(0.5)
-        pcall(function()
-            Window.ModifyTheme('Bloom')
-        end)
+local function runBolongScript(optionName)
+	local data = BOLONG_SCRIPT_DATA[optionName]
 
-    elseif optionName == "Amethyst" then
-        task.wait(0.5)
-        pcall(function()
-            Window.ModifyTheme('Amethyst')
-        end)
+	if not data then
+		Library:Notify("Script not found: " .. tostring(optionName), 5, "Error", "x-circle")
+		return false
+	end
 
-    elseif optionName == "DarkBlue" then
-        task.wait(0.5)
-        pcall(function()
-            Window.ModifyTheme('DarkBlue')
-        end)
+	Library:Notify("Executing " .. optionName .. "...", 4, "Status", "check")
+	task.wait(0.5)
 
-    elseif optionName == "Green" then
-        task.wait(0.5)
-        pcall(function()
-           Window.ModifyTheme('Green')
-        end)
+	local ok, err = pcall(function()
+		if data.useCache ~= nil then
+			loadstring(game:HttpGet(data.url, data.useCache))()
+		else
+			loadstring(game:HttpGet(data.url))()
+		end
+	end)
 
-    elseif optionName == "Light" then
-        task.wait(0.5)
-        pcall(function()
-            Window.ModifyTheme('Light')
-        end)
+	if not ok then
+		Library:Notify(
+			tostring(optionName) .. " failed: " .. tostring(err),
+			5,
+			"Error",
+			"x-circle"
+		)
 
-    elseif optionName == "Ocean" then
-        task.wait(0.5)
-        pcall(function()
-            Window.ModifyTheme('Ocean')
-        end)
-    end
+		return false
+	end
+
+	return true
 end
 
-local Dropdown = Theme:CreateDropdown({
-    Name = "Select Scripts",
-    Options = {"Default", "AmberGlow", "Bloom", "Amethyst",
-                "DarkBlue", "Green", "Light", "Ocean"},
-    CurrentOption = {"None"},
-    MultipleOptions = false,
-    Flag = "Dropdown1",
-    Callback = function(options)
-        -- Handle both table and string returns
-        if type(options) == "table" then
-            selectedOptions = options
-        elseif type(options) == "string" then
-            selectedOptions = {options}
-        else
-            selectedOptions = {}
-        end
-    end,
+MainTab:CreateMultiDropdown({
+	Name = "Select Scripts",
+	Icon = "layers",
+	Options = BOLONG_SCRIPT_OPTIONS,
+	Default = {},
+	Placeholder = "None selected",
+	Flag = "BolongHubMulti",
+	Tooltip = "Select one or more scripts to execute",
+	Callback = function(list)
+		selectedBolongScripts = toSelectionList(list)
+	end,
 })
 
-local Button = Theme:CreateButton({
-    Name = "Execute Selected Theme",
-    Callback = function()
-        if #selectedOptions == 0 or selectedOptions[1] == "None" then
-            Rayfield:Notify({
-                Title = "Error",
-                Content = "Please select a Theme first!",
-                Duration = 5,
-                Image = "triangle-alert",
-            })
-            return
-        end
-        
-        -- Loop through every item in selectedOptions
-        for _, option in pairs(selectedOptions) do
-            if option and option ~= "None" then
-                runScript2(option)
-            end
-        end
-    end
+MainTab:CreateButton({
+	Name = "Execute Selected Scripts",
+	Icon = "play",
+	Tooltip = "Run all selected scripts",
+	Callback = function()
+		if type(selectedBolongScripts) ~= "table" or #selectedBolongScripts == 0 then
+			Library:Notify("Please select at least one script!", 5, "Error", "x-circle")
+			return
+		end
+
+		local count = #selectedBolongScripts
+
+		Library:Notify(
+			"Executing " .. count .. " script(s)...",
+			4,
+			"Status",
+			"check"
+		)
+
+		task.spawn(function()
+			local successCount = 0
+			local failCount = 0
+
+			for i, scriptName in ipairs(selectedBolongScripts) do
+				local ok = runBolongScript(scriptName)
+
+				if ok then
+					successCount = successCount + 1
+				else
+					failCount = failCount + 1
+				end
+
+				if i < count then
+					task.wait(1.2)
+				end
+			end
+
+			if failCount == 0 then
+				Library:Notify(
+					"All selected scripts executed successfully!",
+					6,
+					"Executed Scripts",
+					"check"
+				)
+			else
+				Library:Notify(
+					"Finished: " .. successCount .. " success, " .. failCount .. " failed.",
+					6,
+					"Execution Result",
+					"alert-triangle"
+				)
+			end
+		end)
+	end,
 })
 
-local MainSection = Theme:CreateSection("More Settings")
+MainTab:CreateSection("Auto Farm")
 
-local Button = Theme:CreateButton({
-    Name = "Zeutron [HUB]",
-    Callback = function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Uo2iQnNhD/Maintenance/refs/heads/main/L3aun246-Universal.lua"))()
-   end
-})
-
-local Button = Theme:CreateButton({
-    Name = "Destroy UI/Interface",
-    Callback = function()
-    Rayfield:Notify({
-                    Title = "⚠️ Warning Detected",
-                    Content = "The script will self-destruct in 7 seconds!",
-                    Duration = 7,
-                    Image = "shield-alert",
-                })
-        wait(7)
-    Rayfield:Destroy()
-   end
+MainTab:CreateParagraph({
+	Title = "🛡️ System Information",
+	Content = "This feature is coming soon!"
 })
