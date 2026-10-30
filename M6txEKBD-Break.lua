@@ -19,7 +19,7 @@ local Window = Library:CreateWindow({
 			TextColor = Color3.fromRGB(0, 0, 0)
 		},
 		{
-			Text = "V-rJUZBy7E",
+			Text = "LATEST UPDATE",
 			Color = Color3.fromRGB(46, 230, 110),
 			TextColor = Color3.fromRGB(0, 0, 0)
 		},
@@ -53,7 +53,7 @@ ChangelogTab:CreateParagraph({
 })
 
 ChangelogTab:CreateParagraph({
-	Title = "🔁 V-rJUZBy7E",
+	Title = "🔁 RBX-V/LATEST UPDATE",
 	Content = "- [+] Added Scripts GUI And Auto Farm\n- [+] Added Changelog\n- [+] Added Theme and Destroy features\n- [+] Added More Details & Icons\n- [!] Fixed Some Bugs"
 })
 
