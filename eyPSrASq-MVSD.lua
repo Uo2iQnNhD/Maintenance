@@ -5,7 +5,7 @@ local lp = Players.LocalPlayer
 
 --// Create Window
 local Window = Library:CreateWindow({
-	Title = "Super Zeutron Hub",
+	Title = "Super Zeutron",
 	Subtitle = "Powered By Exterminate0 & Zeutron Team",
 	Accent = Color3.fromRGB(255, 247, 0), -- Default Yellow Accent
 
