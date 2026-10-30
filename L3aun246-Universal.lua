@@ -149,7 +149,7 @@ local Window = Library:CreateWindow({
             TextColor = Color3.fromRGB(0, 0, 0),
         },
         {
-            Text = "V-sTi2Br5D",
+            Text = "RBX-V31",
             Color = Color3.fromRGB(46, 230, 110),
             TextColor = Color3.fromRGB(0, 0, 0),
         },
