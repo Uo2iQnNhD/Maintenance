@@ -209,7 +209,6 @@ notify("Notification Alert", "Thank you for using this scripts", 6, "bell")
 -- =========================================================
 local ChangelogTab = Window:CreateTab("Changelog", "newspaper")
 local MainTab = Window:CreateTab("Main Scripts", "sword")
-local ThemeTab = Window:CreateTab("Theme & Settings", "palette")
 
 -- =========================================================
 -- CHANGELOG TAB
