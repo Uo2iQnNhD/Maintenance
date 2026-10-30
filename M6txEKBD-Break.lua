@@ -41,7 +41,6 @@ end)
 ------------------------------------------------------
 local ChangelogTab = Window:CreateTab("Changelog", "file-text")
 local MainTab = Window:CreateTab("Main Scripts", "crosshair")
-local SettingsTab = Window:CreateTab("Settings", "settings")
 
 ------------------------------------------------------
 -- CHANGELOG TAB
@@ -210,90 +209,5 @@ MainTab:CreateButton({
 		end
 		
 		runFarmScript(selectedFarmScript)
-	end,
-})
-
-------------------------------------------------------
--- SETTINGS TAB (THEME & DESTROY)
-------------------------------------------------------
-SettingsTab:CreateSection("Appearance")
-
-SettingsTab:CreateParagraph({
-	Title = "🎨 Theme Colors",
-	Content = "Change the accent color of the interface.\n(Note: Rayfield themes mapped to closest RGB)"
-})
-
--- Map Rayfield Themes to RGB for the new library
-local themeColors = {
-	Default = Color3.fromRGB(255, 255, 255),
-	AmberGlow = Color3.fromRGB(250, 150, 75),
-	Bloom = Color3.fromRGB(250, 160, 180),
-	Amethyst = Color3.fromRGB(130, 80, 180),
-	DarkBlue = Color3.fromRGB(0, 120, 210),
-	Green = Color3.fromRGB(70, 130, 70),
-	Light = Color3.fromRGB(100, 150, 200),
-	Ocean = Color3.fromRGB(0, 140, 140),
-}
-
-local currentTheme = "Default"
-
-SettingsTab:CreateDropdown({
-	Name = "Select Theme",
-	Icon = "palette",
-	Options = {
-		"Default",
-		"AmberGlow",
-		"Bloom",
-		"Amethyst",
-		"DarkBlue",
-		"Green",
-		"Light",
-		"Ocean"
-	},
-	Default = "Default",
-	Flag = "ThemeSelector",
-	Callback = function(themeName)
-		currentTheme = themeName
-		local color = themeColors[themeName] or themeColors.Default
-		
-		-- Apply accent color globally
-		Library:SetAccent(color)
-		
-		Library:Notify("Theme changed to: " .. themeName, 3, "System", "check")
-	end,
-})
-
-SettingsTab:CreateSection("More Settings")
-
-SettingsTab:CreateButton({
-	Name = "Go Back to Universal Hub",
-	Icon = "home",
-	Callback = function()
-		Library:Notify("Loading Universal Hub...", 3, "Navigation", "refresh-cw")
-		task.wait(1)
-		pcall(function()
-			loadstring(game:HttpGet("https://raw.githubusercontent.com/Uo2iQnNhD/Maintenance/refs/heads/main/L3aun246-Universal.lua"))()
-		end)
-	end,
-})
-
-SettingsTab:CreateButton({
-	Name = "Destroy Interface",
-	Icon = "trash-2",
-	Callback = function()
-		Library:Notify("Self-destructing in 7 seconds...", 7, "Warning", "shield-alert")
-		task.wait(7)
-		
-		-- Attempt to destroy via library method if exists, otherwise just hide/close
-		if type(Library.Destroy) == "function" then
-			Library:Destroy()
-		else
-			-- Fallback: Hide all windows manually if Destroy isn't implemented perfectly yet
-			for _, w in ipairs(Library._windows or {}) do
-				if type(w.Destroy) == "function" then
-					w:Destroy()
-				end
-			end
-		end
 	end,
 })
