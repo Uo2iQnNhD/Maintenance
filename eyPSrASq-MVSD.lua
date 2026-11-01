@@ -16,7 +16,7 @@ local Window = Library:CreateWindow({
 			TextColor = Color3.fromRGB(0, 0, 0)
 		},
 		{
-			Text = "V-f4CKn2bK",
+			Text = "LATEST UPDATE",
 			Color = Color3.fromRGB(46, 230, 110),
 			TextColor = Color3.fromRGB(0, 0, 0)
 		},
@@ -49,14 +49,14 @@ ChangelogTab:CreateParagraph({
 })
 
 ChangelogTab:CreateParagraph({
-	Title = "🔁 V-f4CKn2bK",
+	Title = "🔁 RBX-V/LATEST UPDATE",
 	Content = "- [+] Added Package Script\n- [+] Fixed Some Bugs\n- [+] Added Multi-dropdown & Deleted Packaged"
 })
 
 ChangelogTab:CreateSection("Next Update & Version")
 
 ChangelogTab:CreateParagraph({
-	Title = "❌ V-urNFN5gn",
+	Title = "❌ RBX-V???",
 	Content = "Unknown, Coming Soon!"
 })
 
