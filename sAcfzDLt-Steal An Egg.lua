@@ -390,6 +390,7 @@ local MAIN_SCRIPTS_OPTIONS = {
 	"Sena [NEW]",
 	"Venyx [HUB]",
 	"AXON [HUB & KEYLESS]",
+	"CODIUM [HUB & FREE]",
 	"LIMBO [FREE]",
 }
 
@@ -402,6 +403,7 @@ local MAIN_SCRIPTS_URLS = {
 	["Sena [NEW]"] = "https://senahub.xyz/senaloader",
 	["Venyx [HUB]"] = "https://raw.githubusercontent.com/tienkhanh1/Venyx/main/VenyxHub",
 	["AXON [HUB & KEYLESS]"] = "https://api.luarmor.net/files/v3/loaders/97c3f6db55a2cf72141537a85458e5a7.lua",
+    ["CODIUM [HUB & FREE]"] = "https://getcodium.xyz/loader.luau",
 	["LIMBO [FREE]"] = "https://limbohub.my.id/loader.lua",
 }
 
